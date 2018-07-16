@@ -27,7 +27,8 @@ export default {
 }
 
 .app-main {
-  /* header 52px */
-  min-height: calc(100vh - 52px);
+  /* header: 52px footer: 60px */
+  position: relative;
+  min-height: calc(100vh - 52px - 60px);
 }
 </style>

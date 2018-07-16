@@ -3,25 +3,28 @@
     class="navbar"
     mode="horizontal"
     background-color="#283E4A">
-    <img
-      class="logo"
-      src="@/assets/logo.png">
+    <icon name="app-logo"/>
     <el-input
       :placeholder="$t('navbar.searchPlaceholder')"
       class="search"/>
     <div class="btns">
-      <el-button
-        class="signin-btn"
-        type="text">{{ $t('navbar.signIn') }}</el-button>
-      <el-button
-        class="signup-btn"
-        plain>{{ $t('navbar.signUp') }}</el-button>
+      <router-link to="/signin">
+        <el-button
+          class="signin-btn"
+          type="text">{{ $t('navbar.signIn') }}</el-button>
+      </router-link>
+      <router-link to="/signup">
+        <el-button
+          class="signup-btn"
+          plain>{{ $t('navbar.signUp') }}</el-button>
+      </router-link>
     </div>
   </el-menu>
 </template>
 
 <script>
 export default {
+
 }
 </script>
 
@@ -32,10 +35,12 @@ export default {
   align-items: center;
   height: 52px;
   padding: 0 64px;
-  .logo {
+  .fa-icon {
     width: 34px;
     height: 34px;
     margin-right: 16px;
+    color: #fff;
+    outline: none;
   }
   .search {
     width: 280px;

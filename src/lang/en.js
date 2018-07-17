@@ -21,7 +21,8 @@ export default {
         realName: 'Please enter your real name',
         phone: 'Please enter a valid phone number',
         password: 'Password length is 6 to 25 characters',
-        type: 'Please select your identity'
+        type: 'Please select your identity',
+        phoneIsRegistered: 'The phone number has been registered'
       }
     },
     sendCode: {
@@ -41,10 +42,21 @@ export default {
       success: 'Send succeed',
       signUpSuccess: 'Sign up succeed',
       requireCode: 'Please enter the verification code'
+    },
+    signIn: {
+      phone: 'Phone Number',
+      password: 'Password',
+      signInBtn: 'Sign in',
+      phoneMessage: 'Please enter a valid phone number',
+      passwordMessage: 'Please enter password of which length is 6 to 25',
+      forgetPassword: 'Forget password?',
+      thirdParty: 'Third party',
+      signUpBtn: 'Sign up',
+      signInSuccess: 'Sign in succeed'
     }
   },
   navbar: {
-    searchPlaceholder: 'search project, designer',
+    searchPlaceholder: 'search requirement, designer',
     home: 'Home',
     favorite: 'Favorite',
     order: 'Order',
@@ -73,5 +85,23 @@ export default {
         "Follow Others' Activities"
       ]
     }
+  },
+  profile: {
+    following: 'Following',
+    follower: 'Follower',
+    viewHomePage: 'View Home Page'
+  },
+  publish: {
+    placeholder: 'Publish photo or activity',
+    photoBtn: 'Choose photo',
+    publishBtn: 'Publish'
+  },
+  actions: {
+    publishRequirement: 'Publish requirement',
+    publishedRequirements: 'Published requirements',
+    followingDesigners: 'Following designers'
+  },
+  errmsgs: {
+    getUserInfoFailed: 'Failed to get user information, please refresh and try again'
   }
 }

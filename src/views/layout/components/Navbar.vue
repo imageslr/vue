@@ -3,7 +3,9 @@
     class="navbar"
     mode="horizontal"
     background-color="#283E4A">
-    <icon name="app-logo"/>
+    <icon
+      name="app-logo"
+      @click.native="$router.push('/')"/>
     <el-input
       :placeholder="$t('navbar.searchPlaceholder')"
       class="search"/>
@@ -41,6 +43,7 @@ export default {
     margin-right: 16px;
     color: #fff;
     outline: none;
+    cursor: pointer;
   }
   .search {
     width: 280px;
@@ -48,6 +51,7 @@ export default {
   .btns {
     flex: 1;
     text-align: right;
+    outline: none;
     .signin-btn {
       color: #fff;
     }

@@ -12,9 +12,11 @@ import store from './store'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css' // NProgress样式
 import i18n from './lang' // 初始化语言包
-
-// 引入图表，注册logo
+import GlobalComponents from '@/components/global-install'
 import Icon from 'vue-awesome/components/Icon'
+
+// 全局注册一些常用的组件
+Vue.use(GlobalComponents)
 Vue.component('icon', Icon)
 Icon.register({
   'app-logo': {
@@ -32,8 +34,33 @@ Vue.use(ElementUI, {
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  // 判断登录
-  next()
+  // 如果用户登录过
+  if (store.getters.token && to.path === '/signin') {
+    // 登录过：进入登录页时，重定向至主页
+    next({ path: '/feed' })
+    NProgress.done()
+  } else if (store.getters.token) {
+    // 登录过：进入其他页面时，获取用户信息
+    if (!store.getters.hasUserInfo) {
+      store
+        .dispatch('GET_USER_INFO')
+        .then(() => next())
+        .catch(() => {
+          ElementUI.Message.error(i18n.t('errmsgs.getUserInfoFailed'))
+          NProgress.done()
+        })
+    } else {
+      NProgress.done()
+      next()
+    }
+  } else if (to.matched.some(record => record.meta.requireAuth)) {
+    // 没有登录：访问的页面需要登录，则跳转至登录页
+    next({ path: '/signin' })
+    NProgress.done() // hack
+  } else {
+    // 没有登录：访问其他页面，直接跳转
+    next()
+  }
 })
 router.afterEach(() => {
   NProgress.done() // 结束Progress

@@ -20,7 +20,8 @@ export default {
         realName: '请输入真实姓名',
         phone: '请输入合法手机号',
         password: '密码长度在 6 到 25 个字符',
-        type: '请选择您的身份'
+        type: '请选择您的身份',
+        phoneIsRegistered: '该手机号已被注册'
       }
     },
     sendCode: {
@@ -38,10 +39,21 @@ export default {
       success: '发送成功',
       signUpSuccess: '注册成功',
       requireCode: '请输入验证码'
+    },
+    signIn: {
+      phone: '手机号',
+      password: '密码',
+      signInBtn: '登录',
+      phoneMessage: '请输入合法手机号',
+      passwordMessage: '请输入密码，长度 6 到 25 个字符',
+      forgetPassword: '忘记密码？',
+      thirdParty: '其他登录方式',
+      signUpBtn: '立即注册',
+      signInSuccess: '登录成功'
     }
   },
   navbar: {
-    searchPlaceholder: '搜索项目、设计师',
+    searchPlaceholder: '搜索需求、设计师',
     home: '主页',
     favorite: '关注',
     order: '订单',
@@ -60,5 +72,23 @@ export default {
       title: '我是设计师',
       features: ['查找需求', '承接需求', '发布自己的作品动态', '关注他人动态']
     }
+  },
+  profile: {
+    following: '关注',
+    follower: '粉丝',
+    viewHomePage: '查看个人主页'
+  },
+  publish: {
+    placeholder: '发照片或者动态',
+    photoBtn: '发照片',
+    publishBtn: '发布'
+  },
+  actions: {
+    publishRequirement: '发布需求',
+    publishedRequirements: '已发布的需求',
+    followingDesigners: '我的设计师'
+  },
+  errmsgs: {
+    getUserInfoFailed: '获取用户信息失败，请刷新重试'
   }
 }

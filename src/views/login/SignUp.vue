@@ -8,27 +8,22 @@
         :rules="rules"
         :model="form"
         :show-message="false"
+        size="small"
         label-position="top">
         <el-form-item
           :label="$t('forms.signUp.realName')"
           prop="realName">
-          <el-input
-            v-model="form.realName"
-            size="small"/>
+          <el-input v-model="form.realName"/>
         </el-form-item>
         <el-form-item
           :label="$t('forms.signUp.phone')"
           prop="phone">
-          <el-input
-            v-model="form.phone"
-            size="small"/>
+          <el-input v-model="form.phone"/>
         </el-form-item>
         <el-form-item
           :label="$t('forms.signUp.password')"
           prop="password">
-          <el-input
-            v-model="form.password"
-            size="small"/>
+          <el-input v-model="form.password"/>
         </el-form-item>
         <!-- <el-form-item
           :label="$t('form.signUp.confirmPassword')"
@@ -47,18 +42,14 @@
         </el-form-item>
         <el-form-item>
           <el-button
+            :loading="signUpBtnLoading"
             :disabled="signUpBtnDisabled"
             type="primary"
             @click="onSubmit">{{ $t('forms.signUp.signUpBtn') }}</el-button>
         </el-form-item>
         <p class="term">{{ $t('forms.signUp.term') }}</p>
         <div class="extra-action">
-          <div class="third-party">
-            <span>{{ $t('forms.signUp.thirdParty') }}：</span>
-            <icon name="brands/weixin"/>
-            <icon name="brands/google"/>
-            <icon name="brands/facebook"/>
-          </div>
+          <third-party form-type="signUp"/>
           <router-link to="signin">{{ $t('forms.signUp.loginBtn') }}</router-link>
         </div>
       </el-form>
@@ -73,14 +64,13 @@
 
 <script>
 import { AppFooter } from '../layout/components'
+import ThirdParty from './components/ThirdParty'
 import SendCodeDialog from './components/SendCodeDialog'
-import 'vue-awesome/icons/brands/weixin'
-import 'vue-awesome/icons/brands/google'
-import 'vue-awesome/icons/brands/facebook'
 import { phonePattern } from '@/utils/validate'
+import { checkPhoneAvailable } from '@/api/user'
 export default {
   components: {
-    AppFooter, SendCodeDialog
+    AppFooter, SendCodeDialog, ThirdParty
   },
   data () {
     return {
@@ -97,6 +87,7 @@ export default {
         type: { required: true, message: this.$t('forms.signUp.messages.type') }
       },
       signUpBtnDisabled: false,
+      signUpBtnLoading: false,
       dialogVisible: false
     }
   },
@@ -109,8 +100,18 @@ export default {
         if (!valid) {
           this.showErrMessage(resObj)
         } else {
-          this.dialogVisible = true
-          this.signUpBtnDisabled = true
+          this.signUpBtnLoading = true
+          checkPhoneAvailable(this.form.phone).then(({ data: { available } }) => {
+            this.signUpBtnLoading = false
+            if (available) {
+              this.dialogVisible = true
+              this.signUpBtnDisabled = true
+            } else {
+              this.$message.error(this.$t('forms.signUp.messages.phoneIsRegistered'))
+            }
+          }).catch(() => {
+            this.signUpBtnLoading = false
+          })
         }
       })
     },
@@ -196,22 +197,6 @@ p {
   margin-top: 12px;
   justify-content: space-between;
   font-size: 14px;
-}
-.third-party {
-  color: #595c5f;
-  span {
-    vertical-align: middle;
-  }
-  .fa-icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 12px;
-    vertical-align: middle;
-    cursor: pointer;
-    &:hover {
-      color: #1a85bc;
-    }
-  }
 }
 .footer {
   color: #fff;

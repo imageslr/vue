@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container both-center">
     <div class="item">
       <router-link :to="{ path: '/signup', query: { type: 'party' }}">
         <el-card shadow="hover">
@@ -42,10 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/mixin.scss";
-@import "@/styles/variables.scss";
 .container {
-  @include verticalMiddleAbsolute;
   width: 665px;
   .item {
     box-sizing: border-box;

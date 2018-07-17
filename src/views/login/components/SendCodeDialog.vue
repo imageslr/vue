@@ -18,12 +18,12 @@
           <div class="input">{{ splittedPhone }}</div>
         </div>
         <el-button
-          class="w-100per primary-btn"
+          class="w-100 primary-btn"
           size="large"
           type="primary"
           @click="onSend">{{ $t('forms.sendCode.sendBtn') }}</el-button>
         <el-button
-          class="w-100per cancel-btn"
+          class="w-100 cancel-btn"
           size="large"
           type="info"
           @click="$emit('update:visible', false)">{{ $t('forms.sendCode.cancelBtn') }}</el-button>
@@ -41,7 +41,7 @@
             @click="onSend">{{ $t('forms.sendCode.sendAgain') }}</span>
         </p>
         <el-button
-          class="w-100per primary-btn"
+          class="w-100 primary-btn"
           size="large"
           type="primary"
           @click="onApprove">{{ $t('forms.sendCode.confirmBtn') }}</el-button>

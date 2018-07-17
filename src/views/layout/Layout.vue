@@ -23,12 +23,12 @@ export default {
 .app-container {
   position: relative;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
+  background-color: #f9f9f9;
 }
 
 .app-main {
-  /* header: 52px footer: 60px */
   position: relative;
-  min-height: calc(100vh - 52px - 60px);
+  min-height: calc(100vh - 52px - 60px); /* header: 52px footer: 60px */
 }
 </style>

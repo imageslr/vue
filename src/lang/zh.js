@@ -3,7 +3,7 @@ export default {
     title: '建筑设计平台',
     description: '一个连接甲方与设计师的平台'
   },
-  form: {
+  forms: {
     signUp: {
       realName: '真实姓名',
       phone: '手机',
@@ -16,10 +16,28 @@ export default {
       term: '您同意遵守本网站的《用户协议》及《隐私政策》',
       thirdParty: '其他注册方式',
       loginBtn: '已有账号登录',
-      requireRealName: '请输入真实姓名',
-      requireValidPhone: '请输入合法手机号',
-      passwordLength: '密码长度在 6 到 25 个字符',
-      requireType: '请选择您的身份'
+      messages: {
+        realName: '请输入真实姓名',
+        phone: '请输入合法手机号',
+        password: '密码长度在 6 到 25 个字符',
+        type: '请选择您的身份'
+      }
+    },
+    sendCode: {
+      title: '安全验证',
+      bodyTitle: '请验证电话号码',
+      description: '我们将向下方输入的手机号码发送短信验证码。',
+      phoneLabel: '电话号码',
+      sendBtn: '发送验证码',
+      cancelBtn: '返回',
+      sendedDescription: '请输入验证码完成登录，接收验证码可能需要几分钟。',
+      codeLabel: '验证码',
+      confirmBtn: '通过验证',
+      notReceived: '没有收到？',
+      sendAgain: '再发一次',
+      success: '发送成功',
+      signUpSuccess: '注册成功',
+      requireCode: '请输入验证码'
     }
   },
   navbar: {

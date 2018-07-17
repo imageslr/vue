@@ -1,6 +1,7 @@
 @import "./transition.scss";
 @import "./element-variables.scss";
 @import "./variables.scss";
+@import "./util.scss";
 
 * {
   box-sizing: border-box;
@@ -24,13 +25,6 @@ a {
   color: $--link-color;
   &:hover {
     color: $--link-hover-color;
+    cursor: pointer;
   }
-}
-
-.pull-left {
-  float: left;
-}
-
-.pull-right {
-  float: right;
 }

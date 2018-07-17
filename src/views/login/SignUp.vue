@@ -4,18 +4,28 @@
       <h1><icon name="app-logo"/><span>{{ $t('app.title') }}</span></h1>
       <p>{{ $t('app.description') }}</p>
       <el-form
+        ref="signUpForm"
+        :rules="rules"
+        :model="form"
+        :show-message="false"
         label-position="top">
-        <el-form-item :label="$t('form.signUp.realName')">
+        <el-form-item
+          :label="$t('forms.signUp.realName')"
+          prop="realName">
           <el-input
             v-model="form.realName"
             size="small"/>
         </el-form-item>
-        <el-form-item :label="$t('form.signUp.phone')">
+        <el-form-item
+          :label="$t('forms.signUp.phone')"
+          prop="phone">
           <el-input
             v-model="form.phone"
             size="small"/>
         </el-form-item>
-        <el-form-item :label="$t('form.signUp.password')">
+        <el-form-item
+          :label="$t('forms.signUp.password')"
+          prop="password">
           <el-input
             v-model="form.password"
             size="small"/>
@@ -27,42 +37,50 @@
             v-model="form.confirmPassword"
             size="small"/>
         </el-form-item> -->
-        <el-form-item :label="$t('form.signUp.type')">
+        <el-form-item
+          :label="$t('forms.signUp.type')"
+          prop="type">
           <el-radio-group v-model="form.type">
-            <el-radio :label="$t('form.signUp.party')"/>
-            <el-radio :label="$t('form.signUp.designer')"/>
+            <el-radio label="party">{{ $t('forms.signUp.party') }}</el-radio>
+            <el-radio label="designer">{{ $t('forms.signUp.designer') }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item>
           <el-button
+            :disabled="signUpBtnDisabled"
             type="primary"
-            @click="onSubmit">{{ $t('form.signUp.signUpBtn') }}</el-button>
+            @click="onSubmit">{{ $t('forms.signUp.signUpBtn') }}</el-button>
         </el-form-item>
-        <p class="term">{{ $t('form.signUp.term') }}</p>
+        <p class="term">{{ $t('forms.signUp.term') }}</p>
         <div class="extra-action">
           <div class="third-party">
-            <span>{{ $t('form.signUp.thirdParty') }}：</span>
+            <span>{{ $t('forms.signUp.thirdParty') }}：</span>
             <icon name="brands/weixin"/>
             <icon name="brands/google"/>
             <icon name="brands/facebook"/>
           </div>
-          <router-link to="signin">{{ $t('form.signUp.loginBtn') }}</router-link>
+          <router-link to="signin">{{ $t('forms.signUp.loginBtn') }}</router-link>
         </div>
       </el-form>
     </section>
-    <app-footer/>
+    <app-footer class="footer"/>
+    <send-code-dialog
+      :visible.sync="dialogVisible"
+      :user-info="form"
+      @closed="onDialogClosed"/>
   </div>
 </template>
 
 <script>
 import { AppFooter } from '../layout/components'
+import SendCodeDialog from './components/SendCodeDialog'
 import 'vue-awesome/icons/brands/weixin'
 import 'vue-awesome/icons/brands/google'
 import 'vue-awesome/icons/brands/facebook'
-import { validatePhone } from '@/utils/validate'
+import { phonePattern } from '@/utils/validate'
 export default {
   components: {
-    AppFooter
+    AppFooter, SendCodeDialog
   },
   data () {
     return {
@@ -72,41 +90,48 @@ export default {
         password: '',
         type: ''
       },
-      messages: {
-        realName: this.$t('form.signUp.requireRealName'),
-        phone: this.$t('form.signUp.requireValidPhone'),
-        password: this.$t('form.signUp.passwordLength'),
-        type: this.$t('form.signUp.requireType')
-      }
+      rules: {
+        realName: { required: true, message: this.$t('forms.signUp.messages.realName') },
+        phone: { required: true, pattern: phonePattern, message: this.$t('forms.signUp.messages.phone') },
+        password: { required: true, min: 6, max: 25, message: this.$t('forms.signUp.messages.password') },
+        type: { required: true, message: this.$t('forms.signUp.messages.type') }
+      },
+      signUpBtnDisabled: false,
+      dialogVisible: false
     }
   },
   created () {
-    this.form.type = this.$t('form.signUp.' + this.$route.query.type) || ''
+    this.form.type = this.$route.query.type || ''
   },
   methods: {
     onSubmit () {
-      if (this.validateSignUpForm() === true) {
-        alert('submit!')
-      } else {
-        console.log('error submit!!')
-        return false
-      }
+      this.$refs.signUpForm.validate((valid, resObj) => {
+        if (!valid) {
+          this.showErrMessage(resObj)
+        } else {
+          this.dialogVisible = true
+          this.signUpBtnDisabled = true
+        }
+      })
     },
-    validateSignUpForm () {
-      const msg = (message) => this.$message.error(message)
-      const { form } = this
-      if (!form.realName) return msg(this.$t('form.signUp.requireRealName'))
-      if (!validatePhone(form.phone)) return msg(this.$t('form.signUp.requireValidPhone'))
-      if (form.password.length < 6 || form.password.length > 25) return msg(this.$t('form.signUp.passwordLength'))
-      if (!form.type) return msg(this.$t('form.signUp.requireType'))
-      return true
+    onDialogClosed () {
+      this.signUpBtnDisabled = false
+    },
+    showErrMessage (resObj) {
+      ['realName', 'phone', 'password', 'type'].some(v => {
+        if (resObj[v]) {
+          this.$message.error(resObj[v][0].message)
+          return true
+        } else {
+          return false
+        }
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/index.scss";
 .container {
   width: 100%;
   min-height: 100%;
@@ -184,11 +209,11 @@ p {
     vertical-align: middle;
     cursor: pointer;
     &:hover {
-      color: $--color-primary-light-1;
+      color: #1a85bc;
     }
   }
 }
-footer {
+.footer {
   color: #fff;
   /deep/ .lang-select-button {
     color: #fff;

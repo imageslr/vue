@@ -5,3 +5,5 @@ export const validateEmail = value => {
 export const validatePhone = value => {
   return /^1[34578]\d{9}$/.test(value)
 }
+
+export const phonePattern = /^1[34578]\d{9}$/

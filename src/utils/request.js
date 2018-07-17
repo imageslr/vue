@@ -8,16 +8,19 @@ const service = axios.create({
 })
 
 // request拦截器
-service.interceptors.request.use(config => {
-  if (store.getters.token) {
-    config.headers['TOKEN'] = store.getters.token // 让每个请求携带token
+service.interceptors.request.use(
+  config => {
+    if (store.getters.token) {
+      config.headers['TOKEN'] = store.getters.token // 让每个请求携带token
+    }
+    return config
+  },
+  error => {
+    // Do something with request error
+    console.error('网络请求错误', error) // for debug
+    Promise.reject(error)
   }
-  return config
-}, error => {
-  // Do something with request error
-  console.error('网络请求错误', error) // for debug
-  Promise.reject(error)
-})
+)
 
 // respone拦截器
 service.interceptors.response.use(
@@ -40,9 +43,11 @@ service.interceptors.response.use(
     }
   },
   error => {
+    // 发出请求，超时时走这个回调
+    // TODO 404错误码走哪个？
     console.error('网络响应错误', error)
     Message({
-      message: error.message || '网络响应错误 这是服务器的吗',
+      message: error.message,
       type: 'error',
       duration: 5000
     })

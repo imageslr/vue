@@ -1,4 +1,4 @@
-import { login, getUserInfo } from '@/api/user'
+import { signIn, signUp, getUserInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
@@ -9,9 +9,11 @@ const user = {
   },
 
   mutations: {
-    // 各种SET方法
     SET_TOKEN: (state, token) => {
       state.token = token
+    },
+    SET_USERINFO: (state, userInfo) => {
+      state.userInfo = userInfo
     },
     LOG_OUT: state => {
       state.userInfo = {}
@@ -20,19 +22,21 @@ const user = {
   },
 
   actions: {
+    // 注册
+    SIGN_UP ({ commit }, userInfo) {
+      return signUp(userInfo).then(({ data }) => {
+        setToken(data.token)
+        commit('SET_TOKEN', data.token)
+        commit('SET_USERINFO', data.user)
+      })
+    },
+
     // 登录
-    LOGIN ({ commit }, userInfo) {
-      const username = userInfo.username.trim()
-      return new Promise((resolve, reject) => {
-        login(username, userInfo.password, userInfo.type)
-          .then(response => {
-            commit('SET_USERINFO', response)
-            setToken(response.token)
-            resolve()
-          })
-          .catch(error => {
-            reject(error)
-          })
+    SIGN_IN ({ commit }, account) {
+      return signIn(...account).then(({ data }) => {
+        setToken(data.token)
+        commit('SET_TOKEN', data.token)
+        commit('SET_USERINFO', data.user)
       })
     },
 

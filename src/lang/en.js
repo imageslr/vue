@@ -3,7 +3,7 @@ export default {
     title: 'Building Design Platform',
     description: 'A platform that links Parties and designs'
   },
-  form: {
+  forms: {
     signUp: {
       realName: 'Real name',
       phone: 'Phone',
@@ -17,10 +17,30 @@ export default {
         'You agree to abide by the User Agreement and Privacy Policy of this website.',
       thirdParty: 'Third party',
       loginBtn: 'Sign in',
-      requireRealName: 'Please enter your real name',
-      requireValidPhone: 'Please enter a valid phone number',
-      passwordLength: 'Password length is 6 to 25 characters',
-      requireType: 'Please select your identity'
+      messages: {
+        realName: 'Please enter your real name',
+        phone: 'Please enter a valid phone number',
+        password: 'Password length is 6 to 25 characters',
+        type: 'Please select your identity'
+      }
+    },
+    sendCode: {
+      title: 'Security Verification',
+      bodyTitle: 'Please verify the phone number',
+      description:
+        'We will send a SMS verification code to the mobile number entered below.',
+      phoneLabel: 'Phone Number',
+      sendBtn: 'Send verification code',
+      cancelBtn: 'Cancel',
+      sendedDescription:
+        'Please enter the verification code to complete the login. It may take a few minutes to receive the verification code.',
+      codeLabel: 'Verification code',
+      confirmBtn: 'Approved and sign up',
+      notReceived: 'Did not receive?',
+      sendAgain: 'Send again',
+      success: 'Send succeed',
+      signUpSuccess: 'Sign up succeed',
+      requireCode: 'Please enter the verification code'
     }
   },
   navbar: {

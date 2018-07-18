@@ -3,6 +3,14 @@ export default {
     title: 'Building Design Platform',
     description: 'A platform that links Parties and designs'
   },
+  words: {
+    follow: 'Follow',
+    cancelFollow: 'Cancel follow',
+    follower: 'Follower',
+    like: 'Like',
+    comment: 'Comment',
+    published_at: 'Published at'
+  },
   forms: {
     signUp: {
       realName: 'Real name',
@@ -102,6 +110,7 @@ export default {
     followingDesigners: 'Following designers'
   },
   errmsgs: {
-    getUserInfoFailed: 'Failed to get user information, please refresh and try again'
+    getUserInfoFailed:
+      'Failed to get user information, please refresh and try again'
   }
 }

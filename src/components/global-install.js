@@ -2,10 +2,12 @@
 import Divider from './Divider.vue'
 import LangSelect from './LangSelect.vue'
 import Avatar from './Avatar.vue'
+import Preview from './Preview.vue'
 const components = {
   Divider,
   LangSelect,
-  Avatar
+  Avatar,
+  Preview
 }
 const install = function (Vue, opts = {}) {
   Object.keys(components).forEach(key => {

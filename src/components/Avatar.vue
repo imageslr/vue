@@ -16,6 +16,10 @@ export default {
     avatarUrl: {
       type: String,
       default: ''
+    },
+    square: {
+      type: Boolean,
+      default: false
     }
   }
 }

@@ -3,6 +3,14 @@ export default {
     title: '建筑设计平台',
     description: '一个连接甲方与设计师的平台'
   },
+  words: {
+    follow: '关注',
+    cancelFollow: '取消关注',
+    follower: '关注者',
+    like: '赞',
+    comment: '评论',
+    published_at: '发布于'
+  },
   forms: {
     signUp: {
       realName: '真实姓名',

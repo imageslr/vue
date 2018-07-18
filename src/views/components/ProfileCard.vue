@@ -14,7 +14,7 @@
     <div class="profile-card__follow">
       <div class="p-12">
         <router-link
-          class="f-20 mb-4"
+          class="f-20"
           to="follow">{{ userInfo.following_num }}</router-link>
         <span class="block f-12 black-60">{{ $t('profile.following') }}</span>
       </div>
@@ -22,7 +22,7 @@
       <div class="p-12">
         <router-link
           class="f-20"
-          to="follow mb-4">{{ userInfo.follower_num }}</router-link>
+          to="follow">{{ userInfo.follower_num }}</router-link>
         <span class="block f-12 black-60">{{ $t('profile.follower') }}</span>
       </div>
     </div>

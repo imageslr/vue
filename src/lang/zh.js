@@ -9,7 +9,8 @@ export default {
     follower: '关注者',
     like: '赞',
     comment: '评论',
-    published_at: '发布于'
+    published_at: '发布于',
+    recommendation: '推荐'
   },
   forms: {
     signUp: {
@@ -70,7 +71,8 @@ export default {
     me: '我',
     signIn: '登录',
     signUp: '马上加入',
-    signOut: '退出登录'
+    signOut: '退出登录',
+    square: '需求广场'
   },
   guide: {
     party: {

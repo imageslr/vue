@@ -10,3 +10,14 @@ $--color-primary: #0077b5;
 $--font-path: "~element-ui/lib/theme-chalk/fonts";
 
 @import "~element-ui/packages/theme-chalk/src/index";
+
+// 自定义class
+.el-button.linear {
+  &.primary {
+    color: #0077b5;
+    border-color: #0077b5;
+    &:hover {
+      border-color: rgba(0, 119, 181, 0.8);
+    }
+  }
+}

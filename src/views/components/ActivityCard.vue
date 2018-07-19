@@ -1,11 +1,15 @@
 <template>
   <div class="card activity-card">
     <div class="activity-card__header">
-      <avatar
-        :avatar-url="user.avatar_url"
-        class="activity-card__header-avatar"/>
+      <router-link :to="'profile?uid=' + user.id">
+        <avatar
+          :avatar-url="user.avatar_url"
+          class="activity-card__header-avatar"/>
+      </router-link>
       <div class="activity-card__header-text">
-        <p class="m0 f-15 bold">{{ user.real_name }}</p>
+        <router-link :to="'profile?uid=' + user.id">
+          <p class="m0 f-15 bold black">{{ user.real_name }}</p>
+        </router-link>
         <p class="m0 f-13 bold black-60">{{ followerNum+' '+$t('words.follower') }}</p>
         <p class="m0 f-13 bold black-60">{{ $t('words.published_at') + ' ' + activity.created_at }}</p>
       </div>

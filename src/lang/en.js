@@ -9,7 +9,8 @@ export default {
     follower: 'Follower',
     like: 'Like',
     comment: 'Comment',
-    published_at: 'Published at'
+    published_at: 'Published at',
+    recommendation: 'Recommendation'
   },
   forms: {
     signUp: {
@@ -64,7 +65,7 @@ export default {
     }
   },
   navbar: {
-    searchPlaceholder: 'search requirement, designer',
+    searchPlaceholder: 'Search requirements or designers',
     home: 'Home',
     follow: 'Follow',
     order: 'Order',
@@ -73,7 +74,8 @@ export default {
     me: 'Me',
     signIn: 'Sign in',
     signUp: 'Sign up',
-    signOut: 'Sign out'
+    signOut: 'Sign out',
+    square: 'Square'
   },
   guide: {
     party: {

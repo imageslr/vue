@@ -8,12 +8,12 @@
     <profile-card/>
     <main
       class="main">
-      <publish-card class="mb1"/>
+      <publish-card/>
+      <recommend-card/>
       <activity-card
         v-for="activity in activities"
         :activity="activity"
         :key="activity.id"
-        class="mb1"
         show-follow-button
         @preview="onPreview"/>
       <preview
@@ -43,12 +43,13 @@
 
 <script>
 import ProfileCard from '../components/ProfileCard'
-import PublishCard from '../components/PublishCard'
+import PublishCard from './components/PublishCard'
+import RecommendCard from './components/RecommendCard'
 import ActivityCard from '../components/ActivityCard'
 import AppFooter from '../layout/components/AppFooter'
 import { getFollowingActivities } from '@/api/activity'
 export default {
-  components: { ProfileCard, PublishCard, ActivityCard, AppFooter },
+  components: { ProfileCard, PublishCard, ActivityCard, AppFooter, RecommendCard },
   data () {
     return {
       total: 0,
@@ -117,5 +118,8 @@ export default {
   font-weight: 500;
   text-align: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+.main > .card {
+  margin-bottom: 8px;
 }
 </style>

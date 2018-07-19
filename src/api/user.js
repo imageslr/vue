@@ -20,3 +20,7 @@ export function getUserInfoByUID (uid) {
 export function getUserInfoByToken (token) {
   return request.get(`/users?token=${token}`)
 }
+
+export function getRecommendedDesignersByUID (uid) {
+  return request.get(`/users/${uid}/recommended`)
+}

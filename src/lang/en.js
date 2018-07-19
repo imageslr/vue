@@ -66,13 +66,14 @@ export default {
   navbar: {
     searchPlaceholder: 'search requirement, designer',
     home: 'Home',
-    favorite: 'Favorite',
+    follow: 'Follow',
     order: 'Order',
     message: 'Message',
     notice: 'Notice',
-    my: 'My',
+    me: 'Me',
     signIn: 'Sign in',
-    signUp: 'Sign up'
+    signUp: 'Sign up',
+    signOut: 'Sign out'
   },
   guide: {
     party: {

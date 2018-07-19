@@ -7,7 +7,7 @@
     @close="$emit('close')"
     @closed="$emit('closed')">
     <img
-      :src="photoUrl"
+      :src="src"
       class="block">
   </el-dialog>
 </template>
@@ -15,7 +15,7 @@
 <script>
 export default {
   props: {
-    photoUrl: {
+    src: {
       type: String,
       default: ''
     },

@@ -17,10 +17,10 @@ export default {
       let newLanguage = this.$store.getters.language === 'en' ? 'zh' : 'en'
       this.$i18n.locale = newLanguage
       this.$store.dispatch('setLanguage', newLanguage)
-      this.$message({
-        message: newLanguage === 'en' ? 'Switch Language Success' : '切换语言成功',
-        type: 'success'
-      })
+      // this.$message({
+      //   message: newLanguage === 'en' ? 'Switch Language Success' : '切换语言成功',
+      //   type: 'success'
+      // })
     }
   }
 }

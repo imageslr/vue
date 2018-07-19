@@ -9,7 +9,12 @@
     <el-input
       :placeholder="$t('navbar.searchPlaceholder')"
       class="search"/>
-    <div class="btns">
+    <navbar-menu
+      v-if="isSignIn"
+      class="links"/>
+    <div
+      v-else
+      class="links">
       <router-link to="/signin">
         <el-button
           class="signin-btn"
@@ -25,8 +30,14 @@
 </template>
 
 <script>
+import NavbarMenu from './NavbarMenu'
 export default {
-
+  components: { NavbarMenu },
+  computed: {
+    isSignIn () {
+      return this.$store.getters.isSignIn
+    }
+  }
 }
 </script>
 
@@ -48,7 +59,7 @@ export default {
   .search {
     width: 280px;
   }
-  .btns {
+  .links {
     flex: 1;
     text-align: right;
     outline: none;

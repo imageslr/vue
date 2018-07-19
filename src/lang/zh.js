@@ -63,13 +63,14 @@ export default {
   navbar: {
     searchPlaceholder: '搜索需求、设计师',
     home: '主页',
-    favorite: '关注',
+    follow: '关注',
     order: '订单',
     message: '消息',
     notice: '通知',
-    my: '我',
+    me: '我',
     signIn: '登录',
-    signUp: '马上加入'
+    signUp: '马上加入',
+    signOut: '退出登录'
   },
   guide: {
     party: {

@@ -11,6 +11,9 @@
       </div>
       <el-button
         v-if="showFollowButton && !user._is_following"
+        plain
+        round
+        type="primary"
         class="activity-card__header-follow-button"
         size="small">{{ $t('words.follow') }}</el-button>
       <el-dropdown
@@ -18,7 +21,7 @@
         trigger="click">
         <el-button
           type="text"
-          class="cancel-follow-button"
+          class="activity-card__header-cancel-follow-button"
           icon="el-icon-arrow-down"/>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>{{ $t('words.cancelFollow') }}</el-dropdown-item>
@@ -44,7 +47,7 @@
       <p/>
     </div>
     <divider/>
-    <div>
+    <div class="activity-card__action-btns">
       <el-button
         :class="{'is-liked': activity._is_liked}"
         type="text">{{ $t('words.like') + likeNumStr }}</el-button>
@@ -113,6 +116,10 @@ export default {
       flex: 1;
       margin-left: 8px;
     }
+    &-cancel-follow-button {
+      padding-top: 0;
+      color: rgba(0, 0, 0, 0.6);
+    }
   }
   &__content {
     &-text {
@@ -123,6 +130,7 @@ export default {
     &-carousel {
       &-item {
         height: 250px;
+        cursor: pointer;
       }
       /deep/ .el-carousel__indicators {
         width: 100%;
@@ -133,7 +141,7 @@ export default {
       text-align: center;
     }
   }
-  .el-button {
+  &__action-btns .el-button {
     color: rgba(0, 0, 0, 0.6);
     &.is-liked {
       color: #0077b5;
@@ -142,9 +150,5 @@ export default {
       color: #3392c4;
     }
   }
-}
-.cancel-follow-button {
-  padding-top: 0;
-  color: rgba(0, 0, 0, 0.6);
 }
 </style>

@@ -1,7 +1,13 @@
 <template>
-  <div class="container">
+  <div
+    v-infinite-scroll="getActivities"
+    infinite-scroll-disabled="loading"
+    infinite-scroll-distance="200"
+    class="container"
+  >
     <profile-card/>
-    <main class="main">
+    <main
+      class="main">
       <publish-card class="mb1"/>
       <activity-card
         v-for="activity in activities"
@@ -12,21 +18,26 @@
         @preview="onPreview"/>
       <preview
         :visible.sync="preview.visible"
-        :photo-url="preview.photoUrl"
+        :src="preview.src"
         :width="preview.width" />
+      <loader
+        :loading="loading"
+        icon="facebook" />
     </main>
-    <aside class="action-area card">
-      <router-link
-        class="action-area-item"
-        to="publish">{{ $t('actions.publishRequirement') }}</router-link>
-      <router-link
-        class="action-area-item"
-        to="order">{{ $t('actions.publishedRequirements') }}</router-link>
-      <router-link
-        class="action-area-item"
-        to="follow">{{ $t('actions.followingDesigners') }}</router-link>
-      <div><app-footer/></div>
-    </aside>
+    <div class="action-area-container">
+      <aside class="action-area card">
+        <router-link
+          class="action-area-item"
+          to="publish">{{ $t('actions.publishRequirement') }}</router-link>
+        <router-link
+          class="action-area-item"
+          to="order">{{ $t('actions.publishedRequirements') }}</router-link>
+        <router-link
+          class="action-area-item"
+          to="follow">{{ $t('actions.followingDesigners') }}</router-link>
+        <div><app-footer/></div>
+      </aside>
+    </div>
   </div>
 </template>
 
@@ -44,9 +55,10 @@ export default {
       activities: [],
       preview: {
         visible: false,
-        photoUrl: '',
+        src: '',
         width: '50%'
-      }
+      },
+      loading: true
     }
   },
   created () {
@@ -54,16 +66,22 @@ export default {
   },
   methods: {
     getActivities () {
-      getFollowingActivities(this.$store.getters.uid).then(({ data }) => {
+      this.loading = true
+      let uid = this.$store.getters.uid
+      let start = this.activities.length
+      return getFollowingActivities(uid, start).then(({ data }) => {
+        this.loading = false
         const { total, activities } = data
         this.activities.push.apply(this.activities, activities)
         this.total = total
+      }).catch(() => {
+        this.loading = false
       })
     },
     onPreview (e) {
       if (e.target.tagName === 'IMG') {
         this.preview.visible = true
-        this.preview.photoUrl = e.target.src
+        this.preview.src = e.target.src
         this.preview.width = e.target.width + 'px'
       }
     }
@@ -73,16 +91,23 @@ export default {
 
 <style scoped>
 .container {
-  display: flex;
-  align-items: flex-start;
-  width: 1000px; /* 200 | 24+...+24 | 200 */
-  margin: 24px auto 0;
+  position: relative;
+  width: 1000px;
+  margin: 0 auto;
+  padding: 24px 244px;
 }
-.main {
-  flex: 1;
-  margin: 0 24px;
+.profile-card {
+  position: fixed;
+  top: 76px;
+  margin-left: -244px;
+}
+.action-area-container {
+  position: absolute;
+  top: 24px;
+  right: 220px;
 }
 .action-area {
+  position: fixed;
   width: 220px;
 }
 .action-area-item {

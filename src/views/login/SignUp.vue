@@ -1,3 +1,49 @@
+<i18n>
+{
+  "zh": {
+    "realName": "真实姓名",
+    "phone": "手机",
+    "password": "密码（至少 6 个字符）",
+    "confirmPassword": "确认密码",
+    "type": "您的身份",
+    "party": "甲方",
+    "designer": "设计师",
+    "signUpBtn": "立即加入",
+    "term": "您同意遵守本网站的《用户协议》及《隐私政策》",
+    "thirdParty": "其他注册方式",
+    "loginBtn": "已有账号登录",
+    "messages": {
+      "realName": "请输入真实姓名",
+      "phone": "请输入合法手机号",
+      "password": "密码长度为 6 到 25 个字符",
+      "type": "请选择您的身份",
+      "phoneIsRegistered": "该手机号已被注册"
+    }
+  },
+  "en": {
+    "realName": "Real name",
+    "phone": "Phone",
+    "password": "Password (at least 6 characters)",
+    "confirmPassword": "Confirm password",
+    "type": "Your identity",
+    "party": "Party",
+    "designer": "Designer",
+    "signUpBtn": "Sign up",
+    "term":
+      "You agree to abide by the User Agreement and Privacy Policy of this website.",
+    "thirdParty": "Third party",
+    "loginBtn": "Sign in",
+    "messages": {
+      "realName": "Please enter your real name",
+      "phone": "Please enter a valid phone number",
+      "password": "Password length is 6 to 25 characters",
+      "type": "Please select your identity",
+      "phoneIsRegistered": "The phone number has been registered"
+    }
+  }
+}
+</i18n>
+
 <template>
   <div class="container">
     <section>
@@ -11,33 +57,26 @@
         size="small"
         label-position="top">
         <el-form-item
-          :label="$t('forms.signUp.realName')"
+          :label="$t('realName')"
           prop="realName">
           <el-input v-model="form.realName"/>
         </el-form-item>
         <el-form-item
-          :label="$t('forms.signUp.phone')"
+          :label="$t('phone')"
           prop="phone">
           <el-input v-model="form.phone"/>
         </el-form-item>
         <el-form-item
-          :label="$t('forms.signUp.password')"
+          :label="$t('password')"
           prop="password">
           <el-input v-model="form.password"/>
         </el-form-item>
-        <!-- <el-form-item
-          :label="$t('form.signUp.confirmPassword')"
-          prop="confirmPassword">
-          <el-input
-            v-model="form.confirmPassword"
-            size="small"/>
-        </el-form-item> -->
         <el-form-item
-          :label="$t('forms.signUp.type')"
+          :label="$t('type')"
           prop="type">
           <el-radio-group v-model="form.type">
-            <el-radio label="party">{{ $t('forms.signUp.party') }}</el-radio>
-            <el-radio label="designer">{{ $t('forms.signUp.designer') }}</el-radio>
+            <el-radio label="party">{{ $t('party') }}</el-radio>
+            <el-radio label="designer">{{ $t('designer') }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item>
@@ -45,12 +84,12 @@
             :loading="signUpBtnLoading"
             :disabled="signUpBtnDisabled"
             type="primary"
-            @click="onSubmit">{{ $t('forms.signUp.signUpBtn') }}</el-button>
+            @click="onSubmit">{{ $t('signUpBtn') }}</el-button>
         </el-form-item>
-        <p class="term">{{ $t('forms.signUp.term') }}</p>
+        <p class="term">{{ $t('term') }}</p>
         <div class="extra-action">
           <third-party form-type="signUp"/>
-          <router-link to="signin">{{ $t('forms.signUp.loginBtn') }}</router-link>
+          <router-link to="signin">{{ $t('loginBtn') }}</router-link>
         </div>
       </el-form>
     </section>
@@ -81,10 +120,10 @@ export default {
         type: ''
       },
       rules: {
-        realName: { required: true, message: this.$t('forms.signUp.messages.realName') },
-        phone: { required: true, pattern: phonePattern, message: this.$t('forms.signUp.messages.phone') },
-        password: { required: true, min: 6, max: 25, message: this.$t('forms.signUp.messages.password') },
-        type: { required: true, message: this.$t('forms.signUp.messages.type') }
+        realName: { required: true, message: this.$t('messages.realName') },
+        phone: { required: true, pattern: phonePattern, message: this.$t('messages.phone') },
+        password: { required: true, min: 6, max: 25, message: this.$t('messages.password') },
+        type: { required: true, message: this.$t('messages.type') }
       },
       signUpBtnDisabled: false,
       signUpBtnLoading: false,
@@ -107,7 +146,7 @@ export default {
               this.dialogVisible = true
               this.signUpBtnDisabled = true
             } else {
-              this.$message.error(this.$t('forms.signUp.messages.phoneIsRegistered'))
+              this.$message.error(this.$t('messages.phoneIsRegistered'))
             }
           }).catch(() => {
             this.signUpBtnLoading = false

@@ -1,3 +1,18 @@
+<i18n>
+{
+  "zh": {
+    "following": "关注",
+    "follower": "粉丝",
+    "viewHomePage": "查看个人主页"
+  },
+  "en": {
+    "following": "Following",
+    "follower": "Follower",
+    "viewHomePage": "View Home Page"
+  }
+}
+</i18n>
+
 <template>
   <aside class="card profile-card">
     <img
@@ -16,20 +31,20 @@
         <router-link
           class="f-20"
           to="follow">{{ userInfo.following_num }}</router-link>
-        <span class="block f-12 black-60">{{ $t('profile.following') }}</span>
+        <span class="block f-12 black-60">{{ $t('following') }}</span>
       </div>
       <divider margin="12"/>
       <div class="p-12">
         <router-link
           class="f-20"
           to="follow">{{ userInfo.follower_num }}</router-link>
-        <span class="block f-12 black-60">{{ $t('profile.follower') }}</span>
+        <span class="block f-12 black-60">{{ $t('follower') }}</span>
       </div>
     </div>
     <div class="profile-card__action">
       <el-button
         plain
-        @click="$router.push('/profile')">{{ $t('profile.viewHomePage') }}</el-button>
+        @click="$router.push('/profile')">{{ $t('viewHomePage') }}</el-button>
     </div>
   </aside>
 </template>

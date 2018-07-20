@@ -1,3 +1,38 @@
+<i18n>
+{
+  "zh": {
+    "party": {
+      "title": "我是甲方",
+      "features": ["发布需求", "找设计师", "与专业人士交流", "关注他人动态"]
+    },
+    "designer": {
+      "title": "我是设计师",
+      "features": ["查找需求", "承接需求", "发布自己的作品动态", "关注他人动态"]
+    }
+  },
+  "en": {
+    "party": {
+      "title": "I'm a Party",
+      "features": [
+        "Public Requirements",
+        "Find Designers",
+        "Communicate with Professionals",
+        "Follow Others' Activities"
+      ]
+    },
+    "designer": {
+      "title": "I'm a designer",
+      "features": [
+        "Find Requirements",
+        "Tender for Requirements",
+        "Publish Own Works",
+        "Follow Others' Activities"
+      ]
+    }
+  }
+}
+</i18n>
+
 <template>
   <div class="container both-center">
     <div class="item">
@@ -6,10 +41,10 @@
           <icon
             :scale="6"
             name="user-tie"/>
-          <div class="title">{{ $t('guide.party.title') }}</div>
+          <div class="title">{{ $t('party.title') }}</div>
           <div class="feature">
             <div
-              v-for="feat in $t('guide.party.features')"
+              v-for="feat in $t('party.features')"
               :key="feat">{{ feat }}</div>
           </div>
         </el-card>
@@ -21,10 +56,10 @@
           <icon
             :scale="6"
             name="user"/>
-          <div class="title">{{ $t('guide.designer.title') }}</div>
+          <div class="title">{{ $t('designer.title') }}</div>
           <div class="feature">
             <div
-              v-for="feat in $t('guide.designer.features')"
+              v-for="feat in $t('designer.features')"
               :key="feat">{{ feat }}</div>
           </div>
         </el-card>

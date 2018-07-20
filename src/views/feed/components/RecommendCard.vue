@@ -2,7 +2,7 @@
   <div
     v-if="designers.length"
     class="card p2">
-    <h2 class="m0 f-15 bold">{{ $t('words.recommendation') }}</h2>
+    <h2 class="m0 f-15 bold">{{ $t('g.recommendation') }}</h2>
     <el-scrollbar>
       <ul class="list-reset recommend-list">
         <li
@@ -22,7 +22,7 @@
           <el-button
             size="mini"
             class="linear primary"
-          >{{ $t('words.follow') }}</el-button>
+          >{{ $t('g.follow') }}</el-button>
         </li>
       </ul>
     </el-scrollbar>

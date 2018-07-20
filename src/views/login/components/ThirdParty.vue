@@ -1,6 +1,19 @@
+<i18n>
+{
+  "zh": {
+      "signIn": "其他登录方式",
+      "signUp": "其他注册方式"
+    },
+  "en": {
+      "signIn": "Third party",
+      "signUp": "Third party"
+    }
+}
+</i18n>
+
 <template>
   <div class="third-party">
-    <span>{{ $t(`forms.${formType}.thirdParty`) }}：</span>
+    <span>{{ $t(formType) }}：</span>
     <icon
       name="brands/weixin"
       @click.native="onClickIcon"/>

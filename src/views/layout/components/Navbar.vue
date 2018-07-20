@@ -1,3 +1,18 @@
+<i18n>
+{
+  "zh": {
+    "searchPlaceholder": "搜索需求、设计师",
+    "signIn": "登录",
+    "signUp": "马上加入"
+  },
+  "en": {
+    "searchPlaceholder": "Search requirements or designers",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
+  }
+}
+</i18n>
+
 <template>
   <el-menu
     class="navbar"
@@ -7,7 +22,7 @@
       name="app-logo"
       @click.native="$router.push('/')"/>
     <el-input
-      :placeholder="$t('navbar.searchPlaceholder')"
+      :placeholder="$t('searchPlaceholder')"
       class="search"/>
     <navbar-menu
       v-if="isSignIn"
@@ -18,12 +33,12 @@
       <router-link to="/signin">
         <el-button
           class="signin-btn"
-          type="text">{{ $t('navbar.signIn') }}</el-button>
+          type="text">{{ $t('signIn') }}</el-button>
       </router-link>
       <router-link to="/signup">
         <el-button
           class="signup-btn"
-          plain>{{ $t('navbar.signUp') }}</el-button>
+          plain>{{ $t('signUp') }}</el-button>
       </router-link>
     </div>
   </el-menu>

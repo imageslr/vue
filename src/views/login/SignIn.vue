@@ -1,3 +1,30 @@
+<i18n>
+{
+  "zh": {
+    "phone": "手机号",
+    "password": "密码",
+    "signIn": "登录",
+    "phoneMessage": "请输入合法手机号",
+    "passwordMessage": "请输入密码，长度 6 到 25 个字符",
+    "forgetPassword": "忘记密码？",
+    "thirdParty": "其他登录方式",
+    "signUp": "立即注册",
+    "signInSuccess": "登录成功"
+  },
+  "en": {
+    "phone": "Phone Number",
+    "password": "Password",
+    "signInBtn": "Sign in",
+    "phoneMessage": "Please enter a valid phone number",
+    "passwordMessage": "Please enter password of which length is 6 to 25",
+    "forgetPassword": "Forget password?",
+    "thirdParty": "Third party",
+    "signUpBtn": "Sign up",
+    "signInSuccess": "Sign in succeed"
+  }
+}
+</i18n>
+
 <template>
   <section class="container both-center">
     <h1><icon name="app-logo"/><span>{{ $t('app.title') }}</span></h1>
@@ -9,26 +36,26 @@
       <el-form-item prop="phone">
         <el-input
           v-model="form.phone"
-          :placeholder="$t('forms.signIn.phone')"/>
+          :placeholder="$t('phone')"/>
       </el-form-item>
       <el-form-item prop="password">
         <el-input
           v-model="form.password"
-          :placeholder="$t('forms.signIn.password')"
+          :placeholder="$t('password')"
           type="password"/>
       </el-form-item>
       <el-form-item>
         <el-button
           :loading="signInBtnLoading"
           type="primary"
-          @click="onSubmit">{{ $t('forms.signIn.signInBtn') }}</el-button>
+          @click="onSubmit">{{ $t('signIn') }}</el-button>
       </el-form-item>
       <el-form-item class="forget-password">
-        <a @click="onForget">{{ $t('forms.signIn.forgetPassword') }}</a>
+        <a @click="onForget">{{ $t('forgetPassword') }}</a>
       </el-form-item>
       <div class="extra-action">
         <third-party form-type="signIn"/>
-        <router-link to="signup">{{ $t('forms.signIn.signUpBtn') }}</router-link>
+        <router-link to="signup">{{ $t('signUp') }}</router-link>
       </div>
     </el-form>
   </section>
@@ -46,8 +73,8 @@ export default {
         password: ''
       },
       rules: {
-        phone: { required: true, pattern: phonePattern, message: this.$t('forms.signIn.phoneMessage'), trigger: 'blur' },
-        password: { required: true, min: 6, max: 25, message: this.$t('forms.signIn.passwordMessage'), trigger: 'blur' }
+        phone: { required: true, pattern: phonePattern, message: this.$t('phoneMessage'), trigger: 'blur' },
+        password: { required: true, min: 6, max: 25, message: this.$t('passwordMessage'), trigger: 'blur' }
       },
       signInBtnLoading: false
     }
@@ -60,7 +87,7 @@ export default {
           const { phone, password } = this.form
           this.$store.dispatch('SIGN_IN', phone, password).then(() => {
             this.signInBtnLoading = false
-            this.$message.success(this.$t('forms.signIn.signInSuccess'))
+            this.$message.success(this.$t('signInSuccess'))
             this.$router.push({ path: '/feed' })
           }).catch(() => {
             this.signInBtnLoading = false

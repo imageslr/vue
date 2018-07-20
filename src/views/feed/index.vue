@@ -1,14 +1,29 @@
+<i18n>
+{
+  "zh": {
+    "publishRequirement": "发布需求",
+    "publishedRequirements": "已发布的需求",
+    "followingDesigners": "我的设计师"
+  },
+  "en": {
+    "publishRequirement": "Publish requirement",
+    "publishedRequirements": "Published requirements",
+    "followingDesigners": "Following designers"
+  }
+}
+</i18n>
+
 <template>
   <div
     v-infinite-scroll="getActivities"
     infinite-scroll-disabled="loading"
     infinite-scroll-distance="200"
-    class="container"
+    class="main-container"
   >
     <profile-card/>
     <main
       class="main">
-      <publish-card/>
+      <publish-card @published="onPublished"/>
       <recommend-card/>
       <activity-card
         v-for="activity in activities"
@@ -28,13 +43,13 @@
       <aside class="action-area card">
         <router-link
           class="action-area-item"
-          to="publish">{{ $t('actions.publishRequirement') }}</router-link>
+          to="publish">{{ $t('publishRequirement') }}</router-link>
         <router-link
           class="action-area-item"
-          to="order">{{ $t('actions.publishedRequirements') }}</router-link>
+          to="order">{{ $t('publishedRequirements') }}</router-link>
         <router-link
           class="action-area-item"
-          to="follow">{{ $t('actions.followingDesigners') }}</router-link>
+          to="follow">{{ $t('followingDesigners') }}</router-link>
         <div><app-footer/></div>
       </aside>
     </div>
@@ -85,16 +100,16 @@ export default {
         this.preview.src = e.target.src
         this.preview.width = e.target.width + 'px'
       }
+    },
+    onPublished (e) {
+      this.activities.unshift(e)
     }
   }
 }
 </script>
 
 <style scoped>
-.container {
-  position: relative;
-  width: 1000px;
-  margin: 0 auto;
+.main-container {
   padding: 24px 244px;
 }
 .profile-card {

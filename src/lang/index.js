@@ -16,7 +16,8 @@ const messages = {
 
 const i18n = new VueI18n({
   locale: getLocale(), // set locale
-  messages // set locale messages
+  messages, // set locale messages
+  silentTranslationWarn: true
 })
 
 export function getLocale () {
@@ -25,6 +26,17 @@ export function getLocale () {
 
 export function setLocale (language) {
   return Cookies.set('language', language)
+}
+
+// Hot updates
+if (module.hot) {
+  module.hot.accept(['./en', './zh'], function () {
+    i18n.setLocaleMessage('zh', require('./zh').default)
+    i18n.setLocaleMessage('en', require('./en').default)
+    // Or the following hot updates via $i18n property
+    // app.$i18n.setLocaleMessage('en', require('./en').default)
+    // app.$i18n.setLocaleMessage('ja', require('./ja').default)
+  })
 }
 
 export default i18n

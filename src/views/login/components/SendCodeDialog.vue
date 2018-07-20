@@ -1,6 +1,45 @@
+<i18n>
+{
+  "zh": {
+      "title": "安全验证",
+      "bodyTitle": "请验证电话号码",
+      "description": "我们将向下方输入的手机号码发送短信验证码。",
+      "phone": "电话号码",
+      "send": "发送验证码",
+      "cancel": "返回",
+      "enterCode": "请输入验证码完成登录，接收验证码可能需要几分钟。",
+      "code": "验证码",
+      "confirm": "通过验证",
+      "notReceived": "没有收到？",
+      "sendAgain": "再发一次",
+      "success": "发送成功",
+      "signUpSuccess": "注册成功",
+      "requireCode": "请输入验证码"
+    },
+  "en": {
+      "title": "Security Verification",
+      "bodyTitle": "Please verify the phone number",
+      "description":
+        "We will send a SMS verification code to the mobile number entered below.",
+      "phone": "Phone Number",
+      "send": "Send verification code",
+      "cancel": "Cancel",
+      "enterCode":
+        "Please enter the verification code to complete the login. It may take a few minutes to receive the verification code.",
+      "code": "Verification code",
+      "confirm": "Approved and sign up",
+      "notReceived": "Did not receive?",
+      "sendAgain": "Send again",
+      "success": "Send succeed",
+      "signUpSuccess": "Sign up succeed",
+      "requireCode": "Please enter the verification code"
+    }
+}
+</i18n>
+
 <template>
   <el-dialog
-    :title="$t('forms.sendCode.title')"
+    :title="$t('title')"
     :visible="visible"
     :close-on-click-modal="false"
     width="600px"
@@ -11,40 +50,40 @@
       v-loading="loading"
       class="dialog-body">
       <template v-if="step ==='confirming'">
-        <h1>{{ $t('forms.sendCode.bodyTitle') }}</h1>
-        <h2>{{ $t('forms.sendCode.description') }}</h2>
+        <h1>{{ $t('bodyTitle') }}</h1>
+        <h2>{{ $t('description') }}</h2>
         <div class="input-container">
-          <label>{{ $t('forms.sendCode.phoneLabel') }}</label>
+          <label>{{ $t('phone') }}</label>
           <div class="input">{{ splittedPhone }}</div>
         </div>
         <el-button
           class="w-100 primary-btn"
           size="large"
           type="primary"
-          @click="onSend">{{ $t('forms.sendCode.sendBtn') }}</el-button>
+          @click="onSend">{{ $t('send') }}</el-button>
         <el-button
           class="w-100 cancel-btn"
           size="large"
           type="info"
-          @click="$emit('update:visible', false)">{{ $t('forms.sendCode.cancelBtn') }}</el-button>
+          @click="$emit('update:visible', false)">{{ $t('cancel') }}</el-button>
       </template>
       <template v-else-if="step==='sended'">
-        <h1>{{ $t('forms.sendCode.bodyTitle') }}</h1>
-        <h2>{{ $t('forms.sendCode.sendedDescription') }}</h2>
+        <h1>{{ $t('bodyTitle') }}</h1>
+        <h2>{{ $t('enterCode') }}</h2>
         <div class="input-container">
-          <label>{{ $t('forms.sendCode.codeLabel') }}</label>
+          <label>{{ $t('code') }}</label>
           <el-input v-model="code"/>
         </div>
-        <p>{{ $t('forms.sendCode.notReceived') }}
+        <p>{{ $t('notReceived') }}
           <span
             class="send-again-btn"
-            @click="onSend">{{ $t('forms.sendCode.sendAgain') }}</span>
+            @click="onSend">{{ $t('sendAgain') }}</span>
         </p>
         <el-button
           class="w-100 primary-btn"
           size="large"
           type="primary"
-          @click="onApprove">{{ $t('forms.sendCode.confirmBtn') }}</el-button>
+          @click="onApprove">{{ $t('confirm') }}</el-button>
       </template>
     </section>
   </el-dialog>
@@ -92,19 +131,19 @@ export default {
       sendCode(this.phone).then(res => {
         this.loading = false
         this.step = 'sended'
-        this.$message.success(this.$t('forms.sendCode.success'))
+        this.$message.success(this.$t('success'))
       }).catch(() => {
         this.loading = false
       })
     },
     onApprove () {
-      if (!this.code) return this.$message.error(this.$t('forms.sendCode.requireCode'))
+      if (!this.code) return this.$message.error(this.$t('requireCode'))
       this.loading = true
       const { phone, code, userInfo } = this
       checkCode(phone, code).then(() => {
         return this.$store.dispatch('SIGN_UP', userInfo).then(() => {
           this.loading = false
-          this.$message.success(this.$t('forms.sendCode.signUpSuccess'))
+          this.$message.success(this.$t('signUpSuccess'))
           this.$router.push({ path: '/feed' })
         })
       }).catch(() => {

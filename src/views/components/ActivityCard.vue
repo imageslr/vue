@@ -10,8 +10,8 @@
         <router-link :to="'profile?uid=' + user.id">
           <p class="m0 f-15 bold black">{{ user.real_name }}</p>
         </router-link>
-        <p class="m0 f-13 bold black-60">{{ followerNum+' '+$t('words.follower') }}</p>
-        <p class="m0 f-13 bold black-60">{{ $t('words.published_at') + ' ' + activity.created_at }}</p>
+        <p class="m0 f-13 bold black-60">{{ followerNum+' '+$t('g.follower') }}</p>
+        <p class="m0 f-13 bold black-60">{{ $t('g.published_at') + ' ' + activity.created_at }}</p>
       </div>
       <el-button
         v-if="showFollowButton && !user._is_following"
@@ -19,7 +19,7 @@
         round
         type="primary"
         class="activity-card__header-follow-button"
-        size="small">{{ $t('words.follow') }}</el-button>
+        size="small">{{ $t('g.follow') }}</el-button>
       <el-dropdown
         v-if="showFollowButton && user._is_following"
         trigger="click">
@@ -28,13 +28,14 @@
           class="activity-card__header-cancel-follow-button"
           icon="el-icon-arrow-down"/>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>{{ $t('words.cancelFollow') }}</el-dropdown-item>
+          <el-dropdown-item>{{ $t('g.cancelFollow') }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
     <div class="activity-card__content">
       <p class="activity-card__content-text">{{ activity.content }}</p>
       <el-carousel
+        v-if="activity.photo_urls.length"
         :autoplay="false"
         class="activity-card__content-carousel"
         trigger="click"
@@ -54,8 +55,8 @@
     <div class="activity-card__action-btns">
       <el-button
         :class="{'is-liked': activity._is_liked}"
-        type="text">{{ $t('words.like') + likeNumStr }}</el-button>
-      <el-button type="text">{{ $t('words.comment') + commentNumStr }}</el-button>
+        type="text">{{ $t('g.like') + likeNumStr }}</el-button>
+      <el-button type="text">{{ $t('g.comment') + commentNumStr }}</el-button>
     </div>
   </div>
 </template>

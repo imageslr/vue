@@ -15,7 +15,7 @@ const user = {
     SET_USERINFO: (state, userInfo) => {
       state.userInfo = userInfo
     },
-    LOG_OUT: state => {
+    SIGN_OUT: state => {
       state.userInfo = {}
       state.token = ''
     }
@@ -55,9 +55,9 @@ const user = {
     },
 
     // 前端 登出
-    LOGOUT ({ commit }) {
+    SIGN_OUT ({ commit }) {
       return new Promise(resolve => {
-        commit('LOG_OUT')
+        commit('SIGN_OUT')
         removeToken()
         resolve()
       })

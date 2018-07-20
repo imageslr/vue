@@ -21,3 +21,9 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
     }
   }
 }
+
+.el-form.hide-asterisk {
+  /deep/ .el-form-item__label:before {
+    content: "";
+  }
+}

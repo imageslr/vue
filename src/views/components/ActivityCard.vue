@@ -8,27 +8,31 @@
       </router-link>
       <div class="activity-card__header-text">
         <router-link :to="'profile?uid=' + user.id">
-          <p class="m0 f-15 bold black">{{ user.real_name }}</p>
+          <p class="m0 f-15 bold black inline-block">{{ user.real_name }}</p>
         </router-link>
         <p class="m0 f-13 bold black-60">{{ followerNum+' '+$t('g.follower') }}</p>
         <p class="m0 f-13 bold black-60">{{ $t('g.published_at') + ' ' + activity.created_at }}</p>
       </div>
       <el-button
         v-if="showFollowButton && !user._is_following"
+        :laoding="followBtnLoading"
         plain
         round
         type="primary"
         class="activity-card__header-follow-button"
-        size="small">{{ $t('g.follow') }}</el-button>
+        size="small"
+        @click="onToggleFollow('follow')">{{ $t('g.follow') }}</el-button>
       <el-dropdown
         v-if="showFollowButton && user._is_following"
-        trigger="click">
+        trigger="click"
+        @command="onClickCommand">
         <el-button
           type="text"
           class="activity-card__header-cancel-follow-button"
           icon="el-icon-arrow-down"/>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>{{ $t('g.cancelFollow') }}</el-dropdown-item>
+        <el-dropdown-menu
+          slot="dropdown">
+          <el-dropdown-item command="unfollow">{{ $t('g.cancelFollow') }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -55,13 +59,16 @@
     <div class="activity-card__action-btns">
       <el-button
         :class="{'is-liked': activity._is_liked}"
-        type="text">{{ $t('g.like') + likeNumStr }}</el-button>
+        type="text"
+        @click="onToggleLike">{{ $t('g.like') + likeNumStr }}</el-button>
       <el-button type="text">{{ $t('g.comment') + commentNumStr }}</el-button>
     </div>
   </div>
 </template>
 
 <script>
+import { followUserByUID, unfollowUserByUID } from '@/api/follow'
+import { likeActivityById, unlikeActivityById } from '@/api/activity'
 import { splitNumber } from '@/utils'
 export default {
   props: {
@@ -77,6 +84,7 @@ export default {
           comment_num: 0,
           _is_liked: false,
           user: {
+            id: '',
             avatar_url: '',
             real_name: '',
             follower_num: 0,
@@ -88,6 +96,12 @@ export default {
     showFollowButton: {
       type: Boolean,
       default: false
+    }
+  },
+  data: function () {
+    return {
+      followBtnLoading: false,
+      unfollowBtnLoading: false
     }
   },
   computed: {
@@ -102,6 +116,31 @@ export default {
     },
     commentNumStr () {
       return this.activity.comment_num ? ` (${this.activity.comment_num})` : ''
+    }
+  },
+  methods: {
+    onToggleLike () {
+      const liked = this.activity._is_liked
+      const fn = liked ? unlikeActivityById : likeActivityById
+      fn(this.activity.id).then(({ data: { like_num } }) => {
+        this.activity._is_liked = !liked
+        this.activity.like_num = like_num
+      })
+    },
+    onClickCommand (command) {
+      if (command === 'unfollow') {
+        this.onToggleFollow('unfollow')
+      }
+    },
+    onToggleFollow (action) {
+      this[`${action}BtnLoading`] = true
+      const fn = action === 'follow' ? followUserByUID : unfollowUserByUID
+      fn(this.activity.user.id).then(() => {
+        this[`${action}BtnLoading`] = false
+        this.activity.user._is_following = action === 'follow'
+      }).catch(() => {
+        this[`${action}BtnLoading`] = false
+      })
     }
   }
 }

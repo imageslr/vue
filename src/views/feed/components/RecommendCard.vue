@@ -4,12 +4,14 @@
     class="card p2">
     <h2 class="m0 f-15 bold">{{ $t('g.recommendation') }}</h2>
     <el-scrollbar>
-      <ul class="list-reset recommend-list">
+      <transition-group
+        tag="ul"
+        name="fade"
+        class="list-reset recommend-list">
         <li
-          v-for="designer in designers"
+          v-for="(designer, index) in designers"
           :key="designer.id"
-          class="recommend-list-item"
-        >
+          class="recommend-list-item">
           <router-link :to="'profile?uid=' + designer.id">
             <avatar
               :avatar-url="designer.avatar_url"
@@ -20,29 +22,44 @@
           </router-link>
           <p class="m0 mb1 f-12 black-60 ellipsis-1">{{ designer.title }}</p>
           <el-button
+            :loading="designer._loading"
             size="mini"
             class="linear primary"
+            @click="onFollow(index)"
           >{{ $t('g.follow') }}</el-button>
         </li>
-      </ul>
+      </transition-group>
     </el-scrollbar>
   </div>
 </template>
 
 <script>
 import { getRecommendedDesignersByUID } from '@/api/user'
+import { followUserByUID } from '@/api/follow'
 export default {
   data () {
     return {
-      designers: []
+      designers: [/* ..., _loading: false */]
     }
   },
   created () {
     const uid = this.$store.getters.uid
     getRecommendedDesignersByUID(uid).then(({ data: { users } }) => {
-      this.designers = users
+      this.designers = users.map(e => {
+        return { ...e, _loading: false }
+      })
     })
-  }
+  },
+  methods: {
+    onFollow (index) {
+      this.designers[index]._loading = true
+      followUserByUID(this.designers[index].id).then(() => {
+        this.designers[index]._loading = false
+        this.designers.splice(index, 1)
+      }).catch(() => {
+        this.designers[index]._loading = false
+      })
+    } }
 }
 </script>
 

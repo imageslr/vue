@@ -21,15 +21,15 @@
 
 <template>
   <div class="card">
-    <h1 class="card__header">
-      {{ $t('header') }}
+    <div class="card__header">
+      <h1 class="card__header-title">{{ $t('header') }}</h1>
       <el-input
         :placeholder="$t('searchPlaceholder')"
         suffix-icon="el-icon-search"
         size="small"
         class="card__header-search"
         @click.native="searchDialogVisible = true"/>
-    </h1>
+    </div>
     <div class="card__content">
       <alert
         :title="$t('alertText', { num: totalInvitedNum })"
@@ -38,7 +38,7 @@
       <transition-group
         v-else
         tag="div"
-        name="fade"
+        name="fade-transform-x"
         class="list pt1 pb2">
         <div
           v-for="(designer, index) in invitedDesigners"
@@ -138,6 +138,11 @@ export default {
 <style lang="scss" scoped>
 .card__header {
   position: relative;
+  &-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+  }
   &-search {
     position: absolute;
     right: 16px;

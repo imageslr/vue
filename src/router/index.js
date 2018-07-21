@@ -4,9 +4,10 @@ import Layout from '../views/layout/Layout'
 import Guide from '../views/login/Guide'
 import SignUp from '../views/login/SignUp'
 import SignIn from '../views/login/SignIn'
-import Feed from '../views/feed/index'
-import Publish from '../views/publish/index'
+import Feed from '../views/feed'
+import Publish from '../views/publish'
 import Result from '../views/publish/Result'
+import Follow from '../views/follow'
 
 Vue.use(Router)
 
@@ -61,6 +62,14 @@ export default new Router({
           meta: {
             requireAuth: true
           }
+        },
+        {
+          path: 'follow',
+          name: 'follow',
+          meta: {
+            requireAuth: true
+          },
+          component: Follow
         }
       ]
     }

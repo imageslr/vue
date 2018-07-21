@@ -11,7 +11,7 @@
 
 <script>
 import RequirementEditer from './components/RequirementEditer'
-import { publish } from '@/api/requirement'
+import { publishRequirement } from '@/api/requirement'
 export default {
   components: { RequirementEditer },
   data () {
@@ -30,7 +30,7 @@ export default {
       }
       editor.validate(valid => {
         if (valid) {
-          publish(body).then(({ data: { req_id } }) => {
+          publishRequirement(body).then(({ data: { req_id } }) => {
             this.loading = false
             this.$router.replace(`/publish/result?id=${req_id}`)
           }).catch(() => {

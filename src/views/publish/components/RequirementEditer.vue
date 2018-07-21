@@ -162,8 +162,8 @@ export default {
         price: '',
         description: '',
         biddingNum: '',
-        rewardNum: '', // 1, x
-        rewardSettings: [
+        rewardNum: '', // 1：一个人；x：多个人
+        rewardSettings: [ // 默认是一到三等奖，按照下标排列
           { num: '', bonus: '' },
           { num: '', bonus: '' },
           { num: '', bonus: '' }

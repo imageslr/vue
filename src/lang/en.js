@@ -5,7 +5,7 @@ export default {
   },
   // global
   g: {
-    follow: 'Follow',
+    following: 'Following',
     cancelFollow: 'Cancel follow',
     follower: 'Follower',
     like: 'Like',

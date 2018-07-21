@@ -22,3 +22,13 @@ export function followUserByUID (uid) {
 export function unfollowUserByUID (uid) {
   return unfollow('user', uid)
 }
+
+// 获取某个用户关注的人
+export function getFollowingUsersByUID (uid, start = 0, type = 'all') {
+  return request.get(`/users/${uid}/following?start=${start}&type=${type}`)
+}
+
+// 获取关注某个用户的人
+export function getFollowersByUID (uid, start = 0, type = 'all') {
+  return request.get(`/users/${uid}/followers?start=${start}&type=${type}`)
+}

@@ -16,6 +16,10 @@ export function recall (reqId, uid) {
   })
 }
 
-export function publish (body) {
+export function publishRequirement (body) {
   return request.post(`/requirements`, body)
+}
+
+export function getReqDetailById (reqId) {
+  return request.get(`/requirements/${reqId}`)
 }

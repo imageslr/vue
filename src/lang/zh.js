@@ -5,7 +5,7 @@ export default {
   },
   // global
   g: {
-    follow: '关注',
+    following: '关注',
     cancelFollow: '取消关注',
     follower: '关注者',
     like: '赞',

@@ -26,7 +26,7 @@
             size="mini"
             class="linear primary"
             @click="onFollow(index)"
-          >{{ $t('g.follow') }}</el-button>
+          >{{ $t('g.following') }}</el-button>
         </li>
       </transition-group>
     </el-scrollbar>

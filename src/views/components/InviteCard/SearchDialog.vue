@@ -124,7 +124,7 @@ export default {
       })
     },
     onClosed () {
-      Object.assign(this.$data, this.$options.data()) // 重置data
+      // Object.assign(this.$data, this.$options.data()) // 重置data
       this.$emit('closed')
     }
   }

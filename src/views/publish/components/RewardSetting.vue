@@ -37,6 +37,7 @@
         class="reward-setting-item__input">
         <template slot="prepend">￥</template>
       </el-input>
+      <!-- 最多添加5个 -->
       <el-button
         v-if="index != 0 && index + 1 === value.length"
         @click.prevent="onRemoveReward">{{ $t('delete') }}</el-button>
@@ -72,15 +73,9 @@ export default {
   },
   methods: {
     onAddReward () {
-      // if (this.value.length >= 5) {
-      //   return this.$message.error(this.$t('maxSettingNum'))
-      // }
       this.$emit('input', [...this.value, { num: '', bonus: '' }])
     },
     onRemoveReward (index) {
-      // if (this.value.length === 1) {
-      //   return this.$message.error(this.$t('minSettingNum'))
-      // }
       this.$emit('input', this.value.slice(0, this.value.length - 1))
     }
   }

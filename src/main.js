@@ -16,6 +16,7 @@ import GlobalComponents from '@/components/global-install'
 import Icon from 'vue-awesome/components/Icon'
 import infiniteScroll from 'vue-infinite-scroll'
 import '@/assets/iconfont.js' // iconfont
+import _ from '@/utils/lodash'
 
 // 注册组件库，注册一些常用的全局组件
 Vue.use(ElementUI, {
@@ -36,6 +37,10 @@ Icon.register({
 // 无限滚动指令
 Vue.use(infiniteScroll)
 
+// lodash方法
+Vue.prototype.$_ = _
+
+// 路由前权限判断
 router.beforeEach((to, from, next) => {
   NProgress.start()
   // 如果用户登录过

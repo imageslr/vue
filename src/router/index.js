@@ -6,6 +6,7 @@ import SignUp from '../views/login/SignUp'
 import SignIn from '../views/login/SignIn'
 import Feed from '../views/feed/index'
 import Publish from '../views/publish/index'
+import Result from '../views/publish/Result'
 
 Vue.use(Router)
 
@@ -45,6 +46,14 @@ export default new Router({
             requireAuth: true
           },
           component: Publish
+        },
+        {
+          path: 'publish/result',
+          name: 'publishResult',
+          meta: {
+            requireAuth: true
+          },
+          component: Result
         },
         {
           path: 'me',

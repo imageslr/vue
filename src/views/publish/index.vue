@@ -1,8 +1,9 @@
 <template>
   <div class="main-container">
-    <requirement-editer />
+    <requirement-editer ref="editor"/>
     <el-button
-      class="block w-100 shadow"
+      :loading="loading"
+      class="block w-100 shadow mt-24"
       type="primary"
       @click="onSubmit">{{ $t('g.publish') }}</el-button>
   </div>
@@ -10,23 +11,39 @@
 
 <script>
 import RequirementEditer from './components/RequirementEditer'
+import { publish } from '@/api/requirement'
 export default {
-  components: {
-    RequirementEditer
+  components: { RequirementEditer },
+  data () {
+    return {
+      loading: false
+    }
   },
   methods: {
-    onSubmit () {}
+    onSubmit () {
+      this.loading = true
+      const editor = this.$refs.editor
+      const form = editor.form
+      const body = {
+        ...form,
+        user_id: this.$store.getters.uid
+      }
+      editor.validate(valid => {
+        if (valid) {
+          publish(body).then(({ data: { req_id } }) => {
+            this.loading = false
+            this.$router.replace(`/publish/result?id=${req_id}`)
+          }).catch(() => {
+            this.loading = false
+          })
+        } else {
+          this.loading = false
+        }
+      })
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.main-container {
-  > * {
-    margin-bottom: 24px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-}
 </style>

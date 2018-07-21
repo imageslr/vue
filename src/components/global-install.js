@@ -5,13 +5,17 @@ import Avatar from './Avatar.vue'
 import Preview from './Preview.vue'
 import Loader from './Loader.vue'
 import SvgIcon from './SvgIcon.vue'
+import Alert from './Alert.vue'
+import Empty from './Empty.vue'
 const components = {
   Divider,
   LangSelect,
   Avatar,
   Preview,
   Loader,
-  SvgIcon
+  SvgIcon,
+  Alert,
+  Empty
 }
 const install = function (Vue, opts = {}) {
   Object.keys(components).forEach(key => {

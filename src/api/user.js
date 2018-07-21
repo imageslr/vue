@@ -20,12 +20,22 @@ export function getUserInfoByUID (uid) {
   return request.get(`/users/${uid}`)
 }
 
-// 获取用户信息
+// 根据token获取用户信息
 export function getUserInfoByToken (token) {
-  return request.get(`/users?token=${token}`)
+  return request.get(`/users/token?token=${token}`)
 }
 
 // 获取推荐设计师
 export function getRecommendedDesignersByUID (uid) {
   return request.get(`/users/${uid}/recommended_designers`)
+}
+
+// 搜索设计师
+export function searchDesignersByName (name, params) {
+  params = {
+    type: 'designer',
+    name,
+    ...params
+  }
+  return request.get('/users', { params })
 }

@@ -18,6 +18,7 @@
     "basscss": "^8.0.4",
     "element-ui": "^2.4.4",
     "js-cookie": "^2.2.0",
+    "lodash": "^4.17.10",
     "nprogress": "^0.2.0",
     "vue": "^2.5.2",
     "vue-antd-ui": "^0.7.0",

@@ -73,7 +73,9 @@
       class="form hide-asterisk"
       size="small">
       <el-form-item :label="$t('type')">
-        <el-radio-group v-model="form.type">
+        <el-radio-group
+          v-model="form.type"
+          @change="$emit('changeReqType', $event)">
           <el-radio label="1">{{ $t('audition') }}</el-radio>
           <el-radio label="2">{{ $t('shortlist') }}</el-radio>
           <el-radio label="3">{{ $t('invitation') }}</el-radio>
@@ -148,11 +150,10 @@
 
 <script>
 import RewardSetting from './RewardSetting'
-import validatorMixin from '@/mixins/validator'
-import { plsEnter, plsCheck, maxLen } from '@/utils/errmsg'
+import Validator from 'async-validator'
+import { plsEnter, plsCheck, maxLen, showErrMessage } from '@/utils/errmsg'
 export default {
   components: { RewardSetting },
-  mixins: [validatorMixin],
   data () {
     return {
       form: {
@@ -161,7 +162,7 @@ export default {
         price: '',
         description: '',
         biddingNum: '',
-        rewardNum: '',
+        rewardNum: '', // 1, x
         rewardSettings: [
           { num: '', bonus: '' },
           { num: '', bonus: '' },
@@ -181,7 +182,7 @@ export default {
         rewardNum: { required: true, message: plsCheck(this.$t('rewardNum')) },
         rewardSettings: {
           validator: (rule, value, callback) => {
-            if (value.some(e => !e.num || !e.bonus)) {
+            if (this.form.rewardNum === 'x' && value.some(e => !e.num || !e.bonus)) {
               callback(new Error(this.$t('noEmptyField')))
             } else {
               callback()
@@ -202,6 +203,19 @@ export default {
     },
     uploadTip () {
       return this.$t('fileFormat') + ': ' + ['png', 'jpeg', 'doc', 'docx', 'pdf', 'zip', 'rar'].join('、')
+    }
+  },
+  methods: {
+    validate (cb) {
+      const validator = new Validator(this.rules)
+      validator.validate(this.form, res => {
+        if (res) {
+          showErrMessage(res)
+          cb(false)
+        } else {
+          cb(true)
+        }
+      })
     }
   }
 }

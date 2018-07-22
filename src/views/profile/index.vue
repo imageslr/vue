@@ -153,7 +153,8 @@ export default {
   font-size: 11px;
   color: #4b4f56;
   background: #f6f7f9;
-  border: 1px solid #dfe0e4;
-  border-radius: 2px 2px 0 0;
+  border-radius: 2px;
+  box-shadow: 0 1px 1px 0 #b5b5b5, 0 2px 1px 0 #e2e1e1,
+    0 1px 4px 1px rgba(0, 0, 0, 0.1);
 }
 </style>

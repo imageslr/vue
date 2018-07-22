@@ -15,12 +15,13 @@
     infinite-scroll-disabled="busy"
     infinite-scroll-distance="200">
     <activity-card
-      v-for="activity in activities"
+      v-for="(activity, index) in activities"
       :activity="activity"
       :key="activity.id"
       :show-action-button="showActionButton"
       class="activity-card"
-      @preview="onPreview"/>
+      @preview="onPreview"
+      @deleted="onDeleted(index)"/>
     <preview
       :visible.sync="preview.visible"
       :src="preview.src"
@@ -96,6 +97,9 @@ export default {
         this.preview.src = e.target.src
         this.preview.width = e.target.width + 'px'
       }
+    },
+    onDeleted (index) {
+      this.activities.splice(index, 1)
     }
   }
 }

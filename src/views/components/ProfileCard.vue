@@ -29,15 +29,15 @@
     <div class="profile-card__follow">
       <div class="p-12">
         <router-link
-          class="f-20"
-          to="follow">{{ userInfo.following_num }}</router-link>
+          :to="'/follow?uid=' + userInfo.id"
+          class="f-20">{{ userInfo.following_num }}</router-link>
         <span class="block f-12 black-60">{{ $t('following') }}</span>
       </div>
       <divider margin="12"/>
       <div class="p-12">
         <router-link
-          class="f-20"
-          to="/follow?type=follower">{{ userInfo.follower_num }}</router-link>
+          :to="'/follow?type=follower&uid=' + userInfo.id"
+          class="f-20">{{ userInfo.follower_num }}</router-link>
         <span class="block f-12 black-60">{{ $t('follower') }}</span>
       </div>
     </div>
@@ -58,6 +58,7 @@ export default {
       type: Object,
       default () {
         return {
+          id: null,
           avatar_url: '',
           real_name: this.$t('g.loading'),
           title: '',

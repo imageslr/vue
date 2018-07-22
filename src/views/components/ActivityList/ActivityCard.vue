@@ -165,7 +165,7 @@ export default {
       }
       if (command === 'delete') {
         deleteActivityById(this.activity.id).then(() => {
-          this.$emit('delete', this.activity)
+          this.$emit('deleted', this.activity)
         })
       }
     },

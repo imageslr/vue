@@ -67,8 +67,8 @@ export default {
       let uid = this.$store.getters.uid
       return getFollowingActivities(uid, start)
     },
-    onPublished (e) {
-      console.log(this.$refs.activityList)
+    onPublished (activity) {
+      this.$refs.activityList.activities.unshift(activity)
     }
   }
 }

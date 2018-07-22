@@ -2,11 +2,15 @@
 {
   "zh": {
     "followingTabTitle": "我关注的人",
-    "followerTabTitle": "关注我的人"
+    "followerTabTitle": "关注我的人",
+    "followingTabTitleOther": "Ta关注的人",
+    "followerTabTitleOther": "关注Ta的人"
   },
   "en":  {
     "followingTabTitle": "Following",
-    "followerTabTitle": "Followers"
+    "followerTabTitle": "Followers",
+    "followingTabTitleOther": "Following",
+    "followerTabTitleOther": "Followers"
   }
 }
 </i18n>
@@ -15,12 +19,12 @@
   <div class="main-container">
     <div class="card">
       <el-menu
-        :default-active="activeIndex"
+        :default-active="type"
         style="padding: 0 32px;"
         mode="horizontal"
         @select="onSelectMenuItem">
-        <el-menu-item index="following">{{ $t('followingTabTitle') }}</el-menu-item>
-        <el-menu-item index="follower">{{ $t('followerTabTitle') }}</el-menu-item>
+        <el-menu-item index="following">{{ isSelf ? $t('followingTabTitle') : $t('followingTabTitleOther') }}</el-menu-item>
+        <el-menu-item index="follower">{{ isSelf ? $t('followerTabTitle') : $t('followerTabTitleOther') }}</el-menu-item>
       </el-menu>
       <loader
         :loading="loading"
@@ -29,7 +33,7 @@
       <el-pagination
         :current-page.sync="currentPage"
         :total="total"
-        :page-size="20"
+        :page-size="pageSize"
         background
         layout="prev, pager, next"
         @current-change="onNavigate"/>
@@ -47,26 +51,26 @@ export default {
       loading: true,
       users: [],
       total: Infinity, // TODO: Bug report: 设成0时current-page会失效，不知道为什么
+      pageSize: 20,
       currentPage: 1
     }
   },
   computed: {
-    activeIndex () {
+    // 页面列表类型
+    type () {
       if (this.$route.query.type === 'follower') {
         return 'follower'
       } else {
-        return 'following' // 默认
-      }
-    },
-    start () {
-      return (this.currentPage - 1) * 20
-    },
-    type () {
-      if (this.$route.query.type === 'following') {
         return 'following'
-      } else {
-        return 'follower'
       }
+    },
+    // 当前页面的用户id，默认是当前登录用户的id
+    pageUID () {
+      return this.$route.query.uid || this.$store.getters.uid
+    },
+    // 是否是自己的关注页
+    isSelf () {
+      return this.pageUID == this.$store.getters.uid // eslint-disable-line eqeqeq
     }
   },
   created () {
@@ -76,9 +80,9 @@ export default {
   methods: {
     getUsers () {
       this.loading = true
+      const start = (this.currentPage - 1) * this.pageSize
       const fn = this.type === 'following' ? getFollowingUsersByUID : getFollowersByUID
-      const uid = this.$store.getters.uid
-      fn(uid, this.start).then(({ data: { users, total } }) => {
+      fn(this.pageUID, start).then(({ data: { users, total } }) => {
         this.loading = false
         this.total = total
         this.users = [...this.users, ...users]
@@ -88,17 +92,30 @@ export default {
     },
     onSelectMenuItem (index) {
       if (index === 'following') {
-        this.$router.push('/follow?type=following')
+        this.$router.push({
+          path: this.$route.path,
+          query: {
+            type: 'following',
+            uid: this.pageUID
+          }
+        })
       } else {
-        this.$router.push('/follow?type=follower')
+        this.$router.push({
+          path: this.$route.path,
+          query: {
+            type: 'follower',
+            uid: this.pageUID
+          }
+        })
       }
     },
     onNavigate (page) {
       this.$router.push({
         path: this.$route.path,
         query: {
-          p: page,
-          type: this.type
+          type: this.type,
+          uid: this.pageUID,
+          p: page
         }
       })
     }

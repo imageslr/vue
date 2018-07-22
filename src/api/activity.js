@@ -16,6 +16,10 @@ export function publishActivity (body) {
   return request.post(`/activities`, body)
 }
 
+export function deleteActivityById (id) {
+  return request.delete(`/activities/${id}`)
+}
+
 export function likeActivityById (id) {
   return request.post(`/activities/${id}/like`)
 }

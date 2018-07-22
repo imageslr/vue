@@ -1,3 +1,14 @@
+<i18n>
+{
+  "zh": {
+    "delete": "删除"
+  },
+  "en": {
+    "delete": "Delete"
+  }
+}
+</i18n>
+
 <template>
   <div class="card activity-card">
     <div class="activity-card__header">
@@ -13,28 +24,43 @@
         <p class="m0 f-13 bold black-60">{{ followerNum+' '+$t('g.follower') }}</p>
         <p class="m0 f-13 bold black-60">{{ $t('g.published_at') + ' ' + activity.created_at }}</p>
       </div>
-      <el-button
-        v-if="showFollowButton && !user._is_following"
-        :laoding="followBtnLoading"
-        plain
-        round
-        type="primary"
-        class="activity-card__header-follow-button"
-        size="small"
-        @click="onToggleFollow('follow')">{{ $t('g.follow') }}</el-button>
-      <el-dropdown
-        v-if="showFollowButton && user._is_following"
-        trigger="click"
-        @command="onClickCommand">
+      <template v-if="showActionButton">
+        <el-dropdown
+          v-if="isPublisher"
+          trigger="click"
+          @command="onClickCommand">
+          <el-button
+            type="text"
+            class="activity-card__header-cancel-follow-button"
+            icon="el-icon-arrow-down"/>
+          <el-dropdown-menu
+            slot="dropdown">
+            <el-dropdown-item command="delete">{{ $t('delete') }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-dropdown
+          v-else-if="isFollowing"
+          trigger="click"
+          @command="onClickCommand">
+          <el-button
+            type="text"
+            class="activity-card__header-cancel-follow-button"
+            icon="el-icon-arrow-down"/>
+          <el-dropdown-menu
+            slot="dropdown">
+            <el-dropdown-item command="unfollow">{{ $t('g.cancelFollow') }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <el-button
-          type="text"
-          class="activity-card__header-cancel-follow-button"
-          icon="el-icon-arrow-down"/>
-        <el-dropdown-menu
-          slot="dropdown">
-          <el-dropdown-item command="unfollow">{{ $t('g.cancelFollow') }}</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+          v-else
+          :loading="followBtnLoading"
+          plain
+          round
+          type="primary"
+          class="activity-card__header-follow-button"
+          size="small"
+          @click="onToggleFollow('follow')">{{ $t('g.follow') }}</el-button>
+      </template>
     </div>
     <div class="activity-card__content">
       <p class="activity-card__content-text">{{ activity.content }}</p>
@@ -68,7 +94,7 @@
 
 <script>
 import { followUserByUID, unfollowUserByUID } from '@/api/follow'
-import { likeActivityById, unlikeActivityById } from '@/api/activity'
+import { likeActivityById, unlikeActivityById, deleteActivityById } from '@/api/activity'
 import { splitNumber } from '@/utils'
 export default {
   props: {
@@ -93,7 +119,7 @@ export default {
         }
       }
     },
-    showFollowButton: {
+    showActionButton: {
       type: Boolean,
       default: false
     }
@@ -116,6 +142,12 @@ export default {
     },
     commentNumStr () {
       return this.activity.comment_num ? ` (${this.activity.comment_num})` : ''
+    },
+    isPublisher () {
+      return this.$store.getters.uid === this.activity.user.id
+    },
+    isFollowing () {
+      return this.activity.user._is_following
     }
   },
   methods: {
@@ -130,6 +162,11 @@ export default {
     onClickCommand (command) {
       if (command === 'unfollow') {
         this.onToggleFollow('unfollow')
+      }
+      if (command === 'delete') {
+        deleteActivityById(this.activity.id).then(() => {
+          this.$emit('delete', this.activity)
+        })
       }
     },
     onToggleFollow (action) {

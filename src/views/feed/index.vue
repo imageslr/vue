@@ -23,7 +23,7 @@
       <activity-list
         ref="activityList"
         :get-activities="getActivities"
-        show-follow-button/>
+        show-action-button/>
     </main>
     <div class="action-area-container">
       <aside class="action-area card">

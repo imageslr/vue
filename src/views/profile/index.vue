@@ -6,7 +6,8 @@
     "partyReviews": "甲方评价",
     "designerReviews": "设计师评价",
     "personalActivities": "个人动态",
-    "contact": "交流"
+    "following": "已关注",
+    "contact": "联系"
   },
   "en": {
     "profile": "Profile",
@@ -14,6 +15,7 @@
     "partyReviews": "Party Reviews",
     "designerReviews": "Designer Reviews",
     "personalActivities": "Personal Activities",
+    "following": "Following",
     "contact": "Contact"
   }
 }
@@ -31,14 +33,9 @@
           @click="editProfileDialogVisible = true">{{ $t('editProfile') }}</el-button>
         <template v-else>
           <el-button
-            v-if="userInfo._is_following"
-            :loading="followBtnLoading"
-            @click="onCancelFollow">{{ $t('g.cancelFollow') }}</el-button>
-          <el-button
-            v-else
             :loading="followBtnLoading"
             type="primary"
-            @click="onFollow">{{ $t('g.following') }}</el-button>
+            @click="onToggleFollow">{{ followStatus }}</el-button>
           <el-button>{{ $t('contact') }}</el-button>
         </template>
       </profile-card>
@@ -52,7 +49,9 @@
       <h2
         v-t="$t('personalActivities')"
         class="title" />
-      <activity-list :get-activities="getActivities"/>
+      <activity-list
+        :get-activities="getActivities"
+        :show-action-button="isSelf"/>
     </div>
   </div>
 </template>
@@ -98,6 +97,10 @@ export default {
     // 账号类型
     type () {
       return this.userInfo.type
+    },
+    // 关注状态
+    followStatus () {
+      return this.userInfo._is_following ? this.$t('following') : this.$t('g.follow')
     }
   },
   created () {
@@ -114,18 +117,13 @@ export default {
       let uid = this.pageUID
       return getActivitiesByUID(uid, start)
     },
-    onFollow () {
-      this.onToggleFollow('follow')
-    },
-    onCancelFollow () {
-      this.onToggleFollow('unfollow')
-    },
-    onToggleFollow (action) {
+    onToggleFollow () {
       this.followBtnLoading = true
-      const fn = action === 'follow' ? followUserByUID : unfollowUserByUID
+      const fn = this.userInfo._is_following ? unfollowUserByUID : followUserByUID
       fn(this.pageUID).then(() => {
         this.followBtnLoading = false
         this.userInfo._is_following = !this.userInfo._is_following // TODO setUserInfo
+        console.log(this.userInfo)
       }).catch(() => {
         this.followBtnLoading = false
       })

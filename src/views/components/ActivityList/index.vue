@@ -18,7 +18,7 @@
       v-for="activity in activities"
       :activity="activity"
       :key="activity.id"
-      :show-follow-button="showFollowButton"
+      :show-action-button="showActionButton"
       class="activity-card"
       @preview="onPreview"/>
     <preview
@@ -46,7 +46,7 @@ import ActivityCard from './ActivityCard'
 export default {
   components: { ActivityCard },
   props: {
-    showFollowButton: {
+    showActionButton: {
       type: Boolean,
       default: false
     },

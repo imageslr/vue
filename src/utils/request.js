@@ -45,12 +45,13 @@ service.interceptors.response.use(
   error => {
     // 发出请求，超时时走这个回调
     // TODO 404错误码走哪个？
-    console.error('网络响应错误', error)
-    // Message({
-    //   message: error.message,
-    //   type: 'error',
-    //   duration: 5000
-    // })
+    // console.error('网络响应错误', error)
+    Message({
+      message: error.message,
+      type: 'error',
+      duration: 5000,
+      showClose: true
+    })
     return Promise.reject(error)
   }
 )

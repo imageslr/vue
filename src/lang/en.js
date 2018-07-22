@@ -14,7 +14,8 @@ export default {
     publish: 'Publish',
     published_at: 'Published at',
     recommendation: 'Recommendation',
-    loading: 'Loading'
+    loading: 'Loading',
+    nomore: 'No more data'
   },
   ordinalNum: ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'],
   errmsgs: {

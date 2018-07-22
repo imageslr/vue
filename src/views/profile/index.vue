@@ -22,6 +22,9 @@
 <template>
   <div class="main-container">
     <div class="main-container__left">
+      <h2
+        v-t="$t('profile')"
+        class="title" />
       <profile-card :user-info="userInfo">
         <el-button
           v-if="isSelf"
@@ -39,30 +42,44 @@
           <el-button>{{ $t('contact') }}</el-button>
         </template>
       </profile-card>
-      <review-card />
       <edit-profile-dialog :visible.sync="editProfileDialogVisible"/>
+      <h2
+        v-t="$t(type + 'Reviews')"
+        class="title" />
+      <review-card :uid="pageUID"/>
     </div>
-    <div class="main-container__right"/>
+    <div class="main-container__right">
+      <h2
+        v-t="$t('personalActivities')"
+        class="title" />
+      <activity-list :get-activities="getActivities"/>
+    </div>
   </div>
 </template>
 
 <script>
 import ProfileCard from '@/views/components/ProfileCard'
+import ActivityList from '@/views/components/ActivityList'
 import ReviewCard from './components/ReviewCard'
 import EditProfileDialog from './components/EditProfileDialog'
 import { getUserInfoByUID } from '@/api/user'
 import { followUserByUID, unfollowUserByUID } from '@/api/follow'
+import { getActivitiesByUID } from '@/api/activity'
 export default {
   components: {
     ProfileCard,
     ReviewCard,
-    EditProfileDialog
+    EditProfileDialog,
+    ActivityList
   },
   data () {
     return {
       userInfo: {}, // 用户信息
       followBtnLoading: false,
-      editProfileDialogVisible: false // 是否显示个人信息编辑Dialog
+      editProfileDialogVisible: false, // 是否显示个人信息编辑Dialog
+      activities: [], // 个人动态
+      activitiesLoading: true,
+      activitiesNomore: false
     }
   },
   computed: {
@@ -77,6 +94,10 @@ export default {
     // 是否在浏览自己的主页
     isSelf () {
       return this.uid == this.pageUID // eslint-disable-line eqeqeq
+    },
+    // 账号类型
+    type () {
+      return this.userInfo.type
     }
   },
   created () {
@@ -89,6 +110,10 @@ export default {
     }
   },
   methods: {
+    getActivities (start) {
+      let uid = this.pageUID
+      return getActivitiesByUID(uid, start)
+    },
     onFollow () {
       this.onToggleFollow('follow')
     },
@@ -120,5 +145,17 @@ export default {
     flex: 1;
     padding-left: 48px;
   }
+  .card,
+  .title {
+    margin-bottom: 8px;
+  }
+}
+.title {
+  padding: 12px 16px;
+  font-size: 11px;
+  color: #4b4f56;
+  background: #f6f7f9;
+  border: 1px solid #dfe0e4;
+  border-radius: 2px 2px 0 0;
 }
 </style>

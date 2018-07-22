@@ -30,7 +30,7 @@
         req-id="reqId" />
     </div>
     <el-button
-      class="block w-100 shadow"
+      class="block w-100 shadow mt-24"
       type="primary"
       @click="$router.push(`/requirement/${reqId}`)">{{ $t('viewDetail') }}</el-button>
   </div>
@@ -49,14 +49,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main-container {
-  > * {
-    margin-bottom: 24px;
-    :last-child {
-      margin-bottom: 0;
-    }
-  }
-}
 .result {
   padding: 40px 24px 0;
   text-align: center;
@@ -75,6 +67,7 @@ export default {
     color: rgba(0, 0, 0, 0.45);
   }
 }
+/* 稍微修改一下样式，省得再做个组件 */
 .invite-card {
   box-shadow: none;
   /deep/ .card__header {

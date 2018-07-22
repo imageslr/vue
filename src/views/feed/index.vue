@@ -14,30 +14,16 @@
 </i18n>
 
 <template>
-  <div
-    v-infinite-scroll="getActivities"
-    infinite-scroll-disabled="loading"
-    infinite-scroll-distance="200"
-    class="main-container"
-  >
+  <div class="main-container">
     <profile-card :user-info="userInfo"/>
     <main
       class="main">
       <publish-card @published="onPublished"/>
       <recommend-card/>
-      <activity-card
-        v-for="activity in activities"
-        :activity="activity"
-        :key="activity.id"
-        show-follow-button
-        @preview="onPreview"/>
-      <preview
-        :visible.sync="preview.visible"
-        :src="preview.src"
-        :width="preview.width" />
-      <loader
-        :loading="loading"
-        icon="facebook" />
+      <activity-list
+        ref="activityList"
+        :get-activities="getActivities"
+        show-follow-button/>
     </main>
     <div class="action-area-container">
       <aside class="action-area card">
@@ -50,64 +36,39 @@
         <router-link
           class="action-area-item"
           to="follow">{{ $t('followingDesigners') }}</router-link>
-        <div><app-footer/></div>
+        <app-footer/>
       </aside>
     </div>
   </div>
 </template>
 
 <script>
-import ProfileCard from '../components/ProfileCard'
+import ProfileCard from '@/views/components/ProfileCard'
+import ActivityList from '@/views/components/ActivityList'
 import PublishCard from './components/PublishCard'
 import RecommendCard from './components/RecommendCard'
-import ActivityCard from '../components/ActivityCard'
 import AppFooter from '../layout/components/AppFooter'
 import { getFollowingActivities } from '@/api/activity'
 export default {
-  components: { ProfileCard, PublishCard, ActivityCard, AppFooter, RecommendCard },
-  data () {
-    return {
-      total: 0,
-      activities: [],
-      preview: {
-        visible: false,
-        src: '',
-        width: '50%'
-      },
-      loading: true
-    }
+  components: {
+    ProfileCard,
+    PublishCard,
+    ActivityList,
+    AppFooter,
+    RecommendCard
   },
   computed: {
     userInfo () {
       return this.$store.getters.userInfo
     }
   },
-  created () {
-    this.getActivities()
-  },
   methods: {
-    getActivities () {
-      this.loading = true
+    getActivities (start) {
       let uid = this.$store.getters.uid
-      let start = this.activities.length
-      return getFollowingActivities(uid, start).then(({ data }) => {
-        this.loading = false
-        const { total, activities } = data
-        this.activities.push.apply(this.activities, activities)
-        this.total = total
-      }).catch(() => {
-        this.loading = false
-      })
-    },
-    onPreview (e) {
-      if (e.target.tagName === 'IMG') {
-        this.preview.visible = true
-        this.preview.src = e.target.src
-        this.preview.width = e.target.width + 'px'
-      }
+      return getFollowingActivities(uid, start)
     },
     onPublished (e) {
-      this.activities.unshift(e)
+      console.log(this.$refs.activityList)
     }
   }
 }
@@ -115,7 +76,7 @@ export default {
 
 <style scoped>
 .main-container {
-  padding: 24px 244px;
+  padding: 24px 244px 0;
 }
 .profile-card {
   position: fixed;

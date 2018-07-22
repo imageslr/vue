@@ -37,7 +37,7 @@
       <div class="p-12">
         <router-link
           class="f-20"
-          to="follow">{{ userInfo.follower_num }}</router-link>
+          to="/follow?type=follower">{{ userInfo.follower_num }}</router-link>
         <span class="block f-12 black-60">{{ $t('follower') }}</span>
       </div>
     </div>

@@ -19,8 +19,8 @@
         style="padding: 0 32px;"
         mode="horizontal"
         @select="onSelectMenuItem">
-        <el-menu-item index="follower">{{ $t('followingTabTitle') }}</el-menu-item>
-        <el-menu-item index="following">{{ $t('followerTabTitle') }}</el-menu-item>
+        <el-menu-item index="following">{{ $t('followingTabTitle') }}</el-menu-item>
+        <el-menu-item index="follower">{{ $t('followerTabTitle') }}</el-menu-item>
       </el-menu>
       <loader
         :loading="loading"
@@ -52,10 +52,10 @@ export default {
   },
   computed: {
     activeIndex () {
-      if (this.$route.query.type === 'following') {
-        return 'following'
-      } else {
+      if (this.$route.query.type === 'follower') {
         return 'follower'
+      } else {
+        return 'following' // 默认
       }
     },
     start () {
@@ -108,7 +108,7 @@ export default {
 
 <style lang="scss" scoped>
 .el-pagination {
-  margin-top: 16px;
+  padding: 16px 0;
   text-align: center;
 }
 </style>

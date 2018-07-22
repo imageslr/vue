@@ -14,7 +14,8 @@ export default {
     publish: '发布',
     published_at: '发布于',
     recommendation: '推荐',
-    loading: '加载中'
+    loading: '加载中',
+    nomore: '没有更多数据了'
   },
   ordinalNum: ['一', '二', '三', '四', '五', '六'],
   errmsgs: {

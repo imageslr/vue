@@ -8,6 +8,7 @@ import Feed from '../views/feed'
 import Publish from '../views/publish'
 import Result from '../views/publish/Result'
 import Follow from '../views/follow'
+import Profile from '../views/profile'
 
 Vue.use(Router)
 
@@ -41,22 +42,6 @@ export default new Router({
           component: Feed
         },
         {
-          path: 'publish',
-          name: 'publish',
-          meta: {
-            requireAuth: true
-          },
-          component: Publish
-        },
-        {
-          path: 'publish/result',
-          name: 'publishResult',
-          meta: {
-            requireAuth: true
-          },
-          component: Result
-        },
-        {
           path: 'me',
           name: 'me',
           meta: {
@@ -70,6 +55,39 @@ export default new Router({
             requireAuth: true
           },
           component: Follow
+        }
+      ]
+    },
+    {
+      path: '/profile',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'profile',
+          component: Profile
+        }
+      ]
+    },
+    {
+      path: '/publish',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'publish',
+          meta: {
+            requireAuth: true
+          },
+          component: Publish
+        },
+        {
+          path: 'result',
+          name: 'publishResult',
+          meta: {
+            requireAuth: true
+          },
+          component: Result
         }
       ]
     }

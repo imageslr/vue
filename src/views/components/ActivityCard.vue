@@ -21,7 +21,7 @@
         type="primary"
         class="activity-card__header-follow-button"
         size="small"
-        @click="onToggleFollow('follow')">{{ $t('g.following') }}</el-button>
+        @click="onToggleFollow('follow')">{{ $t('g.follow') }}</el-button>
       <el-dropdown
         v-if="showFollowButton && user._is_following"
         trigger="click"

@@ -5,6 +5,7 @@ export default {
   },
   // global
   g: {
+    follow: '关注',
     following: '关注',
     cancelFollow: '取消关注',
     follower: '关注者',
@@ -12,7 +13,8 @@ export default {
     comment: '评论',
     publish: '发布',
     published_at: '发布于',
-    recommendation: '推荐'
+    recommendation: '推荐',
+    loading: '加载中'
   },
   ordinalNum: ['一', '二', '三', '四', '五', '六'],
   errmsgs: {

@@ -42,18 +42,30 @@
       </div>
     </div>
     <div class="profile-card__action">
-      <el-button
-        plain
-        @click="$router.push('/profile')">{{ $t('viewHomePage') }}</el-button>
+      <slot>
+        <el-button
+          plain
+          @click="$router.push('/profile')">{{ $t('viewHomePage') }}</el-button>
+      </slot>
     </div>
   </aside>
 </template>
 
 <script>
 export default {
-  computed: {
-    userInfo () {
-      return this.$store.getters.userInfo
+  props: {
+    userInfo: {
+      type: Object,
+      default () {
+        return {
+          avatar_url: '',
+          real_name: this.$t('g.loading'),
+          title: '',
+          introduction: '',
+          following_num: 0,
+          follower_num: 0
+        }
+      }
     }
   }
 }
@@ -76,6 +88,14 @@ export default {
   &__action {
     padding: 12px;
     background-color: #f5f5f5;
+    & .el-button {
+      width: 100%;
+      margin-left: 0;
+      margin-bottom: 12px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 </style>

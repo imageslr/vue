@@ -20,7 +20,7 @@
     infinite-scroll-distance="200"
     class="main-container"
   >
-    <profile-card/>
+    <profile-card :user-info="userInfo"/>
     <main
       class="main">
       <publish-card @published="onPublished"/>
@@ -75,6 +75,11 @@ export default {
         width: '50%'
       },
       loading: true
+    }
+  },
+  computed: {
+    userInfo () {
+      return this.$store.getters.userInfo
     }
   },
   created () {

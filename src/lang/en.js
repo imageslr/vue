@@ -5,6 +5,7 @@ export default {
   },
   // global
   g: {
+    follow: 'Follow',
     following: 'Following',
     cancelFollow: 'Cancel follow',
     follower: 'Follower',
@@ -12,7 +13,8 @@ export default {
     comment: 'Comment',
     publish: 'Publish',
     published_at: 'Published at',
-    recommendation: 'Recommendation'
+    recommendation: 'Recommendation',
+    loading: 'Loading'
   },
   ordinalNum: ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'],
   errmsgs: {

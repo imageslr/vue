@@ -44,10 +44,13 @@ Vue.prototype.$_ = _
 router.beforeEach((to, from, next) => {
   NProgress.start()
   // 如果用户登录过
-  if (store.getters.token && to.path === '/signin') {
-    // 登录过：进入登录页时，重定向至主页
+  if (
+    store.getters.token &&
+    to.matched.some(record => record.meta.requireRedirectToFeed)
+  ) {
+    // 登录过：进入需要重定向至主页的页面时重定向
     next({ path: '/feed' })
-    NProgress.done()
+    NProgress.done() // hack
   } else if (store.getters.token) {
     // 登录过：进入其他页面时，获取用户信息
     if (!store.getters.hasUserInfo) {
@@ -59,7 +62,6 @@ router.beforeEach((to, from, next) => {
           NProgress.done()
         })
     } else {
-      NProgress.done()
       next()
     }
   } else if (to.matched.some(record => record.meta.requireAuth)) {
@@ -73,6 +75,7 @@ router.beforeEach((to, from, next) => {
 })
 router.afterEach(() => {
   NProgress.done() // 结束Progress
+  window.scrollTo(0, 0) // 滚动回顶部
 })
 
 /* eslint-disable no-new */

@@ -32,51 +32,61 @@
     </div>
     <div class="card__content">
       <alert
-        :title="$t('alertText', { num: totalInvitedNum })"
+        :title="$t('alertText', { num: total })"
         type="info" />
-      <empty v-if="!invitedDesigners.length" />
-      <transition-group
-        v-else
-        tag="div"
-        name="fade-transform-x"
-        class="list pt1 pb2">
-        <div
-          v-for="(designer, index) in invitedDesigners"
-          :key="designer.id"
-          class="list-item">
-          <router-link :to="'/profile?uid=' + designer.id">
-            <avatar
-              :avatar-url="designer.avatar_url"
-              class="list-item__avatar"/>
-          </router-link>
-          <div class="list-item__info">
-            <p class="m0 mb-4 bold f-14">
-              <router-link
-                :to="'/profile?uid=' + designer.id"
-                class="black-85">{{ designer.real_name }}</router-link>
-              <span
-                v-t="designer.title"
-                class="ml1 black-45" />
-            </p>
-            <p
-              v-t="designer.introduction"
-              class="m0 f-14 black-45 ellipsis-1" />
+      <loader :loading="loading" />
+      <template v-if="!loading">
+        <empty v-if="!invitedDesigners.length" />
+        <transition-group
+          v-else
+          tag="div"
+          name="fade-transform-x"
+          class="list pt1 pb2">
+          <div
+            v-for="(designer, index) in invitedDesigners"
+            :key="designer.id"
+            class="list-item">
+            <router-link :to="'/profile?uid=' + designer.id">
+              <avatar
+                :avatar-url="designer.avatar_url"
+                class="list-item__avatar"/>
+            </router-link>
+            <div class="list-item__info">
+              <p class="m0 mb-4 bold f-14">
+                <router-link
+                  :to="'/profile?uid=' + designer.id"
+                  class="black-85">{{ designer.real_name }}</router-link>
+                <span
+                  v-t="designer.title"
+                  class="ml1 black-45" />
+              </p>
+              <p
+                v-t="designer.introduction"
+                class="m0 f-14 black-45 ellipsis-1" />
+            </div>
+            <div class="list-item__time black-45 f-14">
+              <p
+                v-t="$t('invitedAt')"
+                class="m0 mb-4" />
+              <p
+                v-t="designer.invited_at"
+                class="m0" />
+            </div>
+            <el-button
+              plain
+              size="small"
+              class="list-item__action"
+              @click="onRecall(index)">{{ $t('recall') }}</el-button>
           </div>
-          <div class="list-item__time black-45 f-14">
-            <p
-              v-t="$t('invitedAt')"
-              class="m0 mb-4" />
-            <p
-              v-t="designer.invited_at"
-              class="m0" />
-          </div>
-          <el-button
-            plain
-            size="small"
-            class="list-item__action"
-            @click="onRecall(index)">{{ $t('recall') }}</el-button>
-        </div>
-      </transition-group>
+        </transition-group>
+        <el-pagination
+          :current-page.sync="currentPage"
+          :total="total"
+          :page-size="20"
+          background
+          layout="prev, pager, next"
+          @current-change="onPageChange"/>
+      </template>
     </div>
     <search-dialog
       :visible.sync="searchDialogVisible"
@@ -99,9 +109,12 @@ export default {
   },
   data () {
     return {
-      totalInvitedNum: 0,
+      total: 0,
       invitedDesigners: [],
-      searchDialogVisible: false
+      searchDialogVisible: false,
+      loading: false,
+      pageCount: 0,
+      currentPage: 1
     }
   },
   created () {
@@ -109,10 +122,18 @@ export default {
   },
   methods: {
     getInvitedDesigners () {
-      getInvitedDesignersByReqId(this.reqId).then(({ data }) => {
-        this.totalInvitedNum = data.total
-        this.invitedDesigners = this.invitedDesigners.concat(data.users)
+      this.loading = true
+      const start = (this.currentPage - 1) * 20
+      getInvitedDesignersByReqId(this.reqId, start).then(({ data }) => {
+        this.loading = false
+        this.total = data.total
+        this.invitedDesigners = data.users
+      }).catch(() => {
+        this.loading = false
       })
+    },
+    onPageChange (page) {
+      this.getInvitedDesigners()
     },
     onRecall (index) {
       const { reqId, invitedDesigners } = this
@@ -121,9 +142,11 @@ export default {
         this.invitedDesigners.splice(index, 1)
       })
     },
-    // 在搜索框里邀请了某名设计师
+    // 在搜索框里邀请了某名设计师后的数据同步
     onInvited (designer) {
-      this.invitedDesigners.unshift(designer)
+      if (this.currentPage == 1) { // eslint-disable-line
+        this.invitedDesigners.unshift(designer)
+      }
     },
     // 在搜索框里取消邀请了某名设计师
     onRecalled (designer) {
@@ -175,5 +198,13 @@ export default {
   &__time {
     margin-right: 100px;
   }
+}
+// 组件的样式
+.el-pagination {
+  padding: 16px 0;
+  text-align: center;
+}
+.loader {
+  padding: 24px 0;
 }
 </style>

@@ -18,17 +18,28 @@
     "rewardNum": "中奖人数",
     "rewardSettings": "奖项设置",
     "noEmptyField": "奖项设置不能有空项",
+    "tenderDate": "投标日期",
+    "answerDate": "答疑日期",
+    "designResult": "设计成果",
+    "allowOpen": "允许公开",
+    "notAllowOpen": "禁止公开",
     "placeholders": {
       "title": "请输入需求标题",
-      "biddingNum": "请输入最多申请竞标人数",
-      "description": "请输入需求详情"
+      "biddingNum": "请输入最多申请竞标人数，输入 0 表示无限制",
+      "description": "请输入需求详情",
+      "tenderDate": "请选择投标截止日期",
+      "answerDate": "请选择答疑日期"
     },
     "tipsTitle": "说明",
     "tips": [
       ["海选", "所有人均可申请竞标，均可投标。"],
       ["入围", "所有人均可申请竞标，但只有经过筛选的人才能投标。"],
       ["邀标", "需求不公开，仅对被邀请的设计师可见，只有被邀请的设计师可以投标。"]
-    ]
+    ],
+    "tooltips": {
+      "tenderDate": "投标截止日期必须在一个月之后",
+      "answerDate": "答疑时间必须在一个月之内"
+    }
   },
   "en": {
     "publishHeader": "Fill in the requirement information",
@@ -48,17 +59,28 @@
     "rewardNum": "Reward number",
     "rewardSettings": "Reward setting",
     "noEmptyField": "Reward setting must not have empty field",
+    "tenderDate": "Tender date",
+    "answerDate": "Answer date",
+    "designResult": "Design result",
+    "allowOpen": "Allow to open",
+    "notAllowOpen": "Not allow to open",
     "placeholders": {
       "title": "Please enter requirement title",
-      "biddingNum": "Please enter max competitive bidding number",
-      "description": "Please enter requirement description"
+      "biddingNum": "Please enter max competitive bidding number, 0 meanse unlimited",
+      "description": "Please enter requirement description",
+      "tenderDate": "Please select a tender due date",
+      "answerDate": "Please select an answer Date"
     },
     "tipsTitle": "Tips",
     "tips": [
       ["Audition", "Everyone can apply for a bid and submit a tender."],
       ["Shortlist", "Everyone can apply for a bid，but only shortlisted designers can tender."],
       ["Invitation", "The demand is not public, only visible to and accept the tender from the invited designer."]
-    ]
+    ],
+    "tooltips": {
+      "tenderDate": "The tender due date must be one month later",
+      "answerDate": "Q&A time must be with in one month"
+    }
   }
 }
 </i18n>
@@ -114,7 +136,7 @@
           v-model="form.biddingNum"
           :placeholder="$t('placeholders.biddingNum')"
           type="number"
-          style="width: 200px;"/>
+          class="form-item--short"/>
       </el-form-item>
       <el-form-item :label="$t('rewardNum')">
         <el-radio-group v-model="form.rewardNum">
@@ -126,6 +148,38 @@
         v-if="form.rewardNum === 'x'"
         :label="$t('rewardSettings')">
         <reward-setting v-model="form.rewardSettings"/>
+      </el-form-item>
+      <el-form-item :label="$t('tenderDate')">
+        <el-tooltip
+          :content="$t('tooltips.tenderDate')"
+          placement="right">
+          <el-date-picker
+            v-model="form.tenderDate"
+            :placeholder="$t('placeholders.tenderDate')"
+            :picker-options="datePickerOptions.tenderDate"
+            type="date"
+            value-format="yyyy-MM-dd"
+            class="form-item--short"/>
+        </el-tooltip>
+      </el-form-item>
+      <el-form-item :label="$t('answerDate')">
+        <el-tooltip
+          :content="$t('tooltips.answerDate')"
+          placement="right">
+          <el-date-picker
+            v-model="form.answerDate"
+            :placeholder="$t('placeholders.answerDate')"
+            :picker-options="datePickerOptions.answerDate"
+            type="date"
+            value-format="yyyy-MM-dd"
+            class="form-item--short"/>
+        </el-tooltip>
+      </el-form-item>
+      <el-form-item :label="$t('designResult')">
+        <el-radio-group v-model="form.canOpen">
+          <el-radio label="1">{{ $t('allowOpen') }}</el-radio>
+          <el-radio label="0">{{ $t('notAllowOpen') }}</el-radio>
+        </el-radio-group>
       </el-form-item>
     </el-form>
     <divider margin="32" />
@@ -168,6 +222,9 @@ export default {
           { num: '', bonus: '' },
           { num: '', bonus: '' }
         ],
+        tenderDate: '',
+        answerDate: '',
+        canOpen: '1',
         fileList: [{ name: '招标说明书.docx' }]
       },
       rules: {
@@ -187,6 +244,24 @@ export default {
             } else {
               callback()
             }
+          }
+        },
+        tenderDate: { required: true, message: plsCheck(this.$t('tenderDate')) }, // TODO 投标日期在一个月之后？
+        answerDate: { required: true, message: plsCheck(this.$t('answerDate')) }
+      },
+      datePickerOptions: {
+        tenderDate: {
+          disabledDate (time) {
+            let curDate = (new Date()).getTime()
+            let oneMonthAfter = curDate + 30 * 24 * 3600 * 1000
+            return time.getTime() < oneMonthAfter
+          }
+        },
+        answerDate: {
+          disabledDate (time) {
+            let curDate = (new Date()).getTime()
+            let oneMonthAfter = curDate + 30 * 24 * 3600 * 1000
+            return time.getTime() < Date.now() || time.getTime() > oneMonthAfter
           }
         }
       }
@@ -211,9 +286,9 @@ export default {
       validator.validate(this.form, res => {
         if (res) {
           showErrMessage(res)
-          cb(false)
+          cb(false) // eslint-disable-line
         } else {
-          cb(true)
+          cb(true) // eslint-disable-line
         }
       })
     }
@@ -231,6 +306,9 @@ export default {
   &__uploader {
     margin-top: 12px;
     width: 500px;
+  }
+  &-item--short {
+    width: 360px;
   }
 }
 .card__tips {

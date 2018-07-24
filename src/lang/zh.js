@@ -1,7 +1,8 @@
 export default {
   app: {
-    title: '建筑设计平台',
-    description: '一个连接甲方与设计师的平台'
+    title: '谷德',
+    description: '一个连接甲方与设计师的平台',
+    cpr: 'Goooood'
   },
   // global
   g: {

@@ -9,6 +9,7 @@ import Publish from '../views/publish'
 import Result from '../views/publish/Result'
 import Follow from '../views/follow'
 import Profile from '../views/profile'
+import Requirement from '../views/requirement'
 
 Vue.use(Router)
 
@@ -26,11 +27,17 @@ export default new Router({
         {
           path: '',
           name: 'index',
+          meta: {
+            requireRedirectToFeed: true
+          },
           component: Guide
         },
         {
           path: 'signin',
           name: 'signin',
+          meta: {
+            requireRedirectToFeed: true
+          },
           component: SignIn
         },
         {
@@ -88,6 +95,20 @@ export default new Router({
             requireAuth: true
           },
           component: Result
+        }
+      ]
+    },
+    {
+      path: '/requirement',
+      component: Layout,
+      children: [
+        {
+          path: ':id',
+          name: 'requirement',
+          meta: {
+            requireAuth: true
+          },
+          component: Requirement
         }
       ]
     }

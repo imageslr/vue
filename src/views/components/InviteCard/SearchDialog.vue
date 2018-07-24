@@ -32,45 +32,47 @@
       <loader
         :loading="loading"
         class="mt2 md2"/>
-      <empty v-if="!designers.length"/>
-      <div
-        v-else
-        class="list">
+      <template v-if="!loading">
+        <empty v-if="!designers.length"/>
         <div
-          v-for="(designer, index) in designers"
-          :key="designer.id"
-          class="list-item">
-          <router-link :to="'/profile?uid=' + designer.id">
-            <avatar
-              :avatar-url="designer.avatar_url"
-              class="list-item__avatar"/>
-          </router-link>
-          <div class="list-item__info">
-            <p class="m0 bold f-14">
-              <router-link
-                :to="'/profile?uid=' + designer.id"
-                class="black-85">{{ designer.real_name }}</router-link>
-            </p>
-            <p
-              v-t="designer.title"
-              class="m0 f-14 black-45 ellipsis-1" />
+          v-else
+          class="list">
+          <div
+            v-for="(designer, index) in designers"
+            :key="designer.id"
+            class="list-item">
+            <router-link :to="'/profile?uid=' + designer.id">
+              <avatar
+                :avatar-url="designer.avatar_url"
+                class="list-item__avatar"/>
+            </router-link>
+            <div class="list-item__info">
+              <p class="m0 bold f-14">
+                <router-link
+                  :to="'/profile?uid=' + designer.id"
+                  class="black-85">{{ designer.real_name }}</router-link>
+              </p>
+              <p
+                v-t="designer.title"
+                class="m0 f-14 black-45 ellipsis-1" />
+            </div>
+            <el-button
+              v-if="designer._is_invited"
+              plain
+              type="info"
+              size="mini"
+              class="list-item__action"
+              @click="onRecall(index)">{{ $t('recall') }}</el-button>
+            <el-button
+              v-else
+              plain
+              type="primary"
+              size="mini"
+              class="list-item__action"
+              @click="onInvite(index)">{{ $t('invite') }}</el-button>
           </div>
-          <el-button
-            v-if="designer._is_invited"
-            plain
-            type="info"
-            size="mini"
-            class="list-item__action"
-            @click="onRecall(index)">{{ $t('recall') }}</el-button>
-          <el-button
-            v-else
-            plain
-            type="primary"
-            size="mini"
-            class="list-item__action"
-            @click="onInvite(index)">{{ $t('invite') }}</el-button>
         </div>
-      </div>
+      </template>
     </div>
   </el-dialog>
 </template>

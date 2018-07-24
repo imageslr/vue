@@ -14,14 +14,18 @@
     v-infinite-scroll="onReachBottom"
     infinite-scroll-disabled="busy"
     infinite-scroll-distance="200">
-    <activity-card
-      v-for="(activity, index) in activities"
-      :activity="activity"
-      :key="activity.id"
-      :show-action-button="showActionButton"
-      class="activity-card"
-      @preview="onPreview"
-      @deleted="onDeleted(index)"/>
+    <transition-group
+      tag="div"
+      name="fade-transform-y">
+      <activity-card
+        v-for="(activity, index) in activities"
+        :activity="activity"
+        :key="activity.id"
+        :show-action-button="showActionButton"
+        class="activity-card"
+        @preview="onPreview"
+        @deleted="onDeleted(index)"/>
+    </transition-group>
     <preview
       :visible.sync="preview.visible"
       :src="preview.src"

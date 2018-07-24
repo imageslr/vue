@@ -4,7 +4,7 @@ import store from '@/store'
 
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 5000 // request timeout
+  timeout: 10000 // request timeout
 })
 
 // request拦截器
@@ -29,7 +29,7 @@ service.interceptors.response.use(
     if (response.statusCode < 200 || response.statusCode >= 300) {
       console.error('网络响应错误', response)
       // 发生错误时，如果服务器返回了错误信息，则显示
-      if (res.message) {
+      if (res.message && canshow(res.message)) {
         Message({
           message: res.message,
           type: 'error',
@@ -46,14 +46,21 @@ service.interceptors.response.use(
     // 发出请求，超时时走这个回调
     // TODO 404错误码走哪个？
     // console.error('网络响应错误', error)
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5000,
-      showClose: true
-    })
+    if (canshow(error.message)) {
+      Message({
+        message: error.message,
+        type: 'error',
+        duration: 5000,
+        showClose: true
+      })
+    }
     return Promise.reject(error)
   }
 )
+
+function canshow (msg) {
+  const blackList = ['timeout']
+  return !blackList.some(str => msg.indexOf(str) !== -1)
+}
 
 export default service

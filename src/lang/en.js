@@ -1,7 +1,8 @@
 export default {
   app: {
-    title: 'Building Design Platform',
-    description: 'A platform that links Parties and designs'
+    title: 'Goooood',
+    description: 'A platform that links Parties and designs',
+    cpr: 'Goooood'
   },
   // global
   g: {

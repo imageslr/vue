@@ -33,7 +33,7 @@
       type="primary"
       size="mini"
       class="list-item__action"
-      @click="onFollow">{{ $t('g.following') }}</el-button>
+      @click="onFollow">{{ $t('g.follow') }}</el-button>
   </div>
 </template>
 

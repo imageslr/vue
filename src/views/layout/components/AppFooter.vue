@@ -1,5 +1,5 @@
 <template>
-  <footer>copyright © CCP <lang-select/></footer>
+  <footer>copyright © {{ $t('app.cpr') }} <lang-select/></footer>
 </template>
 
 <script>

@@ -1,6 +1,7 @@
 <template>
   <div
     v-show="loading"
+    class="loader"
     style="text-align: center">
     <i class="el-icon-loading" />
   </div>

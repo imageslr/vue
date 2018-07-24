@@ -2,7 +2,7 @@
 {
   "zh": {
     "noReviews": "暂未收到评价",
-    "viewAll": "查看所有评论"
+    "viewAll": "查看所有评价"
   },
   "en": {
     "noReviews": "No received reviews",

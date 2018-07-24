@@ -130,6 +130,9 @@ export default {
   display: inline-block;
   padding: 3px 24px;
   text-align: center;
+  &:last-child {
+    padding-right: 0;
+  }
   &.border-right:after {
     content: "";
     position: absolute;

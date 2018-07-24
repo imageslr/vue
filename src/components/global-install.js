@@ -7,6 +7,7 @@ import Loader from './Loader.vue'
 import SvgIcon from './SvgIcon.vue'
 import Alert from './Alert.vue'
 import Empty from './Empty.vue'
+import MyProgress from './MyProgress.vue'
 const components = {
   Divider,
   LangSelect,
@@ -15,7 +16,8 @@ const components = {
   Loader,
   SvgIcon,
   Alert,
-  Empty
+  Empty,
+  MyProgress
 }
 const install = function (Vue, opts = {}) {
   Object.keys(components).forEach(key => {

@@ -29,9 +29,7 @@
       size="small"
       @input="onSearch"/>
     <div>
-      <loader
-        :loading="loading"
-        class="mt2 md2"/>
+      <loader :loading="loading"/>
       <template v-if="!loading">
         <empty v-if="!designers.length"/>
         <div

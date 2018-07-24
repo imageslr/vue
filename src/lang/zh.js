@@ -16,7 +16,8 @@ export default {
     published_at: '发布于',
     recommendation: '推荐',
     loading: '加载中',
-    nomore: '没有更多数据了'
+    nomore: '没有更多数据了',
+    reload: '重新加载'
   },
   ordinalNum: ['一', '二', '三', '四', '五', '六'],
   errmsgs: {

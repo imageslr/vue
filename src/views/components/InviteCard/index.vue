@@ -34,7 +34,10 @@
       <alert
         :title="$t('alertText', { num: total })"
         type="info" />
-      <loader :loading="loading" />
+      <loader
+        :loading="loading"
+        :error="error"
+        :on-reload="getInvitedDesigners" />
       <template v-if="!loading">
         <empty v-if="!invitedDesigners.length" />
         <transition-group
@@ -113,6 +116,7 @@ export default {
       invitedDesigners: [],
       searchDialogVisible: false,
       loading: false,
+      error: false,
       pageCount: 0,
       currentPage: 1
     }
@@ -123,6 +127,8 @@ export default {
   methods: {
     getInvitedDesigners () {
       this.loading = true
+      this.error = false
+      this.invitedDesigners = []
       const start = (this.currentPage - 1) * 20
       getInvitedDesignersByReqId(this.reqId, start).then(({ data }) => {
         this.loading = false
@@ -130,6 +136,7 @@ export default {
         this.invitedDesigners = data.users
       }).catch(() => {
         this.loading = false
+        this.error = true
       })
     },
     onPageChange (page) {

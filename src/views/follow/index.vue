@@ -28,7 +28,8 @@
       </el-menu>
       <loader
         :loading="loading"
-        class="mt2 md2"/>
+        :error="error"
+        :on-reload="getUsers"/>
       <user-list :users.sync="users"/>
       <el-pagination
         :current-page.sync="currentPage"
@@ -49,6 +50,7 @@ export default {
   data () {
     return {
       loading: true,
+      error: false,
       users: [],
       total: Infinity, // TODO: Bug report: 设成0时current-page会失效，不知道为什么
       pageSize: 20,
@@ -80,6 +82,7 @@ export default {
   methods: {
     getUsers () {
       this.loading = true
+      this.error = false
       const start = (this.currentPage - 1) * this.pageSize
       const fn = this.type === 'following' ? getFollowingUsersByUID : getFollowersByUID
       fn(this.pageUID, start).then(({ data: { users, total } }) => {
@@ -88,6 +91,7 @@ export default {
         this.users = [...this.users, ...users]
       }).catch(() => {
         this.loading = false
+        this.error = true
       })
     },
     onSelectMenuItem (index) {

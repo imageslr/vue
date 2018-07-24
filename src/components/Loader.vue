@@ -1,9 +1,15 @@
 <template>
   <div
-    v-show="loading"
-    class="loader"
-    style="text-align: center">
-    <i class="el-icon-loading" />
+    v-show="loading || error"
+    class="loader">
+    <i
+      v-if="loading"
+      class="el-icon-loading" />
+    <el-button
+      v-if="error"
+      plain
+      size="mini"
+      @click="onReload()">{{ btnText || $t('g.reload') }}</el-button>
   </div>
 </template>
 
@@ -13,10 +19,26 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    error: {
+      type: Boolean,
+      default: false
+    },
+    btnText: {
+      type: String,
+      default: null
+    },
+    onReload: {
+      type: Function,
+      default: () => {}
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.loader {
+  padding: 16px 0;
+  text-align: center;
+}
 </style>

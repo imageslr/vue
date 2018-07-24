@@ -62,7 +62,7 @@ export default {
   flex-direction: row;
   align-items: center;
   height: 52px;
-  padding: 0 64px;
+  padding: 0 calc((100% - 1000px) / 2);
   .fa-icon {
     width: 34px;
     height: 34px;

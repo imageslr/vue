@@ -30,19 +30,15 @@
       :visible.sync="preview.visible"
       :src="preview.src"
       :width="preview.width" />
-    <loader :loading="loading" />
+    <loader
+      :loading="loading"
+      :error="error"
+      :btn-text="$t('loadmore')"
+      :on-reload="onReload" />
     <p
       v-t="$t('g.nomore')"
       v-if="nomore"
       class="no-more"/>
-    <div
-      v-if="failed"
-      class="block center">
-      <el-button
-        plain
-        size="mini"
-        @click="onReload">{{ $t('loadmore') }}</el-button>
-    </div>
   </div>
 </template>
 
@@ -70,12 +66,12 @@ export default {
       activities: [],
       loading: false,
       nomore: false,
-      failed: false // 标记上次加载是不是出错了，防止网络错误加载失败时不停地触发事件
+      error: false // 标记上次加载是不是出错了，防止网络错误加载失败时不停地触发事件
     }
   },
   computed: {
     busy () {
-      return this.loading || this.nomore || this.failed
+      return this.loading || this.nomore || this.error
     }
   },
   methods: {
@@ -88,12 +84,12 @@ export default {
         this.activities.push.apply(this.activities, activities)
         this.nomore = !activities.length
       }).catch(() => {
-        this.failed = true
+        this.error = true
         this.loading = false
       })
     },
     onReload () {
-      this.failed = false
+      this.error = false
     },
     onPreview (e) {
       if (e.target.tagName === 'IMG') {

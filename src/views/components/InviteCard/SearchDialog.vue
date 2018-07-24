@@ -55,7 +55,7 @@
                 class="m0 f-14 black-45 ellipsis-1" />
             </div>
             <el-button
-              v-if="designer._is_invited"
+              v-if="designer.is_invited"
               plain
               type="info"
               size="mini"
@@ -110,7 +110,7 @@ export default {
       const designer = designers[index]
       const uid = designers[index].id
       invite(reqId, uid).then(() => {
-        designer._is_invited = true
+        designer.is_invited = true
         this.$emit('invited', designer)
       })
     },
@@ -119,7 +119,7 @@ export default {
       const designer = designers[index]
       const uid = designers[index].id
       recall(reqId, uid).then(() => {
-        designer._is_invited = false
+        designer.is_invited = false
         this.$emit('recalled', designer)
       })
     },

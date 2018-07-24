@@ -26,3 +26,13 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
     content: "";
   }
 }
+
+// 覆盖样式
+.el-step__head.is-success {
+  color: rgba($color: #000000, $alpha: 0.85);
+  border-color: rgba($color: #000000, $alpha: 0.85);
+}
+.el-step__title.is-success,
+.el-step__description.is-success {
+  color: rgba($color: #000000, $alpha: 0.85);
+}

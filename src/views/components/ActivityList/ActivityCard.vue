@@ -84,7 +84,7 @@
     <divider/>
     <div class="activity-card__action-btns">
       <el-button
-        :class="{'is-liked': activity._is_liked}"
+        :class="{'is-liked': activity.is_liked}"
         type="text"
         @click="onToggleLike">{{ $t('g.like') + likeNumStr }}</el-button>
       <el-button type="text">{{ $t('g.comment') + commentNumStr }}</el-button>
@@ -108,13 +108,13 @@ export default {
           photo_urls: [],
           like_num: 0,
           comment_num: 0,
-          _is_liked: false,
+          is_liked: false,
           user: {
             id: '',
             avatar_url: '',
             real_name: '',
             follower_num: 0,
-            _is_following: false
+            is_following: false
           }
         }
       }
@@ -147,15 +147,15 @@ export default {
       return this.$store.getters.uid === this.activity.user.id
     },
     isFollowing () {
-      return this.activity.user._is_following
+      return this.activity.user.is_following
     }
   },
   methods: {
     onToggleLike () {
-      const liked = this.activity._is_liked
+      const liked = this.activity.is_liked
       const fn = liked ? unlikeActivityById : likeActivityById
       fn(this.activity.id).then(({ data: { like_num } }) => {
-        this.activity._is_liked = !liked
+        this.activity.is_liked = !liked
         this.activity.like_num = like_num
       })
     },
@@ -174,7 +174,7 @@ export default {
       const fn = action === 'follow' ? followUserByUID : unfollowUserByUID
       fn(this.activity.user.id).then(() => {
         this[`${action}BtnLoading`] = false
-        this.activity.user._is_following = action === 'follow'
+        this.activity.user.is_following = action === 'follow'
       }).catch(() => {
         this[`${action}BtnLoading`] = false
       })

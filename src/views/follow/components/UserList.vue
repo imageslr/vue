@@ -30,10 +30,10 @@ export default {
   },
   methods: {
     onFollow (index) {
-      this.users[index]._is_following = true
+      this.users[index].is_following = true
     },
     onUnfollow (index) {
-      this.users[index]._is_following = false
+      this.users[index].is_following = false
     }
   }
 }

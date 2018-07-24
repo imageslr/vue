@@ -40,6 +40,20 @@ export default {
   display: flex;
   align-items: center;
   padding: 8px 16px;
+  &__icon {
+    margin-right: 8px;
+  }
+  &__title {
+    flex: 1;
+    margin: 0;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 14px;
+  }
+  &__button {
+    padding-top: 0;
+    padding-bottom: 0;
+    color: rgba(0, 119, 181, 0.9);
+  }
   &.warning {
     background: #fffbe6;
     border: 1px solid #ffe58f;
@@ -71,17 +85,6 @@ export default {
     .alert__icon {
       color: #f5222d;
     }
-  }
-  &__title {
-    flex: 1;
-    margin: 0 8px 0;
-    color: rgba(0, 0, 0, 0.45);
-    font-size: 14px;
-  }
-  &__button {
-    padding-top: 0;
-    padding-bottom: 0;
-    color: rgba(0, 119, 181, 0.9);
   }
 }
 </style>

@@ -23,3 +23,11 @@ export function publishRequirement (body) {
 export function getReqDetailById (reqId) {
   return request.get(`/requirements/${reqId}`)
 }
+
+export function favoriteReqById (id) {
+  return request.post(`/requirements/${id}/favorite`)
+}
+
+export function unfavoriteReqById (id) {
+  return request.post(`/requirements/${id}/unfavorite`)
+}

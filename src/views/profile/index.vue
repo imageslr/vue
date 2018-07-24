@@ -100,7 +100,7 @@ export default {
     },
     // 关注状态
     followStatus () {
-      return this.userInfo._is_following ? this.$t('following') : this.$t('g.follow')
+      return this.userInfo.is_following ? this.$t('following') : this.$t('g.follow')
     }
   },
   created () {
@@ -119,10 +119,10 @@ export default {
     },
     onToggleFollow () {
       this.followBtnLoading = true
-      const fn = this.userInfo._is_following ? unfollowUserByUID : followUserByUID
+      const fn = this.userInfo.is_following ? unfollowUserByUID : followUserByUID
       fn(this.pageUID).then(() => {
         this.followBtnLoading = false
-        this.userInfo._is_following = !this.userInfo._is_following // TODO setUserInfo
+        this.userInfo.is_following = !this.userInfo.is_following // TODO setUserInfo
         console.log(this.userInfo)
       }).catch(() => {
         this.followBtnLoading = false

@@ -14,7 +14,7 @@
     "party": {
       "title": "I'm a Party",
       "features": [
-        "Public Requirements",
+        "Publish Requirements",
         "Find Designers",
         "Communicate with Professionals",
         "Follow Others' Activities"

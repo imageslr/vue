@@ -10,6 +10,7 @@ import Result from '../views/publish/Result'
 import Follow from '../views/follow'
 import Profile from '../views/profile'
 import Requirement from '../views/requirement'
+import Order from '../views/order'
 
 Vue.use(Router)
 
@@ -109,6 +110,20 @@ export default new Router({
             requireAuth: true
           },
           component: Requirement
+        }
+      ]
+    },
+    {
+      path: '/order',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'order',
+          meta: {
+            requireAuth: true
+          },
+          component: Order
         }
       ]
     }

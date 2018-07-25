@@ -1,13 +1,13 @@
 <template>
   <div class="app-container">
     <navbar class="app-nav"/>
-    <transition
-      name="fade"
-      mode="out-in">
-      <section class="app-main">
-        <router-view :key="$route.fullPath"/>
-      </section>
-    </transition>
+    <section class="app-main">
+      <!-- <transition
+        name="fade"
+        mode="out-in"> -->
+      <router-view :key="$route.fullPath"/>
+      <!-- </transition> -->
+    </section>
     <app-footer/>
   </div>
 </template>

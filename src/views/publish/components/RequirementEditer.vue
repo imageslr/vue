@@ -75,7 +75,7 @@
     "tips": [
       ["Audition", "Everyone can apply for a bid and submit a tender."],
       ["Shortlist", "Everyone can apply for a bid，but only shortlisted designers can tender."],
-      ["Invitation", "The demand is not public, only visible to and accept the tender from the invited designer."]
+      ["Invitation", "The requirement is not public, only visible to and accept the tender from the invited designer."]
     ],
     "tooltips": {
       "tenderDate": "The tender due date must be one month later",

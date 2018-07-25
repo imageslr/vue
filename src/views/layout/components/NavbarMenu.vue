@@ -43,7 +43,7 @@
     </li>
     <li :class="['navbar-menu-item', { 'is-active': isActive('order')}]">
       <router-link
-        to="/feed"
+        to="/order"
         class="navbar-menu-item__container">
         <svg-icon icon-class="snippets"/>
         <span>{{ $t('order') }}</span>

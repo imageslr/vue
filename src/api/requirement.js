@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+
 export function publishRequirement (body) {
   return request.post(`/requirements`, body)
 }

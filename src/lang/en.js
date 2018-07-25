@@ -16,8 +16,11 @@ export default {
     published_at: 'Published at',
     recommendation: 'Recommendation',
     loading: 'Loading',
+    empty: 'No data',
+    loadmore: 'Load more',
     nomore: 'No more data',
     reload: 'Reload',
+    notice: 'Notice',
     confirmBtn: 'Confirm',
     cancelBtn: 'Cancel'
   },

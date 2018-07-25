@@ -49,24 +49,9 @@
             v-for="(designer, index) in invitedDesigners"
             :key="designer.id"
             class="list-item">
-            <router-link :to="'/profile?uid=' + designer.id">
-              <avatar
-                :avatar-url="designer.avatar_url"
-                class="list-item__avatar"/>
-            </router-link>
-            <div class="list-item__info">
-              <p class="m0 mb-4 bold f-14">
-                <router-link
-                  :to="'/profile?uid=' + designer.id"
-                  class="black-85">{{ designer.real_name }}</router-link>
-                <span
-                  v-t="designer.title"
-                  class="ml1 black-45" />
-              </p>
-              <p
-                v-t="designer.introduction"
-                class="m0 f-14 black-45 ellipsis-1" />
-            </div>
+            <designer-visit-card
+              :user="designer"
+              class="list-item__info" />
             <div class="list-item__time black-45 f-14">
               <p
                 v-t="$t('invitedAt')"
@@ -101,8 +86,9 @@
 <script>
 import { getInvitedDesignersByReqId, recall } from '@/api/requirement'
 import SearchDialog from './SearchDialog'
+import DesignerVisitCard from '@/views/components/DesignerVisitCard'
 export default {
-  components: { SearchDialog },
+  components: { SearchDialog, DesignerVisitCard },
   props: {
     // 需求id
     reqId: {
@@ -191,11 +177,6 @@ export default {
   &:last-child {
     border-bottom: none;
     margin-bottom: none;
-  }
-  &__avatar {
-    width: 48px;
-    height: 48px;
-    margin-right: 24px;
   }
   &__info {
     flex: 1;

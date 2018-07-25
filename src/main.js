@@ -6,6 +6,7 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import '@/styles/index.scss' // global css
+import Dayjs from 'dayjs'
 import App from './App'
 import router from './router'
 import store from './store'
@@ -16,8 +17,8 @@ import GlobalComponents from '@/components/global-install'
 import Icon from 'vue-awesome/components/Icon'
 import infiniteScroll from 'vue-infinite-scroll'
 import '@/assets/iconfont.js' // iconfont
-import _ from '@/utils/lodash'
-import user from '@/directives/user' // 权限指令
+import lodash from '@/utils/lodash'
+import VUser from '@/directives/user'
 
 // 注册组件库，注册一些常用的全局组件
 Vue.use(ElementUI, {
@@ -35,11 +36,13 @@ Icon.register({
   }
 })
 
-// 无限滚动指令
-Vue.use(infiniteScroll)
+// 注册指令
+Vue.use(infiniteScroll) // 无限滚动指令
+Vue.use(VUser) // 权限控制指令
 
-// lodash方法
-Vue.prototype.$_ = _
+// 挂载全局方法
+Vue.prototype.$_ = lodash // lodash
+Vue.prototype.$dayjs = Dayjs // dayjs
 
 // 路由前权限判断
 router.beforeEach((to, from, next) => {

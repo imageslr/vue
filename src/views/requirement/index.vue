@@ -5,6 +5,9 @@
     "cancelApply": "取消投标",
     "supplementReq": "补充需求",
     "cancelPublish": "取消发布",
+    "confirmCancelPublish": "此操作将取消发布该需求并不可恢复，是否确认？",
+    "cancelSuccess": "取消成功",
+    "canceledAlertText": "该需求已于 {time} 被甲方取消，无法进行操作",
     "publisher": "发布者",
     "publishedAt": "发布时间",
     "applicationDeadline": "申请截止日期",
@@ -12,6 +15,8 @@
     "yes": "是",
     "no": "否",
     "applicationSituation": "投标情况",
+    "applicationSituationText": "该需求可接受 {max} 名设计师投标，目前还剩 {remain} 个投标名额",
+    "applicationSituationTextUnlimited": "该需求目前已有 {current} 名设计师投标，投标名额无限制",
     "price": "需求预算",
     "description": "需求详情",
     "supplementDescription": "需求补充",
@@ -24,6 +29,9 @@
     "cancelApply": "Cancel apply",
     "supplementReq": "Supplement requirement",
     "cancelPublish": "Cancel publish",
+    "confirmCancelPublish": "This operation will unpublish the requirement and is not recoverable. Is it confirmed?",
+    "cancelSuccess": "Successfully canceled",
+    "canceledAlertText": "The requirement has been canceled at {time}",
     "publisher": "Publisher",
     "publishedAt": "Published at",
     "applicationDeadline": "Application deadline",
@@ -31,6 +39,8 @@
     "yes": "Yes",
     "no": "No",
     "applicationSituation": "Application situation",
+    "applicationSituationText": "The requirement accepts max {max} designers to apply，{remain} places remaining",
+    "applicationSituationTextUnlimited": "There are currently {current} designers applying for this requirement, and there is no limit on the number of application.",
     "price": "Requirement price",
     "description": "Requirement description",
     "supplementDescription": "Supplement description",
@@ -44,6 +54,11 @@
 <template>
   <div>
     <div class="req-header card">
+      <alert
+        v-if="isCanceled"
+        :title="$t('canceledAlertText', {time: reqDetail.canceled_at})"
+        type="warning"
+        class="mb2"/>
       <div class="req-header__title-area">
         <h1 class="req-header__title">{{ reqDetail.title }}</h1>
         <favorite-button
@@ -65,13 +80,13 @@
         >{{ $t('apply') }}</el-button>
         <el-button
           v-user.party
-          v-if="!hasSupplement && isPublisher"
+          v-if="isPublisher && !hasSupplement"
           size="mini"
           @click="uploadDialogVisible = true"
         >{{ $t('supplementReq') }}</el-button>
         <el-button
           v-user.party
-          v-if="isPublisher"
+          v-if="isPublisher && canCancel"
           size="mini"
           @click="onCancelPublish"
         >{{ $t('cancelPublish') }}</el-button>
@@ -142,6 +157,16 @@
           :bonus="item.bonus"
         />
       </card>
+      <card
+        v-if="isPublisher"
+        :title="$t('applicationSituation')">
+        <alert
+          :title="applicationSituationText"
+          type="warning" />
+        <application-list
+          :req-detail.sync="reqDetail"
+          class="mt1" />
+      </card>
     </div>
     <upload-dialog
       :req-detail.sync="reqDetail"
@@ -156,14 +181,16 @@ import FavoriteButton from './components/FavoriteButton'
 import ReqProgress from './components/ReqProgress'
 import RewardSettingItem from './components/RewardSettingItem'
 import UploadDialog from './components/UploadDialog'
-import { getReqDetailById } from '@/api/requirement'
+import ApplicationList from './components/ApplicationList'
+import { getReqDetailById, cancelRequirementById } from '@/api/requirement'
 export default {
   components: {
     Steps,
     FavoriteButton,
     ReqProgress,
     RewardSettingItem,
-    UploadDialog
+    UploadDialog,
+    ApplicationList
   },
   data () {
     return {
@@ -188,6 +215,21 @@ export default {
     id () {
       return this.$route.params.id
     },
+    // 投标情况的说明文字
+    applicationSituationText () {
+      if (this.reqDetail.max_apply_num == 0) { // eslint-disable-line eqeqeq
+        return this.$t('applicationSituationTextUnlimited', { current: this.reqDetail.current_apply_num })
+      } else {
+        return this.$t('applicationSituationText', {
+          max: this.reqDetail.max_apply_num,
+          remain: this.reqDetail.max_apply_num - this.reqDetail.current_apply_num
+        })
+      }
+    },
+    // 上传对话框类型：补充需求 / 报名投标
+    uploadDialogType () {
+      return this.$store.getters.userType === 'party' ? 'supplement' : 'apply'
+    },
     // 当前登录用户（设计师）能否报名
     canApply () {
       return this.reqDetail.can_apply && this.reqDetail.status == 1000 // eslint-disable-line eqeqeq
@@ -200,8 +242,13 @@ export default {
     hasSupplement () {
       return !!this.reqDetail.supplement_description
     },
-    uploadDialogType () {
-      return this.$store.getters.userType === 'party' ? 'supplement' : 'apply'
+    // 能否取消发布
+    canCancel () {
+      return this.reqDetail.status == 1000 || this.reqDetail.status == 1010 // eslint-disable-line eqeqeq
+    },
+    // 是否已被取消
+    isCanceled () {
+      return this.reqDetail.status == 2000 // eslint-disable-line eqeqeq
     }
   },
   created () {
@@ -225,11 +272,21 @@ export default {
     onCancelApply () {
 
     },
-    onSupplement () {
-
-    },
     onCancelPublish () {
-
+      this.$confirm(this.$t('confirmCancelPublish'), this.$t('g.notice'), {
+        confirmButtonText: this.$t('g.confirmBtn'),
+        cancelButtonText: this.$t('g.cancelBtn'),
+        type: 'warning'
+      }).then(() => {
+        cancelRequirementById(this.reqDetail.id).then(() => {
+          this.reqDetail.status = 2000
+          this.reqDetail.canceled_at = this.$dayjs().format('YYYY-MM-DD HH:mm:ss')
+          this.$message({
+            type: 'success',
+            message: this.$t('cancelSuccess')
+          })
+        })
+      }).catch(() => {})
     }
   }
 }
@@ -295,6 +352,9 @@ export default {
 .main-container {
   .card {
     margin-bottom: 24px;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 .alert {

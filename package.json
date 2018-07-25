@@ -16,6 +16,7 @@
     "async-validator": "^1.8.4",
     "axios": "^0.18.0",
     "basscss": "^8.0.4",
+    "dayjs": "^1.7.4",
     "element-ui": "^2.4.4",
     "js-cookie": "^2.2.0",
     "lodash": "^4.17.10",

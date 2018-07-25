@@ -16,8 +16,11 @@ export default {
     published_at: '发布于',
     recommendation: '推荐',
     loading: '加载中',
+    empty: '暂无数据',
+    loadmore: '加载更多',
     nomore: '没有更多数据了',
     reload: '重新加载',
+    notice: '提示',
     confirmBtn: '确 定',
     cancelBtn: '取 消'
   },

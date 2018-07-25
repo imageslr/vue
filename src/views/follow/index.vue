@@ -30,7 +30,7 @@
         :loading="loading"
         :error="error"
         :on-reload="getUsers"/>
-      <user-list :users.sync="users"/>
+      <user-list :users="users"/>
       <el-pagination
         :current-page.sync="currentPage"
         :total="total"

@@ -44,14 +44,12 @@ export default {
   methods: {
     onFavorite () {
       favoriteReqById(this.reqDetail.id).then(({ data: { favorite_num } }) => {
-        this.reqDetail.is_favorite = true
-        this.reqDetail.favorite_num = favorite_num
+        this.$emit('update:reqDetail', { ...this.reqDetail, is_favorite: true, favorite_num })
       })
     },
     onUnfavorite () {
       unfavoriteReqById(this.reqDetail.id).then(({ data: { favorite_num } }) => {
-        this.reqDetail.is_favorite = false
-        this.reqDetail.favorite_num = favorite_num
+        this.$emit('update:reqDetail', { ...this.reqDetail, is_favorite: false, favorite_num })
       })
     }
   }

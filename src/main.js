@@ -17,6 +17,7 @@ import Icon from 'vue-awesome/components/Icon'
 import infiniteScroll from 'vue-infinite-scroll'
 import '@/assets/iconfont.js' // iconfont
 import _ from '@/utils/lodash'
+import user from '@/directives/user' // 权限指令
 
 // 注册组件库，注册一些常用的全局组件
 Vue.use(ElementUI, {

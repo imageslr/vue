@@ -28,7 +28,7 @@
 <template>
   <el-steps
     :active="active"
-    process-status="finish"
+    process-status="process"
     finish-status="success">
     <el-step
       v-for="(step, index) in $t('steps')"

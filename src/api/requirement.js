@@ -20,6 +20,11 @@ export function publishRequirement (body) {
   return request.post(`/requirements`, body)
 }
 
+// TODO
+export function supplementRequirementById (reqId, data) {
+  return request.post(`/requirements2/${reqId}`, data)
+}
+
 export function getReqDetailById (reqId) {
   return request.get(`/requirements/${reqId}`)
 }

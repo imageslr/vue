@@ -17,7 +17,9 @@ export default {
     recommendation: 'Recommendation',
     loading: 'Loading',
     nomore: 'No more data',
-    reload: 'Reload'
+    reload: 'Reload',
+    confirmBtn: 'Confirm',
+    cancelBtn: 'Cancel'
   },
   ordinalNum: ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'],
   errmsgs: {

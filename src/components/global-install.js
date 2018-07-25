@@ -8,6 +8,7 @@ import SvgIcon from './SvgIcon.vue'
 import Alert from './Alert.vue'
 import Empty from './Empty.vue'
 import MyProgress from './MyProgress.vue'
+import Card from './Card.vue'
 const components = {
   Divider,
   LangSelect,
@@ -17,7 +18,8 @@ const components = {
   SvgIcon,
   Alert,
   Empty,
-  MyProgress
+  MyProgress,
+  Card
 }
 const install = function (Vue, opts = {}) {
   Object.keys(components).forEach(key => {

@@ -28,9 +28,18 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
 }
 
 // 覆盖样式
+.el-step__head.is-process {
+  color: #0077b5;
+  border-color: #0077b5;
+}
 .el-step__head.is-success {
-  color: rgba($color: #000000, $alpha: 0.85);
-  border-color: rgba($color: #000000, $alpha: 0.85);
+  // color: rgba($color: #000000, $alpha: 0.85);
+  // border-color: rgba($color: #000000, $alpha: 0.85);
+  color: #0077b5;
+  border-color: #0077b5;
+  .el-step__line {
+    background-color: #0077b5;
+  }
 }
 .el-step__title.is-success,
 .el-step__description.is-success {

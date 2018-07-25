@@ -3,6 +3,8 @@
   "zh": {
     "apply": "我要投标",
     "cancelApply": "取消投标",
+    "supplementReq": "补充需求",
+    "cancelPublish": "取消发布",
     "publisher": "发布者",
     "publishedAt": "发布时间",
     "applicationDeadline": "申请截止日期",
@@ -12,12 +14,16 @@
     "applicationSituation": "投标情况",
     "price": "需求预算",
     "description": "需求详情",
-    "tenderFile": "下载附件",
+    "supplementDescription": "需求补充",
+    "supplementAt": "补充于",
+    "downloadFile": "下载附件",
     "rewardSettings": "奖项设置"
   },
   "en": {
     "apply": "Apply",
     "cancelApply": "Cancel apply",
+    "supplementReq": "Supplement requirement",
+    "cancelPublish": "Cancel publish",
     "publisher": "Publisher",
     "publishedAt": "Published at",
     "applicationDeadline": "Application deadline",
@@ -27,7 +33,9 @@
     "applicationSituation": "Application situation",
     "price": "Requirement price",
     "description": "Requirement description",
-    "tenderFile": "Download file",
+    "supplementDescription": "Supplement description",
+    "supplementAt": "Supplement at",
+    "downloadFile": "Download file",
     "rewardSettings": "Reward setting"
   }
 }
@@ -38,19 +46,35 @@
     <div class="req-header card">
       <div class="req-header__title-area">
         <h1 class="req-header__title">{{ reqDetail.title }}</h1>
-        <favorite-button :req-detail.sync="reqDetail" />
+        <favorite-button
+          v-user.designer
+          :req-detail.sync="reqDetail" />
         <el-button
+          v-user.designer
           v-if="reqDetail.is_participating"
-          :disabled="!canApply"
           size="mini"
           @click="onCancelApply"
         >{{ $t('cancelApply') }}</el-button>
         <el-button
+          v-user.designer
           v-else
+          :disabled="!canApply"
           type="primary"
           size="mini"
           @click="onApply"
         >{{ $t('apply') }}</el-button>
+        <el-button
+          v-user.party
+          v-if="!hasSupplement && isPublisher"
+          size="mini"
+          @click="uploadDialogVisible = true"
+        >{{ $t('supplementReq') }}</el-button>
+        <el-button
+          v-user.party
+          v-if="isPublisher"
+          size="mini"
+          @click="onCancelPublish"
+        >{{ $t('cancelPublish') }}</el-button>
       </div>
       <div class="overflow-hidden">
         <div class="req-header__info">
@@ -94,28 +118,35 @@
       :error="error"
       :on-reload="getReqDetail" />
     <div class="main-container">
-      <div class="card">
-        <h2 class="card__header">{{ $t('description') }}</h2>
-        <div class="card__content">
-          <div class="pre-wrap">{{ reqDetail.tender_description }}</div>
-          <alert
-            v-if="reqDetail.tender_document_url"
-            class="mt-12"><a :href="reqDetail.tender_document_url">{{ $t('tenderFile') }}</a></alert>
-        </div>
-      </div>
-      <div class="card">
-        <h2 class="card__header">{{ $t('rewardSettings') }}</h2>
-        <div class="card__content">
-          <reward-setting-item
-            v-for="(item, index) in reqDetail.reward_settings"
-            :key="index"
-            :order="index+1"
-            :num="item.num"
-            :bonus="item.bonus"
-          />
-        </div>
-      </div>
+      <card :title="$t('description')">
+        <div class="pre-wrap">{{ reqDetail.tender_description }}</div>
+        <alert
+          v-if="reqDetail.tender_document_url"
+          class="mt-12"><a :href="reqDetail.tender_document_url">{{ $t('downloadFile') }}</a></alert>
+      </card>
+      <card
+        v-if="hasSupplement"
+        :title="$t('supplementDescription')">
+        <div class="pre-wrap">{{ reqDetail.supplement_description }}</div>
+        <alert
+          v-if="reqDetail.supplement_document_url"
+          class="mt-12"><a :href="reqDetail.supplement_document_url">{{ $t('downloadFile') }}</a></alert>
+        <p class="m0 mt1 f-12 black-60">{{ $t('supplementAt') }}：{{ reqDetail.supplement_at }}</p>
+      </card>
+      <card :title="$t('rewardSettings')">
+        <reward-setting-item
+          v-for="(item, index) in reqDetail.reward_settings"
+          :key="index"
+          :order="index+1"
+          :num="item.num"
+          :bonus="item.bonus"
+        />
+      </card>
     </div>
+    <upload-dialog
+      :req-detail.sync="reqDetail"
+      :type="uploadDialogType"
+      :visible.sync="uploadDialogVisible" />
   </div>
 </template>
 
@@ -124,18 +155,21 @@ import Steps from './components/Steps'
 import FavoriteButton from './components/FavoriteButton'
 import ReqProgress from './components/ReqProgress'
 import RewardSettingItem from './components/RewardSettingItem'
+import UploadDialog from './components/UploadDialog'
 import { getReqDetailById } from '@/api/requirement'
 export default {
   components: {
     Steps,
     FavoriteButton,
     ReqProgress,
-    RewardSettingItem
+    RewardSettingItem,
+    UploadDialog
   },
   data () {
     return {
       loading: false,
       error: false,
+      uploadDialogVisible: false,
       reqDetail: {
         status: 1000,
         favorite_num: 0,
@@ -150,11 +184,24 @@ export default {
     }
   },
   computed: {
+    // 需求id
     id () {
       return this.$route.params.id
     },
+    // 当前登录用户（设计师）能否报名
     canApply () {
       return this.reqDetail.can_apply && this.reqDetail.status == 1000 // eslint-disable-line eqeqeq
+    },
+    // 当前登录用户（甲方）是否是发布人
+    isPublisher () {
+      return this.reqDetail.user.id == this.$store.getters.uid // eslint-disable-line eqeqeq
+    },
+    // 是否已经补充过需求
+    hasSupplement () {
+      return !!this.reqDetail.supplement_description
+    },
+    uploadDialogType () {
+      return this.$store.getters.userType === 'party' ? 'supplement' : 'apply'
     }
   },
   created () {
@@ -176,6 +223,12 @@ export default {
 
     },
     onCancelApply () {
+
+    },
+    onSupplement () {
+
+    },
+    onCancelPublish () {
 
     }
   }
@@ -239,13 +292,12 @@ export default {
     margin-top: 32px;
   }
 }
-.card__content {
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.85);
-}
 .main-container {
   .card {
     margin-bottom: 24px;
   }
+}
+.alert {
+  font-size: 14px;
 }
 </style>

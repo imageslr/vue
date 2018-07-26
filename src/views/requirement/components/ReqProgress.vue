@@ -16,15 +16,13 @@
 </template>
 
 <script>
+import Requirement from '@/models/requirement'
 export default {
   props: {
     reqDetail: {
       type: Object,
       default () {
-        return {
-          current_apply_num: 0,
-          max_apply_num: 0
-        }
+        return Requirement.parse()
       }
     }
   },

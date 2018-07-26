@@ -9,6 +9,7 @@ import Alert from './Alert.vue'
 import Empty from './Empty.vue'
 import MyProgress from './MyProgress.vue'
 import Card from './Card.vue'
+import BadgeStatus from './BadgeStatus.vue'
 const components = {
   Divider,
   LangSelect,
@@ -19,7 +20,8 @@ const components = {
   Alert,
   Empty,
   MyProgress,
-  Card
+  Card,
+  BadgeStatus
 }
 const install = function (Vue, opts = {}) {
   Object.keys(components).forEach(key => {

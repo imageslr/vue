@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import Requirement from '@/models/requirement'
 import { supplementRequirementById } from '@/api/requirement'
 export default {
   props: {
@@ -72,7 +73,7 @@ export default {
     reqDetail: {
       type: Object,
       default () {
-        return {}
+        return Requirement.parse()
       }
     },
     type: {

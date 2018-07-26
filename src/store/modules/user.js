@@ -1,10 +1,11 @@
 import { signIn, signUp, getUserInfoByToken } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import User from '@/models/user'
 
 const user = {
   state: {
     // 用户信息
-    userInfo: {},
+    userInfo: User.parse(),
     token: getToken()
   },
 
@@ -16,7 +17,7 @@ const user = {
       state.userInfo = userInfo
     },
     SIGN_OUT: state => {
-      state.userInfo = {}
+      state.userInfo = User.parse()
       state.token = ''
     }
   },
@@ -27,7 +28,7 @@ const user = {
       return signUp(userInfo).then(({ data }) => {
         setToken(data.token)
         commit('SET_TOKEN', data.token)
-        commit('SET_USERINFO', data.user)
+        commit('SET_USERINFO', User.parse(data.user))
       })
     },
 
@@ -36,7 +37,7 @@ const user = {
       return signIn(phone, password).then(({ data }) => {
         setToken(data.token)
         commit('SET_TOKEN', data.token)
-        commit('SET_USERINFO', data.user)
+        commit('SET_USERINFO', User.parse(data.user))
       })
     },
 
@@ -45,7 +46,7 @@ const user = {
       return new Promise((resolve, reject) => {
         getUserInfoByToken(state.token)
           .then(({ data }) => {
-            commit('SET_USERINFO', data)
+            commit('SET_USERINFO', User.parse(data))
             resolve()
           })
           .catch(error => {

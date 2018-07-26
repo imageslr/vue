@@ -40,19 +40,13 @@
 </template>
 
 <script>
+import Requirement from '@/models/requirement'
 export default {
   props: {
     reqDetail: {
       type: Object,
       default () {
-        return {
-          status: 1000,
-          review_status: 0,
-          created_at: '',
-          apply_due_date: '',
-          sign_due_date: '',
-          tender_date: ''
-        }
+        return Requirement.parse()
       }
     }
   },
@@ -65,6 +59,7 @@ export default {
         1110: 4,
         1120: 4,
         1130: 4,
+        1140: 4,
         1200: 4,
         1210: 5,
         1211: 5,

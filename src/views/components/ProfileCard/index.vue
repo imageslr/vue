@@ -23,22 +23,22 @@
         :avatar-url="userInfo.avatar_url"
         class="profile-card__info-avatar"/>
       <h1 class="m0 mb1">{{ userInfo.real_name }}</h1>
-      <p class="m0 f-12 black-60">{{ userInfo.title }}</p>
-      <p class="m0 f-12 black-60 mb-12">{{ userInfo.introduction }}</p>
+      <p class="m0 f-12 black-65">{{ userInfo.title }}</p>
+      <p class="m0 f-12 black-65 mb-12">{{ userInfo.introduction }}</p>
     </div>
     <div class="profile-card__follow">
       <div class="p-12">
         <router-link
           :to="'/follow?uid=' + userInfo.id"
           class="f-20">{{ userInfo.following_num }}</router-link>
-        <span class="block f-12 black-60">{{ $t('following') }}</span>
+        <span class="block f-12 black-65">{{ $t('following') }}</span>
       </div>
       <divider margin="12"/>
       <div class="p-12">
         <router-link
           :to="'/follow?type=follower&uid=' + userInfo.id"
           class="f-20">{{ userInfo.follower_num }}</router-link>
-        <span class="block f-12 black-60">{{ $t('follower') }}</span>
+        <span class="block f-12 black-65">{{ $t('follower') }}</span>
       </div>
     </div>
     <div class="profile-card__action">

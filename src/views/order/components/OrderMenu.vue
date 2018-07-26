@@ -15,7 +15,18 @@
     }
   },
   "en": {
-
+    "orderStatus": {
+      "all": "All",
+      "tendering": "Tendering",
+      "waitingToSign": "Waiting to sign",
+      "working": "Working",
+      "waitingToOpen": "Waiting to open",
+      "evaluating": "Evaluating",
+      "announcing": "Announcing",
+      "waitingToPay": "Waiting to pay",
+      "waitingToReview": "Waiting to review",
+      "finished": "Finished"
+    }
   }
 }
 </i18n>

@@ -27,17 +27,14 @@
 </template>
 
 <script>
+import Requirement from '@/models/requirement'
 import { favoriteReqById, unfavoriteReqById } from '@/api/requirement'
 export default {
   props: {
     reqDetail: {
       type: Object,
       default () {
-        return {
-          id: undefined,
-          is_favorite: false,
-          favorite_num: 0
-        }
+        return Requirement.parse()
       }
     }
   },

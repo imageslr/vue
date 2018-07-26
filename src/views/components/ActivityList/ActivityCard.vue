@@ -21,8 +21,8 @@
         <router-link :to="'/profile?uid=' + user.id">
           <p class="m0 f-15 bold black inline-block">{{ user.real_name }}</p>
         </router-link>
-        <p class="m0 f-13 bold black-60">{{ followerNum+' '+$t('g.follower') }}</p>
-        <p class="m0 f-13 bold black-60">{{ $t('g.published_at') + ' ' + activity.created_at }}</p>
+        <p class="m0 f-13 bold black-65">{{ followerNum+' '+$t('g.follower') }}</p>
+        <p class="m0 f-13 bold black-65">{{ $t('g.published_at') + ' ' + activity.created_at }}</p>
       </div>
       <template v-if="showActionButton">
         <el-dropdown
@@ -199,7 +199,7 @@ export default {
     }
     &-cancel-follow-button {
       padding-top: 0;
-      color: rgba(0, 0, 0, 0.6);
+      color: rgba(0, 0, 0, 0.65);
     }
   }
   &__content {
@@ -223,7 +223,7 @@ export default {
     }
   }
   &__action-btns .el-button {
-    color: rgba(0, 0, 0, 0.6);
+    color: rgba(0, 0, 0, 0.65);
     &.is-liked {
       color: #0077b5;
     }

@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import Requirement from '@/models/requirement'
 import DesignerVisitCard from '@/views/components/DesignerVisitCard'
 import { getApplyDesignersByReqId } from '@/api/requirement'
 export default {
@@ -74,7 +75,7 @@ export default {
     reqDetail: {
       type: Object,
       default () {
-        return {}
+        return Requirement.parse()
       }
     }
   },

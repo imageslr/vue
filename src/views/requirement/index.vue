@@ -80,7 +80,7 @@
         >{{ $t('apply') }}</el-button>
         <el-button
           v-user.party
-          v-if="isPublisher && !hasSupplement"
+          v-if="isPublisher && canSupplement"
           size="mini"
           @click="uploadDialogVisible = true"
         >{{ $t('supplementReq') }}</el-button>
@@ -140,13 +140,13 @@
           class="mt-12"><a :href="reqDetail.tender_document_url">{{ $t('downloadFile') }}</a></alert>
       </card>
       <card
-        v-if="hasSupplement"
+        v-if="reqDetail.supplement_description"
         :title="$t('supplementDescription')">
         <div class="pre-wrap">{{ reqDetail.supplement_description }}</div>
         <alert
           v-if="reqDetail.supplement_document_url"
           class="mt-12"><a :href="reqDetail.supplement_document_url">{{ $t('downloadFile') }}</a></alert>
-        <p class="m0 mt1 f-12 black-60">{{ $t('supplementAt') }}：{{ reqDetail.supplement_at }}</p>
+        <p class="m0 mt1 f-12 black-65">{{ $t('supplementAt') }}：{{ reqDetail.supplement_at }}</p>
       </card>
       <card :title="$t('rewardSettings')">
         <reward-setting-item
@@ -176,6 +176,8 @@
 </template>
 
 <script>
+/* eslint eqeqeq: "off" */
+import Requirement from '@/models/requirement'
 import Steps from './components/Steps'
 import FavoriteButton from './components/FavoriteButton'
 import ReqProgress from './components/ReqProgress'
@@ -197,17 +199,7 @@ export default {
       loading: false,
       error: false,
       uploadDialogVisible: false,
-      reqDetail: {
-        status: 1000,
-        favorite_num: 0,
-        current_apply_num: 0,
-        max_apply_num: 0,
-        apply_due_date: '',
-        can_apply: true,
-        user: {
-
-        }
-      }
+      reqDetail: Requirement.parse()
     }
   },
   computed: {
@@ -217,7 +209,7 @@ export default {
     },
     // 投标情况的说明文字
     applicationSituationText () {
-      if (this.reqDetail.max_apply_num == 0) { // eslint-disable-line eqeqeq
+      if (this.reqDetail.max_apply_num == 0) {
         return this.$t('applicationSituationTextUnlimited', { current: this.reqDetail.current_apply_num })
       } else {
         return this.$t('applicationSituationText', {
@@ -232,23 +224,23 @@ export default {
     },
     // 当前登录用户（设计师）能否报名
     canApply () {
-      return this.reqDetail.can_apply && this.reqDetail.status == 1000 // eslint-disable-line eqeqeq
+      return this.reqDetail.can_apply && this.reqDetail.status == 1000
     },
     // 当前登录用户（甲方）是否是发布人
     isPublisher () {
-      return this.reqDetail.user.id == this.$store.getters.uid // eslint-disable-line eqeqeq
+      return this.reqDetail.user.id == this.$store.getters.uid
     },
-    // 是否已经补充过需求
-    hasSupplement () {
-      return !!this.reqDetail.supplement_description
+    // 能否补充需求
+    canSupplement () {
+      return this.reqDetail.status == 1000 && !!this.reqDetail.supplement_description
     },
     // 能否取消发布
     canCancel () {
-      return this.reqDetail.status == 1000 || this.reqDetail.status == 1010 // eslint-disable-line eqeqeq
+      return this.reqDetail.status == 1000 || this.reqDetail.status == 1010
     },
     // 是否已被取消
     isCanceled () {
-      return this.reqDetail.status == 2000 // eslint-disable-line eqeqeq
+      return this.reqDetail.status == 500
     }
   },
   created () {
@@ -279,7 +271,7 @@ export default {
         type: 'warning'
       }).then(() => {
         cancelRequirementById(this.reqDetail.id).then(() => {
-          this.reqDetail.status = 2000
+          this.reqDetail.status = 500
           this.reqDetail.canceled_at = this.$dayjs().format('YYYY-MM-DD HH:mm:ss')
           this.$message({
             type: 'success',

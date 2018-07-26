@@ -20,7 +20,7 @@
           <router-link :to="'profile?uid=' + designer.id">
             <h3 class="m0 mt-4 mb-4 f-13 ellipsis-1 black">{{ designer.real_name }}</h3>
           </router-link>
-          <p class="m0 mb1 f-12 black-60 ellipsis-1">{{ designer.title }}</p>
+          <p class="m0 mb1 f-12 black-65 ellipsis-1">{{ designer.title }}</p>
           <el-button
             :loading="designer._loading"
             size="mini"

@@ -81,6 +81,8 @@ export default {
   }
   &__info-avatar {
     margin: -40px auto 16px;
+    width: 80px;
+    height: 80px;
   }
   &__follow {
     border-top: 1px solid rgba(0, 0, 0, 0.15);

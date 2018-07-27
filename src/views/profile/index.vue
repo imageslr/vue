@@ -41,7 +41,7 @@
       </profile-card>
       <edit-profile-dialog :visible.sync="editProfileDialogVisible"/>
       <h2
-        v-t="$t(type + 'Reviews')"
+        v-t="$t((type === 'party' ? 'designer' : 'party') + 'Reviews')"
         class="title" />
       <review-card :uid="pageUID"/>
     </div>

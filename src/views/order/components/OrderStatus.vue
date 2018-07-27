@@ -48,7 +48,7 @@
         :text="$t('tendering')"
         status="info" />
       <my-progress
-        :percentage="100 * order.current_tender_num / order.current_apply_num"
+        :percentage="parseInt(100 * order.current_tender_num / order.current_apply_num)"
         :text="order.current_tender_num + '/' + order.current_apply_num"/>
     </template>
     <!-- 待评标 -->

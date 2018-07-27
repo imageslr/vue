@@ -1,6 +1,7 @@
 <i18n>
 {
   "zh": {
+    "placeholder": "输入项目标题或订单号进行搜索",
     "search": "搜索订单",
     "captions": {
       "title": "需求名称",
@@ -23,10 +24,14 @@
     <div class="main">
       <order-menu :order-nums="orderNums"/>
       <div class="order-list-container">
-        <el-input size="small">
+        <el-input
+          v-model="keywordTemp"
+          :placeholder="$t('placeholder')"
+          size="small">
           <el-button
             slot="append"
-            type="primary">{{ $t('search') }}</el-button>
+            type="primary"
+            @click="onSearch">{{ $t('search') }}</el-button>
         </el-input>
         <div class="order-list">
           <div class="order-list__caption">
@@ -60,6 +65,13 @@
             :key="order.id"
             :order="order"
             class="order-list__item" />
+          <el-pagination
+            :current-page.sync="currentPage"
+            :total="total"
+            :page-size="20"
+            background
+            layout="prev, pager, next"
+            @current-change="onNavigate"/>
         </div>
       </div>
     </div>
@@ -79,21 +91,53 @@ export default {
   data () {
     return {
       orderNums: {},
-      orders: []
+      orders: [],
+      currentPage: 1,
+      total: 0,
+      type: 'all',
+      keywordTemp: '', // 输入框中的关键字
+      keyword: '' // query 中的关键字
     }
   },
   created () {
+    if (this.$route.query.p) this.currentPage = parseInt(this.$route.query.p)
+    if (this.$route.query.type) this.type = this.$route.query.type
+    if (this.$route.query.keyword) this.keywordTemp = this.keyword = this.$route.query.keyword
     this.getOrders()
   },
   methods: {
     getOrders () {
-      getOrdersByUID(this.$store.getters.uid).then(({ data }) => {
+      const { currentPage, type, keyword } = this
+      const params = {
+        start: currentPage * 20,
+        type,
+        keyword
+      }
+      getOrdersByUID(this.$store.getters.uid, params).then(({ data }) => {
         this.orderNums = data.order_nums
         this.orders = data.orders
+        this.total = data.total
       })
     },
-    getParams () {
-
+    onSearch () {
+      if (!this.keywordTemp) return
+      this.$router.push({
+        path: this.$route.path,
+        query: {
+          type: this.type,
+          keyword: this.keywordTemp
+        }
+      })
+    },
+    onNavigate (page) {
+      this.$router.push({
+        path: this.$route.path,
+        query: {
+          type: this.type,
+          keyword: this.keyword,
+          p: page
+        }
+      })
     }
   }
 
@@ -137,6 +181,10 @@ export default {
     }
     &__item {
       margin-top: 16px;
+    }
+    .el-pagination {
+      padding: 16px 0;
+      text-align: center;
     }
   }
 }

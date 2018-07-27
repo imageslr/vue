@@ -5,14 +5,20 @@
     "appliedAt": "投标时间",
     "status": "状态",
     "action": "操作",
-    "viewDetail": "查看详情"
+    "viewDetail": "查看详情",
+    "passed": "已通过",
+    "notViewed": "未查看",
+    "failed": "未通过"
   },
   "en": {
     "designer": "Designer",
     "appliedAt": "Applied at",
     "status": "Status",
     "action": "Action",
-    "viewDetail": "View detail"
+    "viewDetail": "View detail",
+    "passed": "Passed",
+    "notViewed": "Not viewed",
+    "failed": "Declined"
   }
 }
 </i18n>
@@ -33,13 +39,16 @@
       </el-table-column>
       <el-table-column
         :label="$t('appliedAt')"
-        width="250"
+        width="200"
         prop="applied_at"/>
       <el-table-column
+        v-if="showStatus"
         :label="$t('status')"
         width="150">
         <template slot-scope="scope">
-          已通过
+          <badge-status
+            :text="statusText[scope.row.apply_status]"
+            :status="statusType[scope.row.apply_status]"/>
         </template>
       </el-table-column>
       <el-table-column
@@ -77,6 +86,10 @@ export default {
       default () {
         return Requirement.parse()
       }
+    },
+    showStatus: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -85,7 +98,17 @@ export default {
       loading: true,
       total: 0,
       pageSize: 20,
-      currentPage: 1
+      currentPage: 1,
+      statusText: {
+        0: this.$t('notViewed'),
+        1: this.$t('passed'),
+        2: this.$t('failed')
+      },
+      statusType: {
+        0: 'default',
+        1: 'success',
+        2: 'error'
+      }
     }
   },
   created () {

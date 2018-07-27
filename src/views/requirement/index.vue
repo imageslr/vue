@@ -165,6 +165,7 @@
           type="warning" />
         <application-list
           :req-detail.sync="reqDetail"
+          show-status
           class="mt1" />
       </card>
     </div>
@@ -232,7 +233,7 @@ export default {
     },
     // 能否补充需求
     canSupplement () {
-      return this.reqDetail.status == 1000 && !!this.reqDetail.supplement_description
+      return this.reqDetail.status == 1000 && !this.reqDetail.supplement_description
     },
     // 能否取消发布
     canCancel () {

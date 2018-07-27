@@ -27,8 +27,6 @@ export default {
 
 <style scoped>
 .avatar {
-  width: 80px;
-  height: 80px;
   border: 2px solid #fff;
   border-radius: 50%;
   box-shadow: inset 0 1.5px 3px 0 rgba(0, 0, 0, 0.15),

@@ -62,7 +62,7 @@ router.beforeEach((to, from, next) => {
         .dispatch('GET_USER_INFO')
         .then(() => next())
         .catch(() => {
-          ElementUI.Message.error(i18n.t('errmsgs.getUserInfoFailed'))
+          // ElementUI.Message.error(i18n.t('errmsgs.getUserInfoFailed'))
           NProgress.done()
         })
     } else {

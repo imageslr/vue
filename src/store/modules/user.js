@@ -37,7 +37,6 @@ const user = {
       return signIn(phone, password).then(({ data }) => {
         setToken(data.token)
         commit('SET_TOKEN', data.token)
-        // commit('SET_USERINFO', User.parse(data)) 登录认证不返回用户信息
       })
     },
 

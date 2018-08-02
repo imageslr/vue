@@ -2,61 +2,27 @@ import request from '@/utils/request'
 
 // 检测手机号是否已被注册
 export function checkPhoneAvailable (phone) {
-  return request({
-    url: `/checkPhone/${phone}`,
-    method: 'post',
-    errMsg: {
-      409: ['该手机号已被注册', 'The phone number has been registered']
-    }
-  })
+  return request.post(`/checkPhone/${phone}`)
 }
 
 // 发送验证码
 export function sendCode (phone) {
-  return request({
-    url: `/verificationCode`,
-    method: 'post',
-    data: { phone },
-    errMsg: {
-      429: [
-        '请求过于频繁，请过一分钟再试',
-        'Too many requests. Please try again after one minute'
-      ]
-    }
-  })
+  return request.post(`/verificationCode`, { phone })
 }
 
 // 注册
 export function signUp (params) {
-  return request({
-    url: `/users`,
-    method: 'post',
-    data: params,
-    errMsg: {
-      400: ['验证码错误', 'Wrong validation code'],
-      409: ['该手机号已被注册', 'The phone number has been registered'],
-      422: ['验证码已失效', 'The validation code is expired']
-    }
-  })
+  return request.post(`/users`, params)
 }
 
 // 登录
 export function signIn (phone, password) {
-  return request({
-    url: `/authorizations`,
-    method: 'post',
-    data: { phone, password },
-    errMsg: {
-      400: ['用户名或密码错误', 'Wrong phone number or password']
-    }
-  })
+  return request.post(`/authorizations`, { phone, password })
 }
 
 // 根据token获取当前用户信息
 export function getCurrentUserInfo (token) {
-  return request({
-    url: `/user`
-  })
+  return request.get(`/user`)
 }
 
 // 获取用户信息

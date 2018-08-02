@@ -1,8 +1,8 @@
 export default {
   app: {
-    title: 'Goooood',
+    title: 'YoGooooo',
     description: 'A platform that links Parties and designs',
-    cpr: 'Goooood'
+    cpr: 'YoGooooo'
   },
   // global
   g: {

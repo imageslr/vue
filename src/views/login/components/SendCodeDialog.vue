@@ -91,7 +91,7 @@
 
 <script>
 import { splitPhone } from '@/utils'
-import { sendCode, checkCode } from '@/api/code'
+import { sendCode } from '@/api/user'
 export default {
   props: {
     visible: {
@@ -103,7 +103,7 @@ export default {
       default: function () {
         return {
           phone: '',
-          real_name: '',
+          name: '',
           password: '',
           type: ''
         }
@@ -139,13 +139,14 @@ export default {
     onApprove () {
       if (!this.code) return this.$message.error(this.$t('requireCode'))
       this.loading = true
-      const { phone, code, userInfo } = this
-      checkCode(phone, code).then(() => {
-        return this.$store.dispatch('SIGN_UP', userInfo).then(() => {
-          this.loading = false
-          this.$message.success(this.$t('signUpSuccess'))
-          this.$router.push({ path: '/feed' })
-        })
+      const { code, userInfo } = this
+      return this.$store.dispatch('SIGN_UP', {
+        ...userInfo,
+        verification_code: code
+      }).then(() => {
+        this.loading = false
+        this.$message.success(this.$t('signUpSuccess'))
+        this.$router.push({ path: '/feed' })
       }).catch(() => {
         this.loading = false
       })

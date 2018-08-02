@@ -1,27 +1,27 @@
 // 全局安装一些常用的自定义组件
-import Divider from './Divider.vue'
-import LangSelect from './LangSelect.vue'
-import Avatar from './Avatar.vue'
-import Preview from './Preview.vue'
-import Loader from './Loader.vue'
-import SvgIcon from './SvgIcon.vue'
-import Alert from './Alert.vue'
-import Empty from './Empty.vue'
-import MyProgress from './MyProgress.vue'
-import Card from './Card.vue'
-import BadgeStatus from './BadgeStatus.vue'
+import MyDivider from './Divider.vue'
+import MyLangSelect from './LangSelect.vue'
+import MyAvatar from './Avatar.vue'
+import MyPreview from './Preview.vue'
+import MyLoader from './Loader.vue'
+import MySvgIcon from './SvgIcon.vue'
+import MyAlert from './Alert.vue'
+import MyEmpty from './Empty.vue'
+import MyProgress from './Progress.vue'
+import MyCard from './Card.vue'
+import MyBadgeStatus from './BadgeStatus.vue'
 const components = {
-  Divider,
-  LangSelect,
-  Avatar,
-  Preview,
-  Loader,
-  SvgIcon,
-  Alert,
-  Empty,
+  MyDivider,
+  MyLangSelect,
+  MyAvatar,
+  MyPreview,
+  MyLoader,
+  MySvgIcon,
+  MyAlert,
+  MyEmpty,
   MyProgress,
-  Card,
-  BadgeStatus
+  MyCard,
+  MyBadgeStatus
 }
 const install = function (Vue, opts = {}) {
   Object.keys(components).forEach(key => {

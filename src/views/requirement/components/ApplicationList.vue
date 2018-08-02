@@ -46,7 +46,7 @@
         :label="$t('status')"
         width="150">
         <template slot-scope="scope">
-          <badge-status
+          <my-badge-status
             :text="statusText[scope.row.apply_status]"
             :status="statusType[scope.row.apply_status]"/>
         </template>

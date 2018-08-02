@@ -7,7 +7,7 @@
     },
     "designer": {
       "title": "我是设计师",
-      "features": ["查找需求", "承接需求", "发布自己的作品动态", "关注他人动态"]
+      "features": ["查找、承接需求", "发布自己的作品动态", "拥有自己的线上工作室",  "与专业人士社交"]
     }
   },
   "en": {
@@ -23,10 +23,10 @@
     "designer": {
       "title": "I'm a designer",
       "features": [
-        "Find Requirements",
-        "Tender for Requirements",
-        "Publish Own Works",
-        "Follow Others' Activities"
+        "Find and tender forRequirements",
+        "Publish your works",
+        "Have your own online studio",
+        "Socialize with professionals"
       ]
     }
   }

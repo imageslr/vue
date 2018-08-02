@@ -27,7 +27,7 @@
     <div
       v-if="focus"
       class="publish-card__counter">{{ textarea.length }} / 200</div>
-    <divider margin="12"/>
+    <my-divider margin="12"/>
     <div class="clearfix p-12">
       <el-button
         round

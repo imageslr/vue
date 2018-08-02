@@ -27,24 +27,24 @@
   <div class="status-container">
     <!-- 设计师参与中 -->
     <template v-if="status === 1000">
-      <badge-status
+      <my-badge-status
         :text="$t('participating')"
         status="info" />
       <req-progress :req-detail="order" />
     </template>
     <!-- 待签单 -->
-    <badge-status
+    <my-badge-status
       v-if="status === 1010"
       :text="$t('waitingToSign')"
       status="info" />
     <!-- 设计师作标中 -->
-    <badge-status
+    <my-badge-status
       v-if="status === 1100"
       :text="$t('working')"
       status="info" />
     <!-- 设计师交标中 -->
     <template v-if="status === 1110">
-      <badge-status
+      <my-badge-status
         :text="$t('tendering')"
         status="info" />
       <my-progress
@@ -53,45 +53,45 @@
     </template>
     <!-- 待评标 -->
     <template v-if="status === 1120">
-      <badge-status :text="$t('hasTendered')" />
-      <badge-status
+      <my-badge-status :text="$t('hasTendered')" />
+      <my-badge-status
         :text="$t('evaluating')"
         status="info"/>
     </template>
     <!-- 待评标 -->
     <template v-if="status === 1130">
-      <badge-status :text="$t('hasTendered')" />
-      <badge-status
+      <my-badge-status :text="$t('hasTendered')" />
+      <my-badge-status
         :text="$t('sysEvaluating')"
         status="info"/>
     </template>
     <!-- 公布中 -->
     <template v-if="status === 1140">
-      <badge-status :text="$t('hasEvaluated')" />
-      <badge-status
+      <my-badge-status :text="$t('hasEvaluated')" />
+      <my-badge-status
         :text="$t('announcing')"
         status="info"/>
     </template>
     <!-- 待支付 -->
-    <badge-status
+    <my-badge-status
       v-if="status === 1200"
       :text="$t('waitingToPay')"
       status="info" />
     <!-- 交易完成 -->
     <template v-if="status >= 1210">
-      <badge-status :text="$t('finished')" />
-      <badge-status
+      <my-badge-status :text="$t('finished')" />
+      <my-badge-status
         v-if="status === 1211"
         :text="$t('refunding')"
         status="info"/>
-      <badge-status
+      <my-badge-status
         v-if="status === 1212"
         :text="$t('refundSucceed')"/>
-      <badge-status
+      <my-badge-status
         v-if="status === 1213"
         :text="$t('refundFailed')"
         status="error"/>
-      <badge-status
+      <my-badge-status
         v-if="order.review_status"
         :text="$t('unreview', {num: order.review_status})"
         status="info"/>

@@ -26,7 +26,7 @@
         <el-menu-item index="following">{{ isSelf ? $t('followingTabTitle') : $t('followingTabTitleOther') }}</el-menu-item>
         <el-menu-item index="follower">{{ isSelf ? $t('followerTabTitle') : $t('followerTabTitleOther') }}</el-menu-item>
       </el-menu>
-      <loader
+      <my-loader
         :loading="loading"
         :error="error"
         :on-reload="getUsers"/>

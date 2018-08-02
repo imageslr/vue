@@ -54,7 +54,7 @@
 <template>
   <div>
     <div class="req-header card">
-      <alert
+      <my-alert
         v-if="isCanceled"
         :title="$t('canceledAlertText', {time: reqDetail.canceled_at})"
         type="warning"
@@ -95,7 +95,7 @@
         <div class="req-header__info">
           <div class="req-header__info-item mb1">
             <span class="req-header__info-item-title">{{ $t('publisher') }}: </span>
-            <router-link :to="'/profile?uid='+reqDetail.user.id">{{ reqDetail.user.real_name }}</router-link>
+            <router-link :to="'/profile?uid='+reqDetail.user.id">{{ reqDetail.user.name }}</router-link>
           </div>
           <div class="req-header__info-item">
             <span class="req-header__info-item-title">{{ $t('publishedAt') }}: </span>
@@ -128,24 +128,24 @@
         :req-detail="reqDetail"
         class="req-header__steps" />
     </div>
-    <loader
+    <my-loader
       :loading="loading"
       :error="error"
       :on-reload="getReqDetail" />
     <div class="main-container">
       <card :title="$t('description')">
         <div class="pre-wrap">{{ reqDetail.tender_description }}</div>
-        <alert
+        <my-alert
           v-if="reqDetail.tender_document_url"
-          class="mt-12"><a :href="reqDetail.tender_document_url">{{ $t('downloadFile') }}</a></alert>
+          class="mt-12"><a :href="reqDetail.tender_document_url">{{ $t('downloadFile') }}</a></my-alert>
       </card>
       <card
         v-if="reqDetail.supplement_description"
         :title="$t('supplementDescription')">
         <div class="pre-wrap">{{ reqDetail.supplement_description }}</div>
-        <alert
+        <my-alert
           v-if="reqDetail.supplement_document_url"
-          class="mt-12"><a :href="reqDetail.supplement_document_url">{{ $t('downloadFile') }}</a></alert>
+          class="mt-12"><a :href="reqDetail.supplement_document_url">{{ $t('downloadFile') }}</a></my-alert>
         <p class="m0 mt1 f-12 black-65">{{ $t('supplementAt') }}：{{ reqDetail.supplement_at }}</p>
       </card>
       <card :title="$t('rewardSettings')">
@@ -160,7 +160,7 @@
       <card
         v-if="isPublisher"
         :title="$t('applicationSituation')">
-        <alert
+        <my-alert
           :title="applicationSituationText"
           type="warning" />
         <application-list

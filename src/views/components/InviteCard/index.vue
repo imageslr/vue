@@ -31,15 +31,15 @@
         @click.native="searchDialogVisible = true"/>
     </div>
     <div class="card__content">
-      <alert
+      <my-alert
         :title="$t('alertText', { num: total })"
         type="info" />
-      <loader
+      <my-loader
         :loading="loading"
         :error="error"
         :on-reload="getInvitedDesigners" />
       <template v-if="!loading">
-        <empty v-if="!invitedDesigners.length" />
+        <my-empty v-if="!invitedDesigners.length" />
         <transition-group
           v-else
           tag="div"

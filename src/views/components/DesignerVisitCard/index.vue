@@ -3,7 +3,7 @@
     <router-link
       :to="'/profile?uid=' + user.id"
       class="avatar-container">
-      <avatar
+      <my-avatar
         :avatar-url="user.avatar_url"
         class="avatar"/>
     </router-link>
@@ -11,7 +11,7 @@
       <p class="m0 bold f-14">
         <router-link
           :to="'/profile?uid=' + user.id"
-          class="black-85">{{ user.real_name }}</router-link>
+          class="black-85">{{ user.name }}</router-link>
         <span
           v-t="user.title"
           class="ml1 black-45" />

@@ -1,9 +1,9 @@
 <i18n>
 {
   "zh": {
-    "publishRequirement": "发布需求",
-    "publishedRequirements": "已发布的需求",
-    "followingDesigners": "我的设计师"
+    "publishRequirement": "发布项目",
+    "publishedRequirements": "已发布的项目",
+    "followingDesigners": "收藏的设计师"
   },
   "en": {
     "publishRequirement": "Publish requirement",

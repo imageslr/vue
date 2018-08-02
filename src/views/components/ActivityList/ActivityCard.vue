@@ -13,13 +13,13 @@
   <div class="card activity-card">
     <div class="activity-card__header">
       <router-link :to="'/profile?uid=' + user.id">
-        <avatar
+        <my-avatar
           :avatar-url="user.avatar_url"
           class="activity-card__header-avatar"/>
       </router-link>
       <div class="activity-card__header-text">
         <router-link :to="'/profile?uid=' + user.id">
-          <p class="m0 f-15 bold black inline-block">{{ user.real_name }}</p>
+          <p class="m0 f-15 bold black inline-block">{{ user.name }}</p>
         </router-link>
         <p class="m0 f-13 bold black-65">{{ followerNum+' '+$t('g.follower') }}</p>
         <p class="m0 f-13 bold black-65">{{ $t('g.published_at') + ' ' + activity.created_at }}</p>
@@ -81,7 +81,7 @@
       </el-carousel>
       <p/>
     </div>
-    <divider/>
+    <my-divider/>
     <div class="activity-card__action-btns">
       <el-button
         :class="{'is-liked': activity.is_liked}"
@@ -112,7 +112,7 @@ export default {
           user: {
             id: '',
             avatar_url: '',
-            real_name: '',
+            name: '',
             follower_num: 0,
             is_following: false
           }

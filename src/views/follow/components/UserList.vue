@@ -1,7 +1,7 @@
 <template>
   <div
     class="list-container">
-    <empty v-if="!users.length" />
+    <my-empty v-if="!users.length" />
     <transition-group
       v-else
       tag="div"

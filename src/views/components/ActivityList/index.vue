@@ -26,11 +26,11 @@
         @preview="onPreview"
         @deleted="onDeleted(index)"/>
     </transition-group>
-    <preview
+    <my-preview
       :visible.sync="preview.visible"
       :src="preview.src"
       :width="preview.width" />
-    <loader
+    <my-loader
       :loading="loading"
       :error="error"
       :btn-text="$t('loadmore')"

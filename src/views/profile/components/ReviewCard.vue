@@ -20,14 +20,14 @@
       class="review-item">
       <div class="review-item__user">
         <router-link :to="'/profile?uid=' + review.user.id">
-          <avatar
+          <my-avatar
             :avatar-url="review.user.avatar_url"
             class="review-item__user-avatar" />
         </router-link>
         <div class="review-item__user-info">
           <router-link
             :to="'/profile?uid=' + review.user.id"
-            class="f-14 bold">{{ review.user.real_name }}</router-link>
+            class="f-14 bold">{{ review.user.name }}</router-link>
           <el-rate
             v-model="review.score"
             :colors="['#00A0DC', '#00A0DC', '#00A0DC']"

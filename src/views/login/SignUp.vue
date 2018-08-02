@@ -1,7 +1,7 @@
 <i18n>
 {
   "zh": {
-    "realName": "真实姓名",
+    "name": "真实姓名",
     "phone": "手机",
     "password": "密码（至少 6 个字符）",
     "confirmPassword": "确认密码",
@@ -13,15 +13,14 @@
     "thirdParty": "其他注册方式",
     "loginBtn": "已有账号登录",
     "messages": {
-      "realName": "请输入真实姓名",
+      "name": "请输入真实姓名（中文名或英文名，2~50个字符）",
       "phone": "请输入合法手机号",
       "password": "密码长度为 6 到 25 个字符",
-      "type": "请选择您的身份",
-      "phoneIsRegistered": "该手机号已被注册"
+      "type": "请选择您的身份"
     }
   },
   "en": {
-    "realName": "Real name",
+    "name": "Real name",
     "phone": "Phone",
     "password": "Password (at least 6 characters)",
     "confirmPassword": "Confirm password",
@@ -34,11 +33,10 @@
     "thirdParty": "Third party",
     "loginBtn": "Sign in",
     "messages": {
-      "realName": "Please enter your real name",
+      "name": "Please enter your real name (between 2 to 50 characters)",
       "phone": "Please enter a valid phone number",
       "password": "Password length is 6 to 25 characters",
-      "type": "Please select your identity",
-      "phoneIsRegistered": "The phone number has been registered"
+      "type": "Please select your identity"
     }
   }
 }
@@ -57,9 +55,9 @@
         size="small"
         label-position="top">
         <el-form-item
-          :label="$t('realName')"
-          prop="realName">
-          <el-input v-model="form.realName"/>
+          :label="$t('name')"
+          prop="name">
+          <el-input v-model="form.name"/>
         </el-form-item>
         <el-form-item
           :label="$t('phone')"
@@ -105,7 +103,7 @@
 import { AppFooter } from '../layout/components'
 import ThirdParty from './components/ThirdParty'
 import SendCodeDialog from './components/SendCodeDialog'
-import { phonePattern } from '@/utils/validate'
+import { phonePattern, namePattern } from '@/utils/validate'
 import { checkPhoneAvailable } from '@/api/user'
 export default {
   components: {
@@ -114,13 +112,13 @@ export default {
   data () {
     return {
       form: {
-        realName: '',
+        name: '',
         phone: '',
         password: '',
         type: ''
       },
       rules: {
-        realName: { required: true, message: this.$t('messages.realName') },
+        name: { required: true, pattern: namePattern, min: 1, max: 50, message: this.$t('messages.name') },
         phone: { required: true, pattern: phonePattern, message: this.$t('messages.phone') },
         password: { required: true, min: 6, max: 25, message: this.$t('messages.password') },
         type: { required: true, message: this.$t('messages.type') }
@@ -140,14 +138,10 @@ export default {
           this.showErrMessage(resObj)
         } else {
           this.signUpBtnLoading = true
-          checkPhoneAvailable(this.form.phone).then(({ data: { available } }) => {
+          checkPhoneAvailable(this.form.phone).then(() => {
             this.signUpBtnLoading = false
-            if (available) {
-              this.dialogVisible = true
-              this.signUpBtnDisabled = true
-            } else {
-              this.$message.error(this.$t('messages.phoneIsRegistered'))
-            }
+            this.dialogVisible = true
+            this.signUpBtnDisabled = true
           }).catch(() => {
             this.signUpBtnLoading = false
           })
@@ -158,7 +152,7 @@ export default {
       this.signUpBtnDisabled = false
     },
     showErrMessage (resObj) {
-      ['realName', 'phone', 'password', 'type'].some(v => {
+      ['name', 'phone', 'password', 'type'].some(v => {
         if (resObj[v]) {
           this.$message.error(resObj[v][0].message)
           return true

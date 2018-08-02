@@ -19,10 +19,10 @@
       src="@/assets/profile-bg.png"
       class="profile-card__bg">
     <div class="profile-card__info">
-      <avatar
+      <my-avatar
         :avatar-url="userInfo.avatar_url"
         class="profile-card__info-avatar"/>
-      <h1 class="m0 mb1">{{ userInfo.real_name }}</h1>
+      <h1 class="m0 mb1">{{ userInfo.name }}</h1>
       <p class="m0 f-12 black-65">{{ userInfo.title }}</p>
       <p class="m0 f-12 black-65 mb-12">{{ userInfo.introduction }}</p>
     </div>
@@ -33,7 +33,7 @@
           class="f-20">{{ userInfo.following_num }}</router-link>
         <span class="block f-12 black-65">{{ $t('following') }}</span>
       </div>
-      <divider margin="12"/>
+      <my-divider margin="12"/>
       <div class="p-12">
         <router-link
           :to="'/follow?type=follower&uid=' + userInfo.id"
@@ -60,7 +60,7 @@ export default {
         return {
           id: null,
           avatar_url: '',
-          real_name: this.$t('g.loading'),
+          name: this.$t('g.loading'),
           title: '',
           introduction: '',
           following_num: 0,

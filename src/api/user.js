@@ -2,12 +2,42 @@ import request from '@/utils/request'
 
 // 检测手机号是否已被注册
 export function checkPhoneAvailable (phone) {
-  return request.get('/users/check', { params: { phone } })
+  return request({
+    url: `/checkPhone/${phone}`,
+    method: 'post',
+    errMsg: {
+      409: ['该手机号已被注册', 'The phone number has been registered']
+    }
+  })
+}
+
+// 发送验证码
+export function sendCode (phone) {
+  return request({
+    url: `/verificationCode`,
+    method: 'post',
+    data: { phone },
+    errMsg: {
+      429: [
+        '请求过于频繁，请过一分钟再试',
+        'Too many requests. Please try again after one minute'
+      ]
+    }
+  })
 }
 
 // 注册
 export function signUp (params) {
-  return request.post('/users/signup', params)
+  return request({
+    url: `/users`,
+    method: 'post',
+    data: params,
+    errMsg: {
+      401: ['验证码错误', 'Wrong validation code'],
+      409: ['该手机号已被注册', 'The phone number has been registered'],
+      422: ['验证码已失效', 'The validation code is expired']
+    }
+  })
 }
 
 // 登录

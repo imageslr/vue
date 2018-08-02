@@ -1,5 +1,5 @@
-"use strict";
+'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  BASE_API: '"https://library-online.cn/ccp_api"'
-};
+  BASE_API: '"http://http://ccpapi.library-online.cn"'
+}

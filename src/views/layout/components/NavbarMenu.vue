@@ -29,7 +29,7 @@
       <router-link
         to="/feed"
         class="navbar-menu-item__container">
-        <svg-icon icon-class="home"/>
+        <my-svg-icon icon-class="home"/>
         <span>{{ $t('home') }}</span>
       </router-link>
     </li>
@@ -37,7 +37,7 @@
       <router-link
         to="/follow"
         class="navbar-menu-item__container">
-        <svg-icon icon-class="team"/>
+        <my-svg-icon icon-class="team"/>
         <span>{{ $t('follow') }}</span>
       </router-link>
     </li>
@@ -45,7 +45,7 @@
       <router-link
         to="/order"
         class="navbar-menu-item__container">
-        <svg-icon icon-class="snippets"/>
+        <my-svg-icon icon-class="snippets"/>
         <span>{{ $t('order') }}</span>
       </router-link>
     </li>
@@ -53,14 +53,14 @@
       <router-link
         to="/message"
         class="navbar-menu-item__container">
-        <svg-icon icon-class="message"/>
+        <my-svg-icon icon-class="message"/>
         <span>{{ $t('message') }}</span>
       </router-link>
     </li>
     <li :class="['navbar-menu-item', { 'is-active': isActive('notice')}]">
       <el-dropdown trigger="click">
         <div class="navbar-menu-item__container">
-          <svg-icon icon-class="bell"/>
+          <my-svg-icon icon-class="bell"/>
           <span>{{ $t('notice') }}</span>
         </div>
         <el-dropdown-menu slot="dropdown">通知</el-dropdown-menu>
@@ -71,7 +71,7 @@
         trigger="click"
         @command="onClickDropdownItem">
         <div class="navbar-menu-item__container">
-          <avatar
+          <my-avatar
             :avatar-url="avatarUrl"
             class="avatar"/>
           <span>{{ $t('me') }}<i class="el-icon-caret-bottom ml-4"/></span>
@@ -89,7 +89,7 @@
       <router-link
         to="/square"
         class="navbar-menu-item__container">
-        <svg-icon icon-class="appstore"/>
+        <my-svg-icon icon-class="appstore"/>
         <span>{{ $t('square') }}</span>
       </router-link>
     </li>

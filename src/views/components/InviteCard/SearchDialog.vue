@@ -31,7 +31,7 @@
     <div>
       <loader :loading="loading"/>
       <template v-if="!loading">
-        <empty v-if="!designers.length"/>
+        <my-empty v-if="!designers.length"/>
         <div
           v-else
           class="list">
@@ -48,7 +48,7 @@
               <p class="m0 bold f-14">
                 <router-link
                   :to="'/profile?uid=' + designer.id"
-                  class="black-85">{{ designer.real_name }}</router-link>
+                  class="black-85">{{ designer.name }}</router-link>
               </p>
               <p
                 v-t="designer.title"

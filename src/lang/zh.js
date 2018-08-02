@@ -1,8 +1,8 @@
 export default {
   app: {
-    title: '谷德',
+    title: '尤歌',
     description: '一个连接甲方与设计师的平台',
-    cpr: 'Goooood'
+    cpr: 'YoGooooo'
   },
   // global
   g: {

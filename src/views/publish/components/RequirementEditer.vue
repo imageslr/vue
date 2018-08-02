@@ -182,7 +182,7 @@
         </el-radio-group>
       </el-form-item>
     </el-form>
-    <divider margin="32" />
+    <my-divider margin="32" />
     <div class="card__tips">
       <p
         v-t="$t('tipsTitle')"

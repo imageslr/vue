@@ -26,9 +26,9 @@ const user = {
     // 注册
     SIGN_UP ({ commit }, userInfo) {
       return signUp(userInfo).then(({ data }) => {
-        setToken(data.token)
-        commit('SET_TOKEN', data.token)
-        commit('SET_USERINFO', User.parse(data.user))
+        setToken(data.meta.token)
+        commit('SET_TOKEN', data.meta.token)
+        commit('SET_USERINFO', User.parse(data))
       })
     },
 

@@ -85,7 +85,7 @@ export default {
         if (valid) {
           this.signInBtnLoading = true
           const { phone, password } = this.form
-          this.$store.dispatch('SIGN_IN', phone, password).then(() => {
+          this.$store.dispatch('SIGN_IN', { phone, password }).then(() => {
             this.signInBtnLoading = false
             this.$message.success(this.$t('signInSuccess'))
             this.$router.push({ path: '/feed' })

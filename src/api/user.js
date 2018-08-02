@@ -33,7 +33,7 @@ export function signUp (params) {
     method: 'post',
     data: params,
     errMsg: {
-      401: ['验证码错误', 'Wrong validation code'],
+      400: ['验证码错误', 'Wrong validation code'],
       409: ['该手机号已被注册', 'The phone number has been registered'],
       422: ['验证码已失效', 'The validation code is expired']
     }
@@ -42,17 +42,26 @@ export function signUp (params) {
 
 // 登录
 export function signIn (phone, password) {
-  return request.post('/users/signin', { phone, password })
+  return request({
+    url: `/authorizations`,
+    method: 'post',
+    data: { phone, password },
+    errMsg: {
+      400: ['用户名或密码错误', 'Wrong phone number or password']
+    }
+  })
+}
+
+// 根据token获取当前用户信息
+export function getCurrentUserInfo (token) {
+  return request({
+    url: `/user`
+  })
 }
 
 // 获取用户信息
 export function getUserInfoByUID (uid) {
   return request.get(`/users/${uid}`)
-}
-
-// 根据token获取用户信息
-export function getUserInfoByToken (token) {
-  return request.get(`/users/token?token=${token}`)
 }
 
 // 获取推荐设计师

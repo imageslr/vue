@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@/store'
+import router from '@/router'
 import i18n from '@/lang' // 初始化语言包
 
 const service = axios.create({
@@ -41,14 +42,19 @@ service.interceptors.response.use(
     } else {
       // TODO 401/403重定向
       showErrMsg(response)
+      if (response.status === 401) {
+        store.dispatch('SIGN_OUT').then(() => {
+          router.replace({ path: '/signin' })
+        })
+      }
     }
     return Promise.reject(error)
   }
 )
 
-// 根据当前界面语言，显示错误信息
-// 其中一种语言缺少的时候，显示另一种
-// 优先级：config自定义 > 服务器返回的message > 默认值
+// 根据当前界面语言，显示错误信息；其中一种语言缺少的时候，显示另一种
+// 设置'400': false, 就不显示400的错误信息了
+// 优先级：config中自定义的错误信息 > 服务器返回的message > 默认值
 function showErrMsg (response) {
   let errMsgArray = {
     '400': ['参数错误', 'Wrong parameters'],
@@ -61,7 +67,8 @@ function showErrMsg (response) {
   }
 
   const { config, status } = response
-  if (response.data && response.data.message) {
+  if (response.data && response.data.message && errMsgArray[status]) {
+    // 只显示默认显示的错误
     errMsgArray[status] = [response.data.message, response.data.message]
   }
   if (config.errMsg) {

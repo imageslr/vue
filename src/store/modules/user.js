@@ -1,4 +1,4 @@
-import { signIn, signUp, getUserInfoByToken } from '@/api/user'
+import { signIn, signUp, getCurrentUserInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import User from '@/models/user'
 
@@ -32,19 +32,19 @@ const user = {
       })
     },
 
-    // 登录
-    SIGN_IN ({ commit }, phone, password) {
+    // 登录认证
+    SIGN_IN ({ commit }, { phone, password }) {
       return signIn(phone, password).then(({ data }) => {
         setToken(data.token)
         commit('SET_TOKEN', data.token)
-        commit('SET_USERINFO', User.parse(data.user))
+        // commit('SET_USERINFO', User.parse(data)) 登录认证不返回用户信息
       })
     },
 
     // 获取用户信息
     GET_USER_INFO ({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getUserInfoByToken(state.token)
+        getCurrentUserInfo()
           .then(({ data }) => {
             commit('SET_USERINFO', User.parse(data))
             resolve()

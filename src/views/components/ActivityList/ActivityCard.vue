@@ -21,12 +21,12 @@
         <router-link :to="'/profile?uid=' + user.id">
           <p class="m0 f-15 bold black inline-block">{{ user.name }}</p>
         </router-link>
-        <p class="m0 f-13 bold black-65">{{ followerNum+' '+$t('g.follower') }}</p>
+        <p class="m0 f-13 bold black-65">{{ splittedFollowerCount +' '+$t('g.follower') }}</p>
         <p class="m0 f-13 bold black-65">{{ $t('g.published_at') + ' ' + activity.created_at }}</p>
       </div>
       <template v-if="showActionButton">
         <el-dropdown
-          v-if="isPublisher"
+          v-if="$uid() == user.id"
           trigger="click"
           @command="onClickCommand">
           <el-button
@@ -39,7 +39,7 @@
           </el-dropdown-menu>
         </el-dropdown>
         <el-dropdown
-          v-else-if="isFollowing"
+          v-else-if="user.following"
           trigger="click"
           @command="onClickCommand">
           <el-button
@@ -59,7 +59,7 @@
           type="primary"
           class="activity-card__header-follow-button"
           size="small"
-          @click="onToggleFollow('follow')">{{ $t('g.follow') }}</el-button>
+          @click="onFollow">{{ $t('g.follow') }}</el-button>
       </template>
     </div>
     <div class="activity-card__content">
@@ -84,10 +84,10 @@
     <my-divider/>
     <div class="activity-card__action-btns">
       <el-button
-        :class="{'is-liked': activity.is_liked}"
+        :class="{'is-liked': activity.liked}"
         type="text"
-        @click="onToggleLike">{{ $t('g.like') + likeNumStr }}</el-button>
-      <el-button type="text">{{ $t('g.comment') + commentNumStr }}</el-button>
+        @click="onToggleLike">{{ $t('g.like') + likeCountStr }}</el-button>
+      <el-button type="text">{{ $t('g.comment') + replyCountStr }}</el-button>
     </div>
   </div>
 </template>
@@ -103,22 +103,23 @@ export default {
       default () {
         return {
           id: 0,
-          created_at: '',
           content: '',
           photo_urls: [],
-          like_num: 0,
-          comment_num: 0,
-          is_liked: false,
+          like_count: 0,
+          reply_count: 0,
+          created_at: '',
+          liked: false,
           user: {
             id: '',
             avatar_url: '',
             name: '',
-            follower_num: 0,
-            is_following: false
+            follower_count: 0,
+            following: false
           }
         }
       }
     },
+    // 是否显示右上角的操作按钮：关注、取消关注或删除
     showActionButton: {
       type: Boolean,
       default: false
@@ -134,50 +135,52 @@ export default {
     user () {
       return this.activity.user
     },
-    followerNum () {
-      return splitNumber(this.activity.user.follower_num)
+    splittedFollowerCount () {
+      return splitNumber(this.activity.user.follower_count)
     },
-    likeNumStr () {
-      return this.activity.like_num ? ` (${this.activity.like_num})` : ''
+    likeCountStr () {
+      return this.activity.like_count ? ` (${this.activity.like_count})` : ''
     },
-    commentNumStr () {
-      return this.activity.comment_num ? ` (${this.activity.comment_num})` : ''
-    },
-    isPublisher () {
-      return this.$store.getters.uid === this.activity.user.id
-    },
-    isFollowing () {
-      return this.activity.user.is_following
+    replyCountStr () {
+      return this.activity.reply_count ? ` (${this.activity.reply_count})` : ''
     }
   },
   methods: {
     onToggleLike () {
-      const liked = this.activity.is_liked
+      const liked = this.activity.liked
       const fn = liked ? unlikeActivityById : likeActivityById
-      fn(this.activity.id).then(({ data: { like_num } }) => {
-        this.activity.is_liked = !liked
-        this.activity.like_num = like_num
+      fn(this.activity.id).then(({ data: { like_count } }) => {
+        this.activity.liked = !liked
+        this.activity.like_count = like_count
+      })
+    },
+    onFollow () {
+      this.followBtnLoading = true
+      followUserByUID(this.user.id).then(() => {
+        this.followBtnLoading = false
+        this.user.following = true
+        this.user.follower_count++
+        this.$emit('follow', this.user.id)
+      }).catch(() => {
+        this.followBtnLoading = false
+      })
+    },
+    onUnfollow () {
+      unfollowUserByUID(this.user.id).then(() => {
+        this.activity.user.following = false
+        this.user.follower_count--
+        this.$emit('unfollow', this.user.id)
       })
     },
     onClickCommand (command) {
       if (command === 'unfollow') {
-        this.onToggleFollow('unfollow')
+        this.onUnfollow()
       }
       if (command === 'delete') {
         deleteActivityById(this.activity.id).then(() => {
           this.$emit('deleted', this.activity)
         })
       }
-    },
-    onToggleFollow (action) {
-      this[`${action}BtnLoading`] = true
-      const fn = action === 'follow' ? followUserByUID : unfollowUserByUID
-      fn(this.activity.user.id).then(() => {
-        this[`${action}BtnLoading`] = false
-        this.activity.user.is_following = action === 'follow'
-      }).catch(() => {
-        this[`${action}BtnLoading`] = false
-      })
     }
   }
 }
@@ -210,7 +213,8 @@ export default {
     }
     &-carousel {
       &-item {
-        height: 250px;
+        // height: 250px;
+        width: 100%;
         cursor: pointer;
       }
       /deep/ .el-carousel__indicators {

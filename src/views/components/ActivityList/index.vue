@@ -24,6 +24,8 @@
         :show-action-button="showActionButton"
         class="activity-card"
         @preview="onPreview"
+        @follow="onToggleFollow($event, true)"
+        @unfollow="onToggleFollow($event, false)"
         @deleted="onDeleted(index)"/>
     </transition-group>
     <my-preview
@@ -64,6 +66,7 @@ export default {
         width: '50%'
       },
       activities: [],
+      currentPage: 0,
       loading: false,
       nomore: false,
       error: false // 标记上次加载是不是出错了，防止网络错误加载失败时不停地触发事件
@@ -77,12 +80,12 @@ export default {
   methods: {
     onReachBottom () {
       this.loading = true
-      let start = this.activities.length
-      return this.getActivities(start).then(({ data }) => {
+      return this.getActivities(this.currentPage + 1).then(({ data }) => {
+        let { data: activities, meta: { pagination } } = data
         this.loading = false
-        const { activities } = data
         this.activities.push.apply(this.activities, activities)
-        this.nomore = !activities.length
+        this.currentPage = pagination.current_page
+        this.nomore = pagination.total_pages === pagination.current_page
       }).catch(() => {
         this.error = true
         this.loading = false
@@ -100,6 +103,13 @@ export default {
     },
     onDeleted (index) {
       this.activities.splice(index, 1)
+    },
+    onToggleFollow (uid, following) {
+      this.activities.forEach(({ user }) => {
+        if (user.id === uid) {
+          user.following = following
+        }
+      })
     }
   }
 }

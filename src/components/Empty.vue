@@ -11,7 +11,7 @@
 
 <template>
   <div class="empty">
-    <svg-icon
+    <my-svg-icon
       class="empty__icon"
       icon-class="frown"/>
     <span v-t="text || $t('text')"/>

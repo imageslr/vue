@@ -46,13 +46,21 @@ service.interceptors.response.use(
         store.dispatch('SIGN_OUT').then(() => {
           router.replace({ path: '/signin' })
         })
-      } else if (response.data && response.data.message) {
-        Message({
-          message: response.data.message,
-          type: 'error',
-          duration: 3500,
-          showClose: true
-        })
+      } else if (response.data) {
+        let errmsg = ''
+        if (response.data.errors) {
+          errmsg = Object.values(response.data.errors)[0] // 表单错误
+        } else if (response.data.message) {
+          errmsg = response.data.message
+        }
+        if (errmsg) {
+          Message({
+            message: errmsg,
+            type: 'error',
+            duration: 3500,
+            showClose: true
+          })
+        }
       }
     }
     return Promise.reject(error)

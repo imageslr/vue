@@ -12,7 +12,7 @@ export default {
     follower: '关注者',
     like: '赞',
     comment: '评论',
-    publish: '发布',
+    publish: '发 布',
     published_at: '发布于',
     recommendation: '推荐',
     loading: '加载中',

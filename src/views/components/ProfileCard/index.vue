@@ -30,14 +30,14 @@
       <div class="p-12">
         <router-link
           :to="'/follow?uid=' + userInfo.id"
-          class="f-20">{{ userInfo.following_num }}</router-link>
+          class="f-20">{{ userInfo.following_count }}</router-link>
         <span class="block f-12 black-65">{{ $t('following') }}</span>
       </div>
       <my-divider margin="12"/>
       <div class="p-12">
         <router-link
           :to="'/follow?type=follower&uid=' + userInfo.id"
-          class="f-20">{{ userInfo.follower_num }}</router-link>
+          class="f-20">{{ userInfo.follower_count }}</router-link>
         <span class="block f-12 black-65">{{ $t('follower') }}</span>
       </div>
     </div>

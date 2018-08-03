@@ -63,9 +63,8 @@ export default {
     }
   },
   methods: {
-    getActivities (start) {
-      let uid = this.$store.getters.uid
-      return getFollowingActivities(uid, start)
+    getActivities (page) {
+      return getFollowingActivities(page)
     },
     onPublished (activity) {
       this.$refs.activityList.activities.unshift(activity)

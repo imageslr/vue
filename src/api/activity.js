@@ -1,9 +1,7 @@
 import request from '@/utils/request'
 
-export function getFollowingActivities (uid, start = 0, count = 20) {
-  return request.get(`/activities/follow/users/${uid}`, {
-    params: { start, count }
-  })
+export function getFollowingActivities (page = 1) {
+  return request.get(`/activities/feeds?page=${page}`)
 }
 
 export function getActivitiesByUID (uid, start = 0, count = 20) {
@@ -21,9 +19,9 @@ export function deleteActivityById (id) {
 }
 
 export function likeActivityById (id) {
-  return request.post(`/activities/${id}/like`)
+  return request.post(`/activities/${id}/likes`)
 }
 
 export function unlikeActivityById (id) {
-  return request.post(`/activities/${id}/unlike`)
+  return request.delete(`/activities/${id}/likes`)
 }

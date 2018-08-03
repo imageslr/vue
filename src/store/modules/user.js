@@ -35,8 +35,9 @@ const user = {
     // 登录认证
     SIGN_IN ({ commit }, { phone, password }) {
       return signIn(phone, password).then(({ data }) => {
-        setToken(data.token)
-        commit('SET_TOKEN', data.token)
+        setToken(data.meta.token)
+        commit('SET_TOKEN', data.meta.token)
+        commit('SET_USERINFO', User.parse(data))
       })
     },
 

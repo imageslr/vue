@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { getRecommendedDesignersByUID } from '@/api/user'
+import { getRecommendedDesigners } from '@/api/user'
 import { followUserByUID } from '@/api/follow'
 export default {
   data () {
@@ -43,10 +43,9 @@ export default {
     }
   },
   created () {
-    const uid = this.$store.getters.uid
-    getRecommendedDesignersByUID(uid).then(({ data: { users } }) => {
-      this.designers = users.map(e => {
-        return { ...e, _loading: false }
+    getRecommendedDesigners().then(({ data: { data } }) => {
+      this.designers = data.map(designer => {
+        return { ...designer, _loading: false }
       })
     })
   },

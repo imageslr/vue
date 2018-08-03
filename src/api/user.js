@@ -31,8 +31,8 @@ export function getUserInfoByUID (uid) {
 }
 
 // 获取推荐设计师
-export function getRecommendedDesignersByUID (uid) {
-  return request.get(`/users/${uid}/recommended_designers`)
+export function getRecommendedDesigners () {
+  return request.get(`/user/recommend`)
 }
 
 // 搜索设计师

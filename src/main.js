@@ -43,6 +43,8 @@ Vue.use(VUser) // 权限控制指令
 // 挂载全局方法
 Vue.prototype.$_ = lodash // lodash
 Vue.prototype.$dayjs = Dayjs // dayjs
+Vue.prototype.$user = () => store.getters.userInfo // 添加一个访问user的快捷方法
+Vue.prototype.$uid = () => store.getters.uid // 添加一个访问uid的快捷方法
 
 // 路由前权限判断
 router.beforeEach((to, from, next) => {

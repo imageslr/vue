@@ -11,6 +11,7 @@ import Follow from '../views/follow'
 import Profile from '../views/profile'
 import Requirement from '../views/requirement'
 import Order from '../views/order'
+import Error404 from '../views/error/404'
 
 Vue.use(Router)
 
@@ -20,6 +21,11 @@ export default new Router({
       path: '/signup',
       component: SignUp,
       name: 'signup'
+    },
+    {
+      path: '/404',
+      component: Error404,
+      name: 404
     },
     {
       path: '/',
@@ -126,6 +132,10 @@ export default new Router({
           component: Order
         }
       ]
+    },
+    {
+      path: '*',
+      redirect: '/404'
     }
   ]
 })

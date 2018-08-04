@@ -20,7 +20,7 @@
         class="m0 f-14 black-45 ellipsis-1" />
     </div>
     <el-button
-      v-if="user.is_following"
+      v-if="user.following"
       :loading="loading"
       plain
       size="mini"

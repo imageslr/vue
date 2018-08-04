@@ -1,20 +1,12 @@
 <template>
-  <div
-    class="list-container">
-    <my-empty v-if="!users.length" />
-    <transition-group
-      v-else
-      tag="div"
-      name="fade-transform-x"
-      class="list">
-      <user-list-item
-        v-for="(user, index) in users"
-        :key="user.id"
-        :user="user"
-        @follow="onFollow(index)"
-        @unfollow="onUnfollow(index)"
-      />
-    </transition-group>
+  <div class="list">
+    <user-list-item
+      v-for="(user, index) in users"
+      :key="user.id"
+      :user="user"
+      @follow="onFollow(index)"
+      @unfollow="onUnfollow(index)"
+    />
   </div>
 </template>
 
@@ -30,10 +22,10 @@ export default {
   },
   methods: {
     onFollow (index) {
-      this.users[index].is_following = true
+      this.users[index].following = true // 为了方便，这里直接操作对象的属性
     },
     onUnfollow (index) {
-      this.users[index].is_following = false
+      this.users[index].following = false
     }
   }
 }

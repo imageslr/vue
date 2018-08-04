@@ -11,11 +11,11 @@ export function unfollowUserByUID (uid) {
 }
 
 // 获取某个用户关注的人
-export function getFollowingUsersByUID (uid, start = 0, type = 'all') {
-  return request.get(`/users/${uid}/following?start=${start}&type=${type}`)
+export function getFollowingUsersByUID (uid, page = 1) {
+  return request.get(`/users/${uid}/following?page=${page}`)
 }
 
 // 获取关注某个用户的人
-export function getFollowersByUID (uid, start = 0, type = 'all') {
-  return request.get(`/users/${uid}/followers?start=${start}&type=${type}`)
+export function getFollowersByUID (uid, page = 1) {
+  return request.get(`/users/${uid}/followers?page=${page}`)
 }

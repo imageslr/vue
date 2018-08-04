@@ -27,11 +27,11 @@
   "en": {
     "apply": "Apply",
     "cancelApply": "Cancel apply",
-    "supplementReq": "Supplement requirement",
+    "supplementReq": "Supplement project",
     "cancelPublish": "Cancel publish",
-    "confirmCancelPublish": "This operation will unpublish the requirement and is not recoverable. Is it confirmed?",
+    "confirmCancelPublish": "This operation will unpublish the project and is not recoverable. Is it confirmed?",
     "cancelSuccess": "Successfully canceled",
-    "canceledAlertText": "The requirement has been canceled at {time}",
+    "canceledAlertText": "The project has been canceled at {time}",
     "publisher": "Publisher",
     "publishedAt": "Published at",
     "applicationDeadline": "Application deadline",
@@ -39,10 +39,10 @@
     "yes": "Yes",
     "no": "No",
     "applicationSituation": "Application situation",
-    "applicationSituationText": "The requirement accepts max {max} designers to apply，{remain} places remaining",
-    "applicationSituationTextUnlimited": "There are currently {current} designers applying for this requirement, and there is no limit on the number of application.",
-    "price": "Requirement price",
-    "description": "Requirement description",
+    "applicationSituationText": "The project accepts max {max} designers to apply，{remain} places remaining",
+    "applicationSituationTextUnlimited": "There are currently {current} designers applying for this project, and there is no limit on the number of application.",
+    "price": "Project price",
+    "description": "Project description",
     "supplementDescription": "Supplement description",
     "supplementAt": "Supplement at",
     "downloadFile": "Download file",
@@ -178,14 +178,14 @@
 
 <script>
 /* eslint eqeqeq: "off" */
-import Requirement from '@/models/requirement'
+import Project from '@/models/project'
 import Steps from './components/Steps'
 import FavoriteButton from './components/FavoriteButton'
 import ReqProgress from './components/ReqProgress'
 import RewardSettingItem from './components/RewardSettingItem'
 import UploadDialog from './components/UploadDialog'
 import ApplicationList from './components/ApplicationList'
-import { getReqDetailById, cancelRequirementById } from '@/api/requirement'
+import { getReqDetailById, cancelProjectById } from '@/api/project'
 export default {
   components: {
     Steps,
@@ -200,7 +200,7 @@ export default {
       loading: false,
       error: false,
       uploadDialogVisible: false,
-      reqDetail: Requirement.parse()
+      reqDetail: Project.parse()
     }
   },
   computed: {
@@ -271,7 +271,7 @@ export default {
         cancelButtonText: this.$t('g.cancelBtn'),
         type: 'warning'
       }).then(() => {
-        cancelRequirementById(this.reqDetail.id).then(() => {
+        cancelProjectById(this.reqDetail.id).then(() => {
           this.reqDetail.status = 500
           this.reqDetail.canceled_at = this.$dayjs().format('YYYY-MM-DD HH:mm:ss')
           this.$message({

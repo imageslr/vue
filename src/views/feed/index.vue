@@ -1,14 +1,20 @@
 <i18n>
 {
   "zh": {
-    "publishRequirement": "发布项目",
-    "publishedRequirements": "已发布的项目",
-    "followingDesigners": "收藏的设计师"
+    "publishProject": "发布项目",
+    "publishedProjects": "已发布的项目",
+    "followingDesigners": "收藏的设计师",
+    "searchProjects": "搜索项目",
+    "myProjects": "我的项目",
+    "myWorks": "我的作品集"
   },
   "en": {
-    "publishRequirement": "Publish requirement",
-    "publishedRequirements": "Published requirements",
-    "followingDesigners": "Following designers"
+    "publishProject": "Publish project",
+    "publishedProjects": "Published projects",
+    "followingDesigners": "Following designers",
+    "searchProjects": "Search projects",
+    "myProjects": "My projects",
+    "myWorks": "My works"
   }
 }
 </i18n>
@@ -27,15 +33,28 @@
     </main>
     <div class="action-area-container">
       <aside class="action-area card">
-        <router-link
-          class="action-area-item"
-          to="publish">{{ $t('publishRequirement') }}</router-link>
-        <router-link
-          class="action-area-item"
-          to="order">{{ $t('publishedRequirements') }}</router-link>
-        <router-link
-          class="action-area-item"
-          to="follow">{{ $t('followingDesigners') }}</router-link>
+        <template v-if="$isParty()">
+          <router-link
+            class="action-area-item"
+            to="publish">{{ $t('publishProject') }}</router-link>
+          <router-link
+            class="action-area-item"
+            to="order">{{ $t('publishedProjects') }}</router-link>
+          <router-link
+            class="action-area-item"
+            to="follow">{{ $t('followingDesigners') }}</router-link>
+        </template>
+        <template v-if="$isDesigner()">
+          <router-link
+            class="action-area-item"
+            to="search">{{ $t('searchProjects') }}</router-link>
+          <router-link
+            class="action-area-item"
+            to="order">{{ $t('myProjects') }}</router-link>
+          <router-link
+            class="action-area-item"
+            to="work">{{ $t('myWorks') }}</router-link>
+        </template>
         <app-footer/>
       </aside>
     </div>

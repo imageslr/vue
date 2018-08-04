@@ -6,9 +6,9 @@
     "viewDetail": "查看需求详情"
   },
   "en": {
-    "publishSucceed": "Requirement publish succeed",
+    "publishSucceed": "Project publish succeed",
     "description": "Now you can invite designers to participate in the bidding",
-    "viewDetail": "View requirement detail"
+    "viewDetail": "View project detail"
   }
 }
 </i18n>
@@ -32,7 +32,7 @@
     <el-button
       class="block w-100 shadow mt-24"
       type="primary"
-      @click="$router.push(`/requirement/${reqId}`)">{{ $t('viewDetail') }}</el-button>
+      @click="$router.push(`/project/${reqId}`)">{{ $t('viewDetail') }}</el-button>
   </div>
 </template>
 

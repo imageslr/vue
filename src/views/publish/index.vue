@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <requirement-editer ref="editor"/>
+    <project-editer ref="editor"/>
     <el-button
       :loading="loading"
       class="block w-100 shadow mt-24"
@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import RequirementEditer from './components/RequirementEditer'
-import { publishRequirement } from '@/api/requirement'
+import ProjectEditer from './components/ProjectEditer'
+import { publishProject } from '@/api/project'
 export default {
-  components: { RequirementEditer },
+  components: { ProjectEditer },
   data () {
     return {
       loading: false
@@ -30,7 +30,7 @@ export default {
       }
       editor.validate(valid => {
         if (valid) {
-          publishRequirement(body).then(({ data: { req_id } }) => {
+          publishProject(body).then(({ data: { req_id } }) => {
             this.loading = false
             this.$router.replace(`/publish/result?id=${req_id}`)
           }).catch(() => {

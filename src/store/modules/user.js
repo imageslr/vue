@@ -23,6 +23,11 @@ const user = {
     },
     SET_FOLLOWING_COUNT: (state, followingCount) => {
       state.userInfo.following_count = followingCount
+    },
+    // TODO 删除
+    SWITCH_TYPE: state => {
+      state.userInfo.type =
+        state.userInfo.type === 'designer' ? 'party' : 'designer'
     }
   },
 

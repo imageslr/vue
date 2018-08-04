@@ -27,7 +27,7 @@
         style="width:35%">
         <router-link
           v-t="order.title"
-          :to="'/requirement/'+order.id"
+          :to="'/project/'+order.id"
           tag="p"
           class="content__title-link"/>
         <p

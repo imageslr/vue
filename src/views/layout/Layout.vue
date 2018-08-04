@@ -8,6 +8,10 @@
       <router-view :key="$route.fullPath"/>
       <!-- </transition> -->
     </section>
+    <el-button
+      type="primary"
+      style="position: fixed; right: 20px; bottom: 20px;"
+      @click="$store.commit('SWITCH_TYPE');$message.info('当前账号类型 '+$user().type)">临时切换账号类型</el-button>
     <app-footer/>
   </div>
 </template>

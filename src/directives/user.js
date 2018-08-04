@@ -1,4 +1,4 @@
-// 根据用户类型显示元素
+// 根据用户类型显示元素，不能用在template上
 import store from '@/store'
 
 export default {

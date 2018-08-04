@@ -27,14 +27,14 @@
 </template>
 
 <script>
-import Requirement from '@/models/requirement'
-import { favoriteReqById, unfavoriteReqById } from '@/api/requirement'
+import Project from '@/models/project'
+import { favoriteReqById, unfavoriteReqById } from '@/api/project'
 export default {
   props: {
     reqDetail: {
       type: Object,
       default () {
-        return Requirement.parse()
+        return Project.parse()
       }
     }
   },

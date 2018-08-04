@@ -9,7 +9,7 @@ import Publish from '../views/publish'
 import Result from '../views/publish/Result'
 import Follow from '../views/follow'
 import Profile from '../views/profile'
-import Requirement from '../views/requirement'
+import Project from '../views/project'
 import Order from '../views/order'
 import Error404 from '../views/error/404'
 
@@ -106,16 +106,16 @@ export default new Router({
       ]
     },
     {
-      path: '/requirement',
+      path: '/project',
       component: Layout,
       children: [
         {
           path: ':id',
-          name: 'requirement',
+          name: 'project',
           meta: {
             requireAuth: true
           },
-          component: Requirement
+          component: Project
         }
       ]
     },

@@ -45,6 +45,8 @@ Vue.prototype.$_ = lodash // lodash
 Vue.prototype.$dayjs = Dayjs // dayjs
 Vue.prototype.$user = () => store.getters.userInfo // 添加一个访问user的快捷方法
 Vue.prototype.$uid = () => store.getters.uid // 添加一个访问uid的快捷方法
+Vue.prototype.$isDesigner = () => store.getters.userInfo.type === 'designer' // 判断用户类型：设计师
+Vue.prototype.$isParty = () => store.getters.userInfo.type === 'party' // 判断用户类型：甲方
 
 // 路由前权限判断
 router.beforeEach((to, from, next) => {

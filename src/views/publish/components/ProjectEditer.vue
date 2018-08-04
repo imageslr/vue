@@ -42,14 +42,14 @@
     }
   },
   "en": {
-    "publishHeader": "Fill in the requirement information",
-    "title": "Requirement title",
-    "type": "Requirement type",
+    "publishHeader": "Fill in the project information",
+    "title": "Project title",
+    "type": "Project type",
     "audition": "Audition",
     "shortlist": "Shortlist",
     "invitation": "Invitation",
-    "price": "Requirement price",
-    "description": "Requirement description",
+    "price": "Project price",
+    "description": "Project description",
     "uploadFile": "Upload file",
     "fileFormat": "File format",
     "rewardNum": "",
@@ -65,9 +65,9 @@
     "allowOpen": "Allow to open",
     "notAllowOpen": "Not allow to open",
     "placeholders": {
-      "title": "Please enter requirement title",
+      "title": "Please enter project title",
       "biddingNum": "Please enter max competitive bidding number, 0 meanse unlimited",
-      "description": "Please enter requirement description",
+      "description": "Please enter project description",
       "tenderDate": "Please select a tender due date",
       "answerDate": "Please select an answer Date"
     },
@@ -75,7 +75,7 @@
     "tips": [
       ["Audition", "Everyone can apply for a bid and submit a tender."],
       ["Shortlist", "Everyone can apply for a bid，but only shortlisted designers can tender."],
-      ["Invitation", "The requirement is not public, only visible to and accept the tender from the invited designer."]
+      ["Invitation", "The project is not public, only visible to and accept the tender from the invited designer."]
     ],
     "tooltips": {
       "tenderDate": "The tender due date must be one month later",

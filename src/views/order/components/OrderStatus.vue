@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import ReqProgress from '../../requirement/components/ReqProgress'
+import ReqProgress from '../../project/components/ReqProgress'
 export default {
   components: {
     ReqProgress

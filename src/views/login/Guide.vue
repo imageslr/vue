@@ -14,19 +14,19 @@
     "party": {
       "title": "I'm a Party",
       "features": [
-        "Publish Requirements",
+        "Publish Projects",
         "Find Designers",
         "Communicate with Professionals",
         "Follow Others' Activities"
       ]
     },
     "designer": {
-      "title": "I'm a designer",
+      "title": "I'm a Designer",
       "features": [
-        "Find and tender forRequirements",
-        "Publish your works",
-        "Have your own online studio",
-        "Socialize with professionals"
+        "Find and Tender for Projects",
+        "Publish Your Works",
+        "Have Your Own Online Studio",
+        "Socialize with Professionals"
       ]
     }
   }

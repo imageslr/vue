@@ -13,7 +13,7 @@
   },
   "en": {
     "steps": [
-      "Publish requirement",
+      "Publish project",
       "Designers participate",
       "Payty hosts money and sign",
       "Designers work",
@@ -40,13 +40,13 @@
 </template>
 
 <script>
-import Requirement from '@/models/requirement'
+import Project from '@/models/project'
 export default {
   props: {
     reqDetail: {
       type: Object,
       default () {
-        return Requirement.parse()
+        return Project.parse()
       }
     }
   },

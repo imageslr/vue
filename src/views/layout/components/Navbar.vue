@@ -6,7 +6,7 @@
     "signUp": "马上加入"
   },
   "en": {
-    "searchPlaceholder": "Search requirements or designers",
+    "searchPlaceholder": "Search projects or designers",
     "signIn": "Sign in",
     "signUp": "Sign up"
   }

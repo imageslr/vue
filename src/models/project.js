@@ -1,7 +1,7 @@
 import Model from './model'
 import User from './user'
 
-let Requirement = new Model({
+let Project = new Model({
   id: null,
   req_no: '',
   status: null,
@@ -32,4 +32,4 @@ let Requirement = new Model({
   is_participating: false
 })
 
-export default Requirement
+export default Project

@@ -19,7 +19,7 @@
     "uploadFile": "Upload file",
     "fileFormat": "File format",
     "title": {
-      "supplement": "Supplement Requirement",
+      "supplement": "Supplement Project",
       "apply": "Upload Tender File"
     },
     "errorMessage": {
@@ -62,8 +62,8 @@
 </template>
 
 <script>
-import Requirement from '@/models/requirement'
-import { supplementRequirementById } from '@/api/requirement'
+import Project from '@/models/project'
+import { supplementProjectById } from '@/api/project'
 export default {
   props: {
     visible: {
@@ -73,7 +73,7 @@ export default {
     reqDetail: {
       type: Object,
       default () {
-        return Requirement.parse()
+        return Project.parse()
       }
     },
     type: {
@@ -113,7 +113,7 @@ export default {
     },
     supplement () {
       this.loading = true
-      supplementRequirementById(this.reqDetail.id, {
+      supplementProjectById(this.reqDetail.id, {
         supplement_description: this.textarea
         // TODO fileupload
       }).then(({ data: { supplement_at, supplement_document_url } }) => {

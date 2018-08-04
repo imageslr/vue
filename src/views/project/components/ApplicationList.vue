@@ -75,16 +75,16 @@
 </template>
 
 <script>
-import Requirement from '@/models/requirement'
+import Project from '@/models/project'
 import DesignerVisitCard from '@/views/components/DesignerVisitCard'
-import { getApplyDesignersByReqId } from '@/api/requirement'
+import { getApplyDesignersByReqId } from '@/api/project'
 export default {
   components: { DesignerVisitCard },
   props: {
     reqDetail: {
       type: Object,
       default () {
-        return Requirement.parse()
+        return Project.parse()
       }
     },
     showStatus: {

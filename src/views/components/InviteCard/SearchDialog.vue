@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { invite, recall } from '@/api/requirement'
+import { invite, recall } from '@/api/project'
 import { searchDesignersByName } from '@/api/user'
 import _ from '@/utils/lodash'
 export default {
@@ -97,7 +97,7 @@ export default {
     onSearch: _.debounce(function (value) {
       this.loading = true
       searchDesignersByName(value, {
-        requirement_id: this.reqId
+        project_id: this.reqId
       }).then(({ data: { users } }) => {
         this.loading = false
         this.designers = users

@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { getInvitedDesignersByReqId, recall } from '@/api/requirement'
+import { getInvitedDesignersByReqId, recall } from '@/api/project'
 import SearchDialog from './SearchDialog'
 import DesignerVisitCard from '@/views/components/DesignerVisitCard'
 export default {

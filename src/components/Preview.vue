@@ -8,6 +8,7 @@
     @closed="$emit('closed')">
     <img
       :src="src"
+      width="100%"
       class="block">
   </el-dialog>
 </template>

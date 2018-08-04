@@ -93,7 +93,6 @@
 </template>
 
 <script>
-import { followUserByUID, unfollowUserByUID } from '@/api/follow'
 import { likeActivityById, unlikeActivityById, deleteActivityById } from '@/api/activity'
 import { splitNumber } from '@/utils'
 export default {
@@ -156,7 +155,7 @@ export default {
     },
     onFollow () {
       this.followBtnLoading = true
-      followUserByUID(this.user.id).then(() => {
+      this.$store.dispatch('FOLLOW', this.user.id).then(() => {
         this.followBtnLoading = false
         this.user.following = true
         this.user.follower_count++
@@ -166,7 +165,7 @@ export default {
       })
     },
     onUnfollow () {
-      unfollowUserByUID(this.user.id).then(() => {
+      this.$store.dispatch('UNFOLLOW', this.user.id).then(() => {
         this.activity.user.following = false
         this.user.follower_count--
         this.$emit('unfollow', this.user.id)

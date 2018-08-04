@@ -35,7 +35,6 @@
 
 <script>
 import { getRecommendedDesigners } from '@/api/user'
-import { followUserByUID } from '@/api/follow'
 export default {
   data () {
     return {
@@ -52,7 +51,7 @@ export default {
   methods: {
     onFollow (index) {
       this.designers[index]._loading = true
-      followUserByUID(this.designers[index].id).then(() => {
+      this.$store.dispatch('FOLLOW', this.designers[index].id).then(() => {
         this.designers[index]._loading = false
         this.designers.splice(index, 1)
       }).catch(() => {

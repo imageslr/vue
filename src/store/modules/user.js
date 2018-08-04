@@ -1,4 +1,5 @@
 import { signIn, signUp, getCurrentUserInfo } from '@/api/user'
+import { followUserByUID, unfollowUserByUID } from '@/api/follow'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import User from '@/models/user'
 
@@ -19,6 +20,9 @@ const user = {
     SIGN_OUT: state => {
       state.userInfo = User.parse()
       state.token = ''
+    },
+    SET_FOLLOWING_COUNT: (state, followingCount) => {
+      state.userInfo.following_count = followingCount
     }
   },
 
@@ -42,7 +46,7 @@ const user = {
     },
 
     // 获取用户信息
-    GET_USER_INFO ({ commit, state }) {
+    GET_USER_INFO ({ commit }) {
       return new Promise((resolve, reject) => {
         getCurrentUserInfo()
           .then(({ data }) => {
@@ -61,6 +65,20 @@ const user = {
         commit('SIGN_OUT')
         removeToken()
         resolve()
+      })
+    },
+
+    // 关注一名用户
+    FOLLOW ({ commit, state }, uid) {
+      return followUserByUID(uid).then(() => {
+        commit('SET_FOLLOWING_COUNT', state.userInfo.following_count + 1)
+      })
+    },
+
+    // 取消关注一名用户
+    UNFOLLOW ({ commit, state }, uid) {
+      return unfollowUserByUID(uid).then(() => {
+        commit('SET_FOLLOWING_COUNT', state.userInfo.following_count - 1)
       })
     }
   }

@@ -7,9 +7,9 @@ let User = new Model({
   avatar_url: '',
   title: '',
   introduction: '',
-  follower_num: 0,
-  following_num: 0,
-  is_following: false
+  follower_count: 0,
+  following_count: 0,
+  following: false
 })
 
 export default User

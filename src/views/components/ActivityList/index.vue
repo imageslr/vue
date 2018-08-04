@@ -30,8 +30,7 @@
     </transition-group>
     <my-preview
       :visible.sync="preview.visible"
-      :src="preview.src"
-      :width="preview.width" />
+      :src="preview.src" />
     <my-loader
       :loading="loading"
       :error="error"
@@ -62,8 +61,7 @@ export default {
     return {
       preview: {
         visible: false,
-        src: '',
-        width: '50%'
+        src: ''
       },
       activities: [],
       currentPage: 0,
@@ -98,7 +96,6 @@ export default {
       if (e.target.tagName === 'IMG') {
         this.preview.visible = true
         this.preview.src = e.target.src
-        this.preview.width = e.target.width + 'px'
       }
     },
     onDeleted (index) {

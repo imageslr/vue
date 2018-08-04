@@ -22,7 +22,9 @@ export default {
     reload: '重新加载',
     notice: '提示',
     confirmBtn: '确 定',
-    cancelBtn: '取 消'
+    cancelBtn: '取 消',
+    party: '甲方',
+    designer: '设计师'
   },
   ordinalNum: ['一', '二', '三', '四', '五', '六'],
   errmsgs: {

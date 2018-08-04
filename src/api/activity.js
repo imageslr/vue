@@ -4,10 +4,8 @@ export function getFollowingActivities (page = 1) {
   return request.get(`/activities/feeds?page=${page}`)
 }
 
-export function getActivitiesByUID (uid, start = 0, count = 20) {
-  return request.get(`/users/${uid}/activities`, {
-    params: { start, count }
-  })
+export function getActivitiesByUID (uid, page = 1) {
+  return request.get(`/users/${uid}/activities?page=${page}`)
 }
 
 export function publishActivity (body) {

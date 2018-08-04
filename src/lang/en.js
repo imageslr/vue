@@ -22,7 +22,9 @@ export default {
     reload: 'Reload',
     notice: 'Notice',
     confirmBtn: 'Confirm',
-    cancelBtn: 'Cancel'
+    cancelBtn: 'Cancel',
+    party: 'Party',
+    designer: 'Designer'
   },
   ordinalNum: ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'],
   errmsgs: {

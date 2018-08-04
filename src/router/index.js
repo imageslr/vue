@@ -27,11 +27,6 @@ export default new Router({
       name: 'signup'
     },
     {
-      path: '/404',
-      component: Error404,
-      name: 404
-    },
-    {
       path: '/',
       component: Layout,
       children: [
@@ -66,6 +61,11 @@ export default new Router({
             requireAuth: true
           },
           component: Follow
+        },
+        {
+          path: '404',
+          name: '404',
+          component: Error404
         }
       ]
     },

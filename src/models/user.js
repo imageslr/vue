@@ -3,6 +3,8 @@ import Model from './model'
 let User = new Model({
   id: null,
   type: '',
+  phone: '',
+  email: '',
   name: '',
   avatar_url: '',
   title: '',

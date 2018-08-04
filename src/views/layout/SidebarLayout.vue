@@ -1,13 +1,13 @@
 
 <template>
-  <div class="container">
-    <navbar class="navbar"/>
+  <div class="app-container">
+    <navbar class="app-navbar"/>
     <router-view
-      class="sidebar"
+      class="app-sidebar"
       name="sidebar"/>
-    <div class="main">
+    <div class="app-main">
       <router-view
-        class="content"
+        class="app-content"
         name="content"/>
       <app-footer />
     </div>
@@ -28,29 +28,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.app-container {
   padding-top: 52px;
   padding-left: 200px;
   min-height: 100%;
-  .navbar {
+  .app-navbar {
     position: fixed;
     height: 52px;
     top: 0;
     left: 0;
     width: 100%;
   }
-  .sidebar {
+  .app-sidebar {
     position: fixed;
     left: 0;
     top: 52px;
     bottom: 0;
     width: 200px;
   }
-  .main {
+  .app-main {
     min-height: calc(100vh - 52px);
     display: flex;
     flex-direction: column;
-    .content {
+    .app-content {
       flex: 1;
     }
   }

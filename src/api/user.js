@@ -30,6 +30,11 @@ export function getUserInfoByUID (uid) {
   return request.get(`/users/${uid}`)
 }
 
+// 更新当前用户信息
+export function updateCurrentUserInfo (body) {
+  return request.patch('/user', body)
+}
+
 // 获取推荐设计师
 export function getRecommendedDesigners () {
   return request.get(`/user/recommend`)

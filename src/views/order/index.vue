@@ -19,72 +19,68 @@
 </i18n>
 
 <template>
-  <div class="container">
-    <side-menu class="aside"/>
-    <div class="main">
-      <order-menu :order-nums="orderNums"/>
-      <div class="order-list-container">
-        <el-input
-          v-model="keywordTemp"
-          :placeholder="$t('placeholder')"
-          size="small">
-          <el-button
-            slot="append"
-            type="primary"
-            @click="onSearch">{{ $t('search') }}</el-button>
-        </el-input>
-        <div class="order-list">
-          <div class="order-list__caption">
-            <div
-              v-t="$t('captions.title')"
-              class="order-list__caption-item"
-              style="width:35%" />
-            <div
-              v-t="$t('captions.type')"
-              class="order-list__caption-item"
-              style="width:10%" />
-            <div
-              v-t="$t('captions.budget')"
-              class="order-list__caption-item"
-              style="width:10%" />
-            <div
-              v-t="$t('captions.actualPayment')"
-              class="order-list__caption-item"
-              style="width:10%" />
-            <div
-              v-t="$t('captions.status')"
-              class="order-list__caption-item"
-              style="width:25%" />
-            <div
-              v-t="$t('captions.action')"
-              class="order-list__caption-item"
-              style="width:10%" />
-          </div>
-          <order-list-item
-            v-for="order in orders"
-            :key="order.id"
-            :order="order"
-            class="order-list__item" />
-          <el-pagination
-            :current-page.sync="currentPage"
-            :total="total"
-            :page-size="20"
-            background
-            layout="prev, pager, next"
-            @current-change="onNavigate"/>
+  <div>
+    <order-menu :order-nums="orderNums"/>
+    <div class="order-list-container">
+      <el-input
+        v-model="keywordTemp"
+        :placeholder="$t('placeholder')"
+        size="small">
+        <el-button
+          slot="append"
+          type="primary"
+          @click="onSearch">{{ $t('search') }}</el-button>
+      </el-input>
+      <div class="order-list">
+        <div class="order-list__caption">
+          <div
+            v-t="$t('captions.title')"
+            class="order-list__caption-item"
+            style="width:35%" />
+          <div
+            v-t="$t('captions.type')"
+            class="order-list__caption-item"
+            style="width:10%" />
+          <div
+            v-t="$t('captions.budget')"
+            class="order-list__caption-item"
+            style="width:10%" />
+          <div
+            v-t="$t('captions.actualPayment')"
+            class="order-list__caption-item"
+            style="width:10%" />
+          <div
+            v-t="$t('captions.status')"
+            class="order-list__caption-item"
+            style="width:25%" />
+          <div
+            v-t="$t('captions.action')"
+            class="order-list__caption-item"
+            style="width:10%" />
         </div>
+        <order-list-item
+          v-for="order in orders"
+          :key="order.id"
+          :order="order"
+          class="order-list__item" />
+        <el-pagination
+          :current-page.sync="currentPage"
+          :total="total"
+          :page-size="20"
+          background
+          layout="prev, pager, next"
+          @current-change="onNavigate"/>
       </div>
     </div>
-</div></template>
+  </div>
+</template>
 
 <script>
-import SideMenu from './components/SideMenu'
 import OrderMenu from './components/OrderMenu'
 import OrderListItem from './components/OrderListItem'
 import { getOrdersByUID } from '@/api/order'
 export default {
   components: {
-    SideMenu,
     OrderMenu,
     OrderListItem
   },
@@ -145,19 +141,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  height: 100%;
-  .aside {
-    position: fixed;
-    top: 52px;
-    left: 0;
-    bottom: 0;
-    width: 200px;
-  }
-  .main {
-    padding-left: 200px;
-  }
-}
 .order-list-container {
   padding: 24px 32px;
   background-color: #fff;

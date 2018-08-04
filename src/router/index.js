@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '../views/layout/Layout'
+import SidebarLayout from '../views/layout/SidebarLayout'
 import Guide from '../views/login/Guide'
 import SignUp from '../views/login/SignUp'
 import SignIn from '../views/login/SignIn'
@@ -10,7 +11,10 @@ import Result from '../views/publish/Result'
 import Follow from '../views/follow'
 import Profile from '../views/profile'
 import Project from '../views/project'
-import Order from '../views/order'
+import OrderSidebar from '../views/order/Sidebar'
+import OrderContent from '../views/order/index'
+import MeSidebar from '../views/me/Sidebar'
+import MeContent from '../views/me/index'
 import Error404 from '../views/error/404'
 
 Vue.use(Router)
@@ -54,13 +58,6 @@ export default new Router({
             requireAuth: true
           },
           component: Feed
-        },
-        {
-          path: 'me',
-          name: 'me',
-          meta: {
-            requireAuth: true
-          }
         },
         {
           path: 'follow',
@@ -121,7 +118,7 @@ export default new Router({
     },
     {
       path: '/order',
-      component: Layout,
+      component: SidebarLayout,
       children: [
         {
           path: '',
@@ -129,7 +126,27 @@ export default new Router({
           meta: {
             requireAuth: true
           },
-          component: Order
+          components: {
+            sidebar: OrderSidebar,
+            content: OrderContent
+          }
+        }
+      ]
+    },
+    {
+      path: '/me',
+      component: SidebarLayout,
+      children: [
+        {
+          path: '',
+          name: 'me',
+          meta: {
+            requireAuth: true
+          },
+          components: {
+            sidebar: MeSidebar,
+            content: MeContent
+          }
         }
       ]
     },

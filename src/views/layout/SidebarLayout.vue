@@ -1,0 +1,58 @@
+
+<template>
+  <div class="container">
+    <navbar class="navbar"/>
+    <router-view
+      class="sidebar"
+      name="sidebar"/>
+    <div class="main">
+      <router-view
+        class="content"
+        name="content"/>
+      <app-footer />
+    </div>
+    <el-button
+      type="primary"
+      style="position: fixed; right: 20px; bottom: 20px;"
+      @click="$store.commit('SWITCH_TYPE');$message.info('当前账号类型 '+$user().type)">临时切换账号类型</el-button>
+  </div>
+</template>
+
+<script>
+import { Navbar, AppFooter } from './components'
+export default {
+  components: {
+    Navbar, AppFooter
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.container {
+  padding-top: 52px;
+  padding-left: 200px;
+  min-height: 100%;
+  .navbar {
+    position: fixed;
+    height: 52px;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 52px;
+    bottom: 0;
+    width: 200px;
+  }
+  .main {
+    min-height: calc(100vh - 52px);
+    display: flex;
+    flex-direction: column;
+    .content {
+      flex: 1;
+    }
+  }
+}
+</style>

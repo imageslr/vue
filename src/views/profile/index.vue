@@ -214,7 +214,7 @@ export default {
     },
     getReviews (page) {
       this.reviewDialog.loading = true
-      getReceivedReviewsByUID(this.pageUID, page, 1).then(({
+      getReceivedReviewsByUID(this.pageUID, page).then(({
         data: { data, meta: { pagination } }
       }) => {
         this.reviewDialog.loading = false

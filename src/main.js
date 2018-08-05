@@ -10,8 +10,6 @@ import Dayjs from 'dayjs'
 import App from './App'
 import router from './router'
 import store from './store'
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css' // NProgress样式
 import i18n from './lang' // 初始化语言包
 import GlobalComponents from '@/components/global-install'
 import Icon from 'vue-awesome/components/Icon'
@@ -19,6 +17,7 @@ import infiniteScroll from 'vue-infinite-scroll'
 import '@/assets/iconfont.js' // iconfont
 import lodash from '@/utils/lodash'
 import VUser from '@/directives/user'
+import './permission' // 路由权限控制
 
 // 注册组件库，注册一些常用的全局组件
 Vue.use(ElementUI, {
@@ -47,44 +46,6 @@ Vue.prototype.$user = () => store.getters.userInfo // 添加一个访问user的�
 Vue.prototype.$uid = () => store.getters.uid // 添加一个访问uid的快捷方法
 Vue.prototype.$isDesigner = () => store.getters.userInfo.type === 'designer' // 判断用户类型：设计师
 Vue.prototype.$isParty = () => store.getters.userInfo.type === 'party' // 判断用户类型：甲方
-
-// 路由前权限判断
-router.beforeEach((to, from, next) => {
-  NProgress.start()
-  // 如果用户登录过
-  if (
-    store.getters.token &&
-    to.matched.some(record => record.meta.requireRedirectToFeed)
-  ) {
-    // 登录过：进入需要重定向至主页的页面时重定向
-    next({ path: '/feed' })
-    NProgress.done() // hack
-  } else if (store.getters.token) {
-    // 登录过：进入其他页面时，获取用户信息
-    if (!store.getters.hasUserInfo) {
-      store
-        .dispatch('GET_USER_INFO')
-        .then(() => next())
-        .catch(() => {
-          // ElementUI.Message.error(i18n.t('errmsgs.getUserInfoFailed'))
-          NProgress.done()
-        })
-    } else {
-      next()
-    }
-  } else if (to.matched.some(record => record.meta.requireAuth)) {
-    // 没有登录：访问的页面需要登录，则跳转至登录页
-    next({ path: '/signin' })
-    NProgress.done() // hack
-  } else {
-    // 没有登录：访问其他页面，直接跳转
-    next()
-  }
-})
-router.afterEach(() => {
-  NProgress.done() // 结束Progress
-  window.scrollTo(0, 0) // 滚动回顶部
-})
 
 /* eslint-disable no-new */
 new Vue({

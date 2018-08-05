@@ -87,15 +87,23 @@
         :class="{'is-liked': activity.liked}"
         type="text"
         @click="onToggleLike">{{ $t('g.like') + likeCountStr }}</el-button>
-      <el-button type="text">{{ $t('g.comment') + replyCountStr }}</el-button>
+      <el-button
+        type="text"
+        @click="showReplyList = !showReplyList">{{ $t('g.comment') + replyCountStr }}</el-button>
     </div>
+    <reply-list
+      v-if="showReplyList"
+      :activity-id="activity.id"
+      class="activity-card__reply-list" />
   </div>
 </template>
 
 <script>
+import ReplyList from './ReplyList'
 import { likeActivityById, unlikeActivityById, deleteActivityById } from '@/api/activity'
 import { splitNumber } from '@/utils'
 export default {
+  components: { ReplyList },
   props: {
     activity: {
       type: Object,
@@ -122,12 +130,18 @@ export default {
     showActionButton: {
       type: Boolean,
       default: false
+    },
+    // 默认是否显示评论列表
+    defaultShowReplyList: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
     return {
       followBtnLoading: false,
-      unfollowBtnLoading: false
+      unfollowBtnLoading: false,
+      showReplyList: false
     }
   },
   computed: {
@@ -143,6 +157,9 @@ export default {
     replyCountStr () {
       return this.activity.reply_count ? ` (${this.activity.reply_count})` : ''
     }
+  },
+  created () {
+    this.showReplyList = this.defaultShowReplyList
   },
   methods: {
     onToggleLike () {
@@ -233,6 +250,11 @@ export default {
     &:hover {
       color: #3392c4;
     }
+  }
+  &__reply-list {
+    // 撑满宽度
+    margin-left: -16px;
+    margin-right: -16px;
   }
 }
 </style>

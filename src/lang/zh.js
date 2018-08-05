@@ -28,7 +28,7 @@ export default {
   },
   ordinalNum: ['一', '二', '三', '四', '五', '六'],
   errmsgs: {
-    getUserInfoFailed: '获取用户信息失败，请刷新重试',
+    getUserInfoFailed: '获取用户信息失败，请重新登录',
     plsEnter: '请输入{name}',
     plsCheck: '请选择{name}',
     lenBetween: '{name} 的长度为{min}到{max}个字符',

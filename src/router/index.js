@@ -6,6 +6,7 @@ import Guide from '../views/login/Guide'
 import SignUp from '../views/login/SignUp'
 import SignIn from '../views/login/SignIn'
 import Feed from '../views/feed'
+import Activity from '../views/activity'
 import Publish from '../views/publish'
 import Result from '../views/publish/Result'
 import Follow from '../views/follow'
@@ -33,39 +34,38 @@ export default new Router({
         {
           path: '',
           name: 'index',
-          meta: {
-            requireRedirectToFeed: true
-          },
           component: Guide
         },
         {
           path: 'signin',
           name: 'signin',
-          meta: {
-            requireRedirectToFeed: true
-          },
           component: SignIn
         },
         {
           path: 'feed',
           name: 'feed',
-          meta: {
-            requireAuth: true
-          },
           component: Feed
         },
         {
           path: 'follow',
           name: 'follow',
-          meta: {
-            requireAuth: true
-          },
           component: Follow
         },
         {
           path: '404',
           name: '404',
           component: Error404
+        }
+      ]
+    },
+    {
+      path: '/activity/:id',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'activity',
+          component: Activity
         }
       ]
     },
@@ -88,7 +88,7 @@ export default new Router({
           path: '',
           name: 'publish',
           meta: {
-            requireAuth: true
+            roles: ['party']
           },
           component: Publish
         },
@@ -96,7 +96,7 @@ export default new Router({
           path: 'result',
           name: 'publishResult',
           meta: {
-            requireAuth: true
+            roles: ['party']
           },
           component: Result
         }
@@ -109,9 +109,6 @@ export default new Router({
         {
           path: ':id',
           name: 'project',
-          meta: {
-            requireAuth: true
-          },
           component: Project
         }
       ]
@@ -123,9 +120,6 @@ export default new Router({
         {
           path: '',
           name: 'order',
-          meta: {
-            requireAuth: true
-          },
           components: {
             sidebar: OrderSidebar,
             content: OrderContent
@@ -140,9 +134,6 @@ export default new Router({
         {
           path: '',
           name: 'me',
-          meta: {
-            requireAuth: true
-          },
           components: {
             sidebar: MeSidebar,
             content: MeContent

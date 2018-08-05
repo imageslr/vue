@@ -28,8 +28,7 @@ export default {
   },
   ordinalNum: ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'],
   errmsgs: {
-    getUserInfoFailed:
-      'Failed to get user information, please refresh and try again',
+    getUserInfoFailed: 'Failed to get user information, please sign in again',
     plsEnter: 'Please enter {name}',
     plsCheck: 'Please check {name}',
     lenBetween: '{name} length must be between {min} and {max}',

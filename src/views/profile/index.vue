@@ -37,7 +37,8 @@
         class="title" />
       <profile-card :user-info="userInfo">
         <el-button
-          v-if="isCurrentUser">{{ $t('editProfile') }}</el-button>
+          v-if="isCurrentUser"
+          @click="$router.push({path: '/me'})">{{ $t('editProfile') }}</el-button>
         <template v-else>
           <el-button
             :loading="followBtnLoading"

@@ -68,6 +68,10 @@
         <el-input
           v-model="form.introduction"
           :placeholder="$t('placeholders.introduction')"
+          autosize
+          type="textarea"
+          rows="1"
+          resize="none"
           maxlength="200"/>
       </el-form-item>
       <el-form-item :label="$t('email')" >

@@ -135,7 +135,8 @@ export default {
       this.buttonLoading = true
       postReplyByActivityId(this.reply.activity_id, {
         content: this.content,
-        replyee_id: this.reply.user.id
+        replyee_id: this.reply.user.id,
+        reply_id: this.reply.id
       }).then(({ data }) => {
         Object.assign(this.$data, this.$options.data()) // 重置data
         this.$emit('post', data)
@@ -154,7 +155,7 @@ export default {
           this.$emit('delete')
           this.$message.success(this.$t('successfulDeleted'))
         })
-      })
+      }).catch(() => {})
     }
   }
 }

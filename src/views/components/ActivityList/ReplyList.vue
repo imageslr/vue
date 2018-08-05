@@ -34,36 +34,19 @@
         size="small"
         type="primary"
         class="reply-input-area__button"
-        @click="onSend">{{ $t('post') }}</el-button>
+        @click="onPost">{{ $t('post') }}</el-button>
     </div>
     <div
       v-loading="listLoading"
       class="reply-list-area">
       <template v-if="replies.length">
-        <div
-          v-for="reply in replies"
+        <reply-list-item
+          v-for="(reply, index) in replies"
           :key="reply.id"
-          class="reply-list-item">
-          <router-link :to="'/profile?uid=' + reply.user.id">
-            <my-avatar
-              :avatar-url="reply.user.avatar_url"
-              class="reply-list-item__avatar"/>
-          </router-link>
-          <div>
-            <p class="m0 f-14">
-              <router-link :to="'/profile?uid=' + reply.user.id">
-                <span class="bold black">{{ reply.user.name }}</span>
-              </router-link>
-              <span
-                v-t="reply.user.title"
-                class="ml-4 f-13 black-45" />
-            </p>
-            <p
-              v-t="reply.created_at"
-              class="m0 f-12 black-45" />
-            <p class="reply-list-item__content">{{ reply.content }}</p>
-          </div>
-        </div>
+          :reply="reply"
+          :activity="activity"
+          @post="onPostInItem"
+          @delete="onDelete(index)" />
         <el-pagination
           :current-page.sync="currentPage"
           :page-count="pageCount"
@@ -81,12 +64,16 @@
 </template>
 
 <script>
-import { getRepliesByActivityId, postReplyByActivityId, deleteReply } from '@/api/activity'
+import { getRepliesByActivityId, postReplyByActivityId } from '@/api/activity'
+import ReplyListItem from './ReplyListItem'
 export default {
+  components: { ReplyListItem },
   props: {
-    activityId: {
-      type: Number,
-      required: true
+    activity: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
   },
   data () {
@@ -108,10 +95,10 @@ export default {
     this.getReplies()
   },
   methods: {
-    onSend () {
+    onPost () {
       if (!this.content) return
       this.buttonLoading = true
-      postReplyByActivityId(this.activityId, {
+      postReplyByActivityId(this.activity.id, {
         content: this.content
       }).then(({ data }) => {
         this.buttonLoading = false
@@ -124,7 +111,7 @@ export default {
     getReplies (page) {
       this.listLoading = true
       this.replies = []
-      getRepliesByActivityId(this.activityId, page).then(({
+      getRepliesByActivityId(this.activity.id, page).then(({
         data: { data, meta: { pagination } }
       }) => {
         this.listLoading = false
@@ -133,6 +120,12 @@ export default {
       }).catch(() => {
         this.listLoading = false
       })
+    },
+    onPostInItem (reply) {
+      this.replies.unshift(reply)
+    },
+    onDelete (index) {
+      this.replies.splice(index, 1)
     }
   }
 }
@@ -152,22 +145,6 @@ export default {
   &__input {
     flex: 1;
     margin-right: 8px;
-  }
-}
-.reply-list-item {
-  padding: 12px 16px;
-  border-bottom: 1px solid #dddfe2;
-  display: flex;
-  align-items: flex-start;
-  flex-direction: row;
-  &__avatar {
-    margin-right: 8px;
-    width: 32px;
-    height: 32px;
-  }
-  &__content {
-    margin: 4px 0 0;
-    font-size: 14px;
   }
 }
 </style>

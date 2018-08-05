@@ -36,6 +36,6 @@ export function getRepliesByActivityId (id, page = 1) {
   return request.get(`/activities/${id}/replies?page=${page}`)
 }
 
-export function deleteReply (acitvityId, replyId) {
-  return request.post(`/activities/${acitvityId}/replies/${replyId}`)
+export function deleteReply (activityId, replyId) {
+  return request.delete(`/activities/${activityId}/replies/${replyId}`)
 }

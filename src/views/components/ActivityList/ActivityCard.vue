@@ -93,7 +93,7 @@
     </div>
     <reply-list
       v-if="showReplyList"
-      :activity-id="activity.id"
+      :activity="activity"
       class="activity-card__reply-list" />
   </div>
 </template>

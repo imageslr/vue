@@ -44,12 +44,12 @@
           multiple
           class="mb-12"
           list-type="picture-card"
-          accept="image/jpeg, image/jpg, image/png">
+          accept="image/jpeg, image/jpg, image/png, image/bmp">
           <i class="el-icon-plus"/>
         </el-upload>
         <el-button
           class="left"
-          @click="inputing=false">{{ $t('g.cancelBtn') }}</el-button>
+          @click="onCancel">{{ $t('g.cancelBtn') }}</el-button>
       </template>
       <el-button
         v-else
@@ -73,7 +73,7 @@
 <script>
 import 'vue-awesome/icons/camera-retro'
 import { publishActivity } from '@/api/activity'
-import { uploadImage } from '@/api/image'
+import { uploadImage } from '@/api/upload'
 export default {
   data () {
     return {
@@ -85,7 +85,8 @@ export default {
         visible: false,
         src: ''
       },
-      uploadingCount: 0 // 正在上传的文件数量
+      uploadingCount: 0, // 正在上传的文件数量
+      uploadQueue: [] // 上传队列的source，可以cancel
     }
   },
   methods: {
@@ -106,20 +107,20 @@ export default {
       this.$message.error(this.$t('maxPhotoNumber'))
     },
     onUpload (file) {
+      let source = this.$axios.CancelToken.source()
+      this.uploadQueue.push(source) // 加入到上传队列中
       this.uploadingCount++ // 信号量+1
       file.onProgress({ percent: 50 }) // 传一个percent参数，显示loading
-      let param = new FormData()
-      param.append('type', 'activity')
-      param.append('image', file.file)
-      uploadImage(param).then(({ data }) => {
-        this.uploadingCount && this.uploadingCount-- // 信号量-1
-        file.onSuccess()
-        this.photoImageIds.push(data.id)
-      }).catch(error => {
-        this.uploadingCount && this.uploadingCount-- // 信号量-1
-        file.onError()
-        console.error(error)
-      })
+      uploadImage('activity_photo', file.file, { cancelToken: source.token })
+        .then(({ data }) => {
+          this.uploadingCount && this.uploadingCount-- // 信号量-1
+          file.onSuccess()
+          this.photoImageIds.push(data.id)
+        }).catch(error => {
+          this.uploadingCount && this.uploadingCount-- // 信号量-1
+          file.onError()
+          console.error(error)
+        })
     },
     onPublish () {
       if (!this.inputing) {
@@ -138,9 +139,14 @@ export default {
         this.$refs.upload.clearFiles()
         Object.assign(this.$data, this.$options.data()) // 重置data
         this.$emit('published', data)
-      }).catch(() => {
+      }).catch((e) => {
+        console.log(e.message)
         this.publishBtnLoading = false
       })
+    },
+    onCancel () {
+      this.uploadQueue.forEach(v => v.cancel('取消上传')) // 取消全部上传请求
+      Object.assign(this.$data, this.$options.data())
     }
   }
 }

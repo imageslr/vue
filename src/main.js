@@ -18,6 +18,7 @@ import '@/assets/iconfont.js' // iconfont
 import lodash from '@/utils/lodash'
 import VUser from '@/directives/user'
 import './permission' // 路由权限控制
+import Axios from '../node_modules/axios'
 
 // 注册组件库，注册一些常用的全局组件
 Vue.use(ElementUI, {
@@ -42,6 +43,7 @@ Vue.use(VUser) // 权限控制指令
 // 挂载全局方法
 Vue.prototype.$_ = lodash // lodash
 Vue.prototype.$dayjs = Dayjs // dayjs
+Vue.prototype.$axios = Axios // axios
 Vue.prototype.$user = () => store.getters.userInfo // 添加一个访问user的快捷方法
 Vue.prototype.$uid = () => store.getters.uid // 添加一个访问uid的快捷方法
 Vue.prototype.$isDesigner = () => store.getters.userInfo.type === 'designer' // 判断用户类型：设计师

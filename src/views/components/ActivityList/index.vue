@@ -83,7 +83,7 @@ export default {
         this.loading = false
         this.activities.push.apply(this.activities, activities)
         this.currentPage = pagination.current_page
-        this.nomore = pagination.total_pages === pagination.current_page
+        this.nomore = pagination.total_pages <= pagination.current_page
       }).catch(() => {
         this.error = true
         this.loading = false

@@ -31,9 +31,10 @@ service.interceptors.response.use(
     return response
   },
   error => {
-    console.log('网络响应错误', error.response)
     const response = error.response
-    if (!response) {
+    if (axios.isCancel(error)) {
+      // 是被取消的请求的话，不输出错误信息
+    } else if (!response) {
       Message({
         message: i18n.locale === 'zh' ? '网络错误' : 'Network error',
         type: 'error',
@@ -42,6 +43,7 @@ service.interceptors.response.use(
       })
     } else {
       // TODO 401/403重定向
+      console.error('网络响应错误', error.response)
       if (response.status === 401) {
         store.dispatch('SIGN_OUT').then(() => {
           router.replace({ path: '/signin' })

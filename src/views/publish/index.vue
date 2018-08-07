@@ -1,26 +1,6 @@
 <i18n>
 {
   "zh": {
-    "header": "我是业主",
-    "subheader": "我想找设计公司、设计师来帮我做项目",
-    "slogan": "在最专业、最国际化的建筑、规划、景观、室内设计平台遇见最专业的设计师",
-    "title": "给项目起一个标题吧",
-    "titleTip": "项目标题最多50字",
-    "type": "项目的类型是？",
-    "feature": "项目的功能是？",
-    "area": "项目的面积有多大？",
-    "areaTip": "请尽可能精准的描述。比如建筑面积200平方米，套内面积160平方米。小区占地2000亩，建筑面积20万平米，其中住宅17万，商业三万，之外景观绿化率需要多少百分比等等",
-    "deliveryTime": "项目的交付时间",
-    "payment": "希望付给设计师的费用是多少？",
-    "description": "项目其他描述和需求",
-    "descriptionTip": "比如项目的施工预算、动工时间、您倾向的风格和色彩，希望设计师做到哪种程度等等",
-    "uploadFile": "上传附件",
-    "fileFormat": "附件格式",
-    "findTime": "希望用多长时间找设计师？",
-    "remark": "申请备注",
-    "publishTip": "项目发布前会核实身份证以及公司营业执照",
-    "other": "其他",
-    "maxLength50": "最多50字",
     "types":  {
       "conceptPlanning": "概念规划",
       "cityDesign": "城市设计",
@@ -52,16 +32,54 @@
     }
   },
   "en": {
-    "header": "I am party",
-    "subheader": "I'm looking for designer or company to do projects",
-    "slogan": "Meet the most professional designers in the most professional and international architecture, planning, landscape, interior design platform",
-    "title": "Project title",
-    "type": "Project type",
-    "price": "Project price",
-    "description": "Project description",
-    "uploadFile": "Upload file",
+    "我是业主": "I am party",
+    "我想找设计公司、设计师来帮我做项目": "I'm looking for designer or company to do projects",
+    "在最专业、最国际化的建筑、规划、景观、室内设计平台遇见最专业的设计师": "Meet the most professional designers in the most professional and international architecture, planning, landscape, interior design platform",
+    "给项目起一个标题吧": "Project title",
+    "最多50字": "50 characters at most",
+    "项目的类型是？": "Project type",
+    "项目的功能是？": "Project feature",
+    "项目的面积有多大？": "Project area",
+    "请尽可能精准的描述。比如建筑面积200平方米，套内面积160平方米。小区占地2000亩，建筑面积20万平米，其中住宅17万，商业三万，之外景观绿化率需要多少百分比等等": "Please describe it as accurately as possible. For example, the building area is 200 square meters and the inner cover area is 160 square meters.",
+    "项目的其他描述和需求": "Project description",
+    "比如项目的施工预算、动工时间、您倾向的风格和色彩，希望设计师做到哪种程度等等": "Such as the construction budget of the project, the time of construction, the style and color you are inclined to, the degree of hope for the designer, etc.",
+    "项目的交付时间": "Delivery time",
+    "希望用多长时间找设计师？": "How long do you want to find a designer?",
+    "希望付给设计师的费用是多少？": "How much would you want to pay for the designer?",
+    "上传附件": "Upload file",
     "最大不得超过10M": "Max file size is 10M",
-    "fileFormat": "File format"
+    "申请备注": "Application remark",
+    "项目发布前会核实身份证以及公司营业执照": "The identity card and company business license will be verified before the project is published.",
+    "其他": "Other",
+    "types":  {
+      "conceptPlanning": "Concept Planning",
+      "cityDesign": "City Design",
+      "architecturalDesign": "Architectural Design",
+      "landscapeDesign": "Landscape Design",
+      "interiorDesign": "Interior Design"
+    },
+    "features": {
+      "residence": "Residence",
+      "business": "Business",
+      "office": "Office",
+      "publicSpace": "Public Space",
+      "school": "School",
+      "retail": "Retail",
+      "restaurant": "Restaurant",
+      "hotel": "Hotel",
+      "club": "Club",
+      "gardenSquare": "Garden Square"
+    },
+    "deliveryTimes": {
+      "afterOneMonth": "After one month",
+      "afterThreeMonth": "After three month",
+      "afterSixMonth": "After six month"
+    },
+    "findTimes": {
+      "9to12": "9~12 days",
+      "12to20": "12~20 days",
+      "oneMonth": "In one month"
+    }
   }
 }
 </i18n>
@@ -71,13 +89,13 @@
     <div class="card">
       <div class="border-bottom center p-24">
         <h1
-          v-t="$t('header')"
+          v-t="$t('我是业主')"
           class="m0 color-primary"/>
         <p
-          v-t="$t('subheader')"
+          v-t="$t('我想找设计公司、设计师来帮我做项目')"
           class="m0 p1 black-65 f-13"/>
         <p
-          v-t="$t('slogan')"
+          v-t="$t('在最专业、最国际化的建筑、规划、景观、室内设计平台遇见最专业的设计师')"
           class="m0 p0 black-45 f-12" />
       </div>
       <el-form
@@ -86,14 +104,14 @@
         class="form"
         size="small">
         <el-form-item
-          :label="$t('title')"
+          :label="$t('给项目起一个标题吧')"
           prop="title">
           <el-input
             v-model="form.title"
-            :placeholder="$t('titleTip')"/>
+            :placeholder="$t('最多50字')"/>
         </el-form-item>
         <el-form-item
-          :label="$t('type')"
+          :label="$t('项目的类型是？')"
           prop="types">
           <el-checkbox
             v-for="type in types"
@@ -102,16 +120,16 @@
             :key="type">
             {{ $t(`types.${type}`) }}
           </el-checkbox><el-checkbox v-model="others.type.checked">
-            {{ $t('other') }}
+            {{ $t('其他') }}
             <el-input
               v-if="others.type.checked"
               v-model="others.type.input"
-              :placeholder="$t('maxLength50')"
+              :placeholder="$t('最多50字')"
               maxlength="50"/>
           </el-checkbox>
         </el-form-item>
         <el-form-item
-          :label="$t('feature')"
+          :label="$t('项目的功能是？')"
           prop="features">
           <el-checkbox
             v-for="feature in features"
@@ -120,22 +138,22 @@
             :key="feature">
             {{ $t(`features.${feature}`) }}
           </el-checkbox><el-checkbox v-model="others.feature.checked">
-            {{ $t('other') }}
+            {{ $t('其他') }}
             <el-input
               v-if="others.feature.checked"
               v-model="others.feature.input"
-              :placeholder="$t('maxLength50')"
+              :placeholder="$t('最多50字')"
               maxlength="50"/>
           </el-checkbox>
         </el-form-item>
-        <el-form-item :label="$t('area')">
+        <el-form-item :label="$t('项目的面积有多大？')">
           <el-input
             v-model="form.area"
             :rows="5"
-            :placeholder="$t('areaTip')"
+            :placeholder="$t('请尽可能精准的描述。比如建筑面积200平方米，套内面积160平方米。小区占地2000亩，建筑面积20万平米，其中住宅17万，商业三万，之外景观绿化率需要多少百分比等等')"
             type="textarea"/>
         </el-form-item>
-        <el-form-item :label="$t('deliveryTime')">
+        <el-form-item :label="$t('项目的交付时间')">
           <el-radio
             v-for="time in deliveryTimes"
             v-model="form.deliveryTime"
@@ -145,37 +163,37 @@
           </el-radio><el-radio
             v-model="form.deliveryTime"
             label="other">
-            {{ $t('other') }}
+            {{ $t('其他') }}
             <el-input
               v-if="form.deliveryTime === 'other'"
               v-model="others.deliveryTime.input"
-              :placeholder="$t('maxLength50')"
+              :placeholder="$t('最多50字')"
               maxlength="50"/>
           </el-radio>
         </el-form-item>
-        <el-form-item :label="$t('payment')">
+        <el-form-item :label="$t('希望付给设计师的费用是多少？')">
           <el-input
             v-model="form.payment"
             maxlength="200" />
         </el-form-item>
-        <el-form-item :label="$t('description')">
+        <el-form-item :label="$t('项目的其他描述和需求')">
           <el-input
             v-model="form.description"
             :rows="5"
-            :placeholder="$t('descriptionTip')"
+            :placeholder="$t('比如项目的施工预算、动工时间、您倾向的风格和色彩，希望设计师做到哪种程度等等')"
             type="textarea"/>
           <el-upload
             :file-list="form.fileList"
             class="form__uploader"
             action="">
-            <el-button>{{ $t('uploadFile') }}</el-button>
+            <el-button>{{ $t('上传附件') }}</el-button>
             <p
               v-t="$t('最大不得超过10M')"
               slot="tip"
               class="inline ml-12 black-45"/>
           </el-upload>
         </el-form-item>
-        <el-form-item :label="$t('findTime')">
+        <el-form-item :label="$t('希望用多长时间找设计师？')">
           <el-radio
             v-for="time in findTimes"
             v-model="form.findTime"
@@ -185,15 +203,15 @@
           </el-radio><el-radio
             v-model="form.findTime"
             label="other">
-            {{ $t('other') }}
+            {{ $t('其他') }}
             <el-input
               v-if="form.findTime === 'other'"
-              :placeholder="$t('maxLength50')"
+              :placeholder="$t('最多50字')"
               v-model="others.findTime.input"
               maxlength="50"/>
           </el-radio>
         </el-form-item>
-        <el-form-item :label="$t('remark')">
+        <el-form-item :label="$t('申请备注')">
           <el-input
             v-model="form.remark"
             :rows="5"
@@ -201,7 +219,7 @@
         </el-form-item>
       </el-form>
       <p
-        v-t="$t('publishTip')"
+        v-t="$t('项目发布前会核实身份证以及公司营业执照')"
         class="m0 pb-24 center f-14 black-45" />
     </div>
     <el-button

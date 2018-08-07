@@ -12,6 +12,9 @@
     "取消成功": "Successfully canceled",
     "甲方": "Party",
     "发布于": "Published at",
+    "设计师报名中": "Designers applying",
+    "设计师工作中": "Designers working",
+    "项目已完成": "Project is complete",
     "项目的类型是？": "Project type",
     "项目的功能是？": "Project feature",
     "项目的面积有多大？": "Project area",
@@ -38,7 +41,7 @@
   <div>
     <div class="project-header card">
       <my-alert
-        v-if="project.canceled_at"
+        v-if="isCanceled"
         :title="$t('该项目已被甲方取消')"
         type="warning"
         class="mb2"/>
@@ -92,6 +95,15 @@
           {{ project.created_at }}
         </div>
       </div>
+      <el-steps
+        :active="stepIndex"
+        process-status="process"
+        finish-status="success"
+        class="mt3">
+        <el-step :title="$t('设计师报名中')" />
+        <el-step :title="$t('设计师工作中')" />
+        <el-step :title="$t('项目已完成')" />
+      </el-steps>
     </div>
     <div
       v-loading="loading"
@@ -194,6 +206,21 @@ export default {
     id () {
       return this.$route.params.id
     },
+    // 项目进度下标
+    stepIndex () {
+      switch (this.project.status) {
+        case Project.STATUS_TENDERING:
+          return 0
+        case Project.STATUS_WORKING:
+          return 1
+        case Project.STATUS_COMPLETED:
+          return 2
+      }
+    },
+    // 项目是否取消
+    isCanceled () {
+      return this.project.status == Project.STATUS_CANCELED
+    },
     // 甲方：能否补充项目
     supplementable () {
       const { project } = this
@@ -258,17 +285,17 @@ export default {
      * 甲方相关操作：取消发布、补充项目
      */
     onCancelPublish () {
-      this.$confirm(this.$t('confirmCancelPublish'), this.$t('g.notice'), {
+      this.$confirm(this.$t('此操作将取消发布该项目并不可恢复，是否确认？'), this.$t('g.notice'), {
         confirmButtonText: this.$t('g.confirmBtn'),
         cancelButtonText: this.$t('g.cancelBtn'),
         type: 'warning'
       }).then(() => {
         cancelProjectById(this.project.id).then(() => {
-          this.project.status = 500
+          this.project.status = Project.STATUS_CANCELED
           this.project.canceled_at = this.$dayjs().format('YYYY-MM-DD HH:mm:ss')
           this.$message({
             type: 'success',
-            message: this.$t('cancelSuccess')
+            message: this.$t('取消成功')
           })
         })
       }).catch(() => {})

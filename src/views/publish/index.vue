@@ -51,6 +51,9 @@
     "申请备注": "Application remark",
     "项目发布前会核实身份证以及公司营业执照": "The identity card and company business license will be verified before the project is published.",
     "其他": "Other",
+    "请填写此项": "Please enter this field",
+    "请选择此项": "Please select this field",
+    "输入框不能为空": "Please enter the input field",
     "types":  {
       "conceptPlanning": "Concept Planning",
       "cityDesign": "City Design",
@@ -99,7 +102,9 @@
           class="m0 p0 black-45 f-12" />
       </div>
       <el-form
+        ref="form"
         :model="form"
+        :rules="rules"
         label-position="top"
         class="form"
         size="small">
@@ -108,7 +113,8 @@
           prop="title">
           <el-input
             v-model="form.title"
-            :placeholder="$t('最多50字')"/>
+            :placeholder="$t('最多50字')"
+            maxlength="50"/>
         </el-form-item>
         <el-form-item
           :label="$t('项目的类型是？')"
@@ -116,17 +122,15 @@
           <el-checkbox
             v-for="type in types"
             v-model="form.types"
-            :label="type"
-            :key="type">
-            {{ $t(`types.${type}`) }}
-          </el-checkbox><el-checkbox v-model="others.type.checked">
-            {{ $t('其他') }}
-            <el-input
-              v-if="others.type.checked"
-              v-model="others.type.input"
-              :placeholder="$t('最多50字')"
-              maxlength="50"/>
-          </el-checkbox>
+            :label="$t(`types.${type}`)"
+            :key="type"/><el-checkbox v-model="others.type.checked">
+              {{ $t('其他') }}
+              <el-input
+                v-if="others.type.checked"
+                v-model="others.type.input"
+                :placeholder="$t('最多50字')"
+                maxlength="50"/>
+            </el-checkbox>
         </el-form-item>
         <el-form-item
           :label="$t('项目的功能是？')"
@@ -134,49 +138,55 @@
           <el-checkbox
             v-for="feature in features"
             v-model="form.features"
-            :label="feature"
-            :key="feature">
-            {{ $t(`features.${feature}`) }}
-          </el-checkbox><el-checkbox v-model="others.feature.checked">
-            {{ $t('其他') }}
-            <el-input
-              v-if="others.feature.checked"
-              v-model="others.feature.input"
-              :placeholder="$t('最多50字')"
-              maxlength="50"/>
-          </el-checkbox>
+            :label="$t(`features.${feature}`)"
+            :key="feature"/><el-checkbox v-model="others.feature.checked">
+              {{ $t('其他') }}
+              <el-input
+                v-if="others.feature.checked"
+                v-model="others.feature.input"
+                :placeholder="$t('最多50字')"
+                maxlength="50"/>
+            </el-checkbox>
         </el-form-item>
-        <el-form-item :label="$t('项目的面积有多大？')">
+        <el-form-item
+          :label="$t('项目的面积有多大？')"
+          prop="area">
           <el-input
             v-model="form.area"
             :rows="5"
             :placeholder="$t('请尽可能精准的描述。比如建筑面积200平方米，套内面积160平方米。小区占地2000亩，建筑面积20万平米，其中住宅17万，商业三万，之外景观绿化率需要多少百分比等等')"
             type="textarea"/>
         </el-form-item>
-        <el-form-item :label="$t('项目的交付时间')">
-          <el-radio
-            v-for="time in deliveryTimes"
-            v-model="form.deliveryTime"
-            :label="time"
-            :key="time">
-            {{ $t(`deliveryTimes.${time}`) }}
-          </el-radio><el-radio
-            v-model="form.deliveryTime"
-            label="other">
-            {{ $t('其他') }}
-            <el-input
-              v-if="form.deliveryTime === 'other'"
-              v-model="others.deliveryTime.input"
-              :placeholder="$t('最多50字')"
-              maxlength="50"/>
-          </el-radio>
+        <el-form-item
+          :label="$t('项目的交付时间')"
+          prop="deliveryTime">
+          <el-radio-group v-model="form.deliveryTime">
+            <el-radio
+              v-for="time in deliveryTimes"
+              :label="time"
+              :key="time">
+              {{ $t(`deliveryTimes.${time}`) }}
+            </el-radio><el-radio
+              label="other">
+              {{ $t('其他') }}
+              <el-input
+                v-if="form.deliveryTime === 'other'"
+                v-model="others.deliveryTime.input"
+                :placeholder="$t('最多50字')"
+                maxlength="50"/>
+            </el-radio>
+          </el-radio-group>
         </el-form-item>
-        <el-form-item :label="$t('希望付给设计师的费用是多少？')">
+        <el-form-item
+          :label="$t('希望付给设计师的费用是多少？')"
+          prop="payment">
           <el-input
             v-model="form.payment"
             maxlength="200" />
         </el-form-item>
-        <el-form-item :label="$t('项目的其他描述和需求')">
+        <el-form-item
+          :label="$t('项目的其他描述和需求')"
+          prop="description">
           <el-input
             v-model="form.description"
             :rows="5"
@@ -193,25 +203,29 @@
               class="inline ml-12 black-45"/>
           </el-upload>
         </el-form-item>
-        <el-form-item :label="$t('希望用多长时间找设计师？')">
-          <el-radio
-            v-for="time in findTimes"
-            v-model="form.findTime"
-            :label="time"
-            :key="time">
-            {{ $t(`findTimes.${time}`) }}
-          </el-radio><el-radio
-            v-model="form.findTime"
-            label="other">
-            {{ $t('其他') }}
-            <el-input
-              v-if="form.findTime === 'other'"
-              :placeholder="$t('最多50字')"
-              v-model="others.findTime.input"
-              maxlength="50"/>
-          </el-radio>
+        <el-form-item
+          :label="$t('希望用多长时间找设计师？')"
+          prop="findTime">
+          <el-radio-group v-model="form.findTime">
+            <el-radio
+              v-for="time in findTimes"
+              :label="time"
+              :key="time">
+              {{ $t(`findTimes.${time}`) }}
+            </el-radio><el-radio
+              label="other">
+              {{ $t('其他') }}
+              <el-input
+                v-if="form.findTime === 'other'"
+                :placeholder="$t('最多50字')"
+                v-model="others.findTime.input"
+                maxlength="50"/>
+            </el-radio>
+          </el-radio-group>
         </el-form-item>
-        <el-form-item :label="$t('申请备注')">
+        <el-form-item
+          :label="$t('申请备注')"
+          prop="remark">
           <el-input
             v-model="form.remark"
             :rows="5"
@@ -234,6 +248,30 @@
 import { publishProject } from '@/api/project'
 export default {
   data () {
+    const getCheckBoxValidator = (field) => {
+      return (rule, value, callback) => {
+        let other = this.others[field]
+        if (!value.length && !other.checked) {
+          callback(new Error(this.$t('请选择此项')))
+        } else if (other.checked && !other.input) {
+          callback(new Error(this.$t('输入框不能为空')))
+        } else {
+          callback()
+        }
+      }
+    }
+    const getRadioValidator = (field) => {
+      return (rule, value, callback) => {
+        let other = this.others[field]
+        if (!value) {
+          callback(new Error(this.$t('请选择此项')))
+        } else if (value === 'other' && !other.input) {
+          callback(new Error(this.$t('输入框不能为空')))
+        } else {
+          callback()
+        }
+      }
+    }
     return {
       types: [
         'conceptPlanning',
@@ -293,28 +331,33 @@ export default {
         findTime: '',
         remark: ''
       },
+      rules: {
+        title: { required: true, message: this.$t('请填写此项') },
+        types: { required: true, validator: getCheckBoxValidator('type') },
+        features: { required: true, validator: getCheckBoxValidator('feature') },
+        area: { required: true, message: this.$t('请填写此项') },
+        deliveryTime: { required: true, validator: getRadioValidator('deliveryTime') },
+        payment: { required: true, message: this.$t('请填写此项') },
+        description: { required: true, message: this.$t('请填写此项') },
+        findTime: { required: true, validator: getRadioValidator('findTime') }
+      },
       loading: false
     }
   },
   methods: {
     onSubmit () {
-      this.loading = true
-      const editor = this.$refs.editor
-      const form = editor.form
-      const body = {
-        ...form,
-        user_id: this.$store.getters.uid
-      }
-      editor.validate(valid => {
+      // this.loading = true
+      this.$refs.form.validate(valid => {
         if (valid) {
-          publishProject(body).then(({ data: { req_id } }) => {
-            this.loading = false
-            this.$router.replace(`/publish/result?id=${req_id}`)
-          }).catch(() => {
-            this.loading = false
-          })
+          console.log(valid)
+          // publishProject(body).then(({ data: { req_id } }) => {
+          //   this.loading = false
+          //   this.$router.replace(`/publish/result?id=${req_id}`)
+          // }).catch(() => {
+          //   this.loading = false
+          // })
         } else {
-          this.loading = false
+          // this.loading = false
         }
       })
     }
@@ -336,17 +379,28 @@ export default {
   &-item--short {
     width: 360px;
   }
+  /deep/ .el-input__inner,
+  /deep/ .el-textarea__inner {
+    border-color: rgb(220, 223, 230);
+    &:focus {
+      border-color: #0077b5;
+    }
+  }
   .el-checkbox {
     margin: 0;
     width: 33%;
     font-weight: 400;
   }
-  .el-radio {
-    margin: 0;
-    width: 50%;
-    font-weight: 400;
-    .el-input {
-      width: 300px;
+  .el-radio-group {
+    display: block;
+    .el-radio {
+      width: 50%;
+      margin: 0;
+      line-height: 32px;
+      font-weight: 400;
+      .el-input {
+        width: 300px;
+      }
     }
   }
 }

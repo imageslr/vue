@@ -47,7 +47,9 @@
     "希望用多长时间找设计师？": "How long do you want to find a designer?",
     "希望付给设计师的费用是多少？": "How much would you want to pay for the designer?",
     "上传附件": "Upload file",
-    "最大不得超过10M": "Max file size is 10M",
+    "只能上传一个文件，最大不得超过10M": "Allow upload only one file of which size is less than 10M",
+    "只能上传一个文件": "Allow upload only one file",
+    "正在上传附件，请稍后": "File uploading, please wait",
     "申请备注": "Application remark",
     "项目发布前会核实身份证以及公司营业执照": "The identity card and company business license will be verified before the project is published.",
     "其他": "Other",
@@ -92,13 +94,13 @@
     <div class="card">
       <div class="border-bottom center p-24">
         <h1
-          v-t="$t('我是业主')"
+          v-t="'我是业主'"
           class="m0 color-primary"/>
         <p
-          v-t="$t('我想找设计公司、设计师来帮我做项目')"
+          v-t="'我想找设计公司、设计师来帮我做项目'"
           class="m0 p1 black-65 f-13"/>
         <p
-          v-t="$t('在最专业、最国际化的建筑、规划、景观、室内设计平台遇见最专业的设计师')"
+          v-t="'在最专业、最国际化的建筑、规划、景观、室内设计平台遇见最专业的设计师'"
           class="m0 p0 black-45 f-12" />
       </div>
       <el-form
@@ -123,11 +125,11 @@
             v-for="type in types"
             v-model="form.types"
             :label="$t(`types.${type}`)"
-            :key="type"/><el-checkbox v-model="others.type.checked">
+            :key="type"/><el-checkbox v-model="formOthers.types.checked">
               {{ $t('其他') }}
               <el-input
-                v-if="others.type.checked"
-                v-model="others.type.input"
+                v-if="formOthers.types.checked"
+                v-model="formOthers.types.input"
                 :placeholder="$t('最多50字')"
                 maxlength="50"/>
             </el-checkbox>
@@ -139,11 +141,11 @@
             v-for="feature in features"
             v-model="form.features"
             :label="$t(`features.${feature}`)"
-            :key="feature"/><el-checkbox v-model="others.feature.checked">
+            :key="feature"/><el-checkbox v-model="formOthers.features.checked">
               {{ $t('其他') }}
               <el-input
-                v-if="others.feature.checked"
-                v-model="others.feature.input"
+                v-if="formOthers.features.checked"
+                v-model="formOthers.features.input"
                 :placeholder="$t('最多50字')"
                 maxlength="50"/>
             </el-checkbox>
@@ -153,28 +155,26 @@
           prop="area">
           <el-input
             v-model="form.area"
-            :rows="5"
+            :rows="7"
             :placeholder="$t('请尽可能精准的描述。比如建筑面积200平方米，套内面积160平方米。小区占地2000亩，建筑面积20万平米，其中住宅17万，商业三万，之外景观绿化率需要多少百分比等等')"
             type="textarea"/>
         </el-form-item>
         <el-form-item
           :label="$t('项目的交付时间')"
-          prop="deliveryTime">
-          <el-radio-group v-model="form.deliveryTime">
+          prop="delivery_time">
+          <el-radio-group v-model="form.delivery_time">
             <el-radio
               v-for="time in deliveryTimes"
-              :label="time"
-              :key="time">
-              {{ $t(`deliveryTimes.${time}`) }}
-            </el-radio><el-radio
-              label="other">
-              {{ $t('其他') }}
-              <el-input
-                v-if="form.deliveryTime === 'other'"
-                v-model="others.deliveryTime.input"
-                :placeholder="$t('最多50字')"
-                maxlength="50"/>
-            </el-radio>
+              :label="$t(`deliveryTimes.${time}`)"
+              :key="time"/><el-radio
+                label="other">
+                {{ $t('其他') }}
+                <el-input
+                  v-if="form.delivery_time === 'other'"
+                  v-model="formOthers.delivery_time.input"
+                  :placeholder="$t('最多50字')"
+                  maxlength="50"/>
+              </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item
@@ -189,38 +189,41 @@
           prop="description">
           <el-input
             v-model="form.description"
-            :rows="5"
+            :rows="7"
             :placeholder="$t('比如项目的施工预算、动工时间、您倾向的风格和色彩，希望设计师做到哪种程度等等')"
             type="textarea"/>
           <el-upload
-            :file-list="form.fileList"
-            class="form__uploader"
-            action="">
-            <el-button>{{ $t('上传附件') }}</el-button>
+            :on-exceed="onExceed"
+            :on-remove="onRemove"
+            :http-request="onUpload"
+            :limit="1"
+            action=""
+            class="form__uploader">
+            <el-button
+              :loading="uploading"
+              :disabled="!!form.project_file_id">{{ $t('上传附件') }}</el-button>
             <p
-              v-t="$t('最大不得超过10M')"
+              v-t="'只能上传一个文件，最大不得超过10M'"
               slot="tip"
               class="inline ml-12 black-45"/>
           </el-upload>
         </el-form-item>
         <el-form-item
           :label="$t('希望用多长时间找设计师？')"
-          prop="findTime">
-          <el-radio-group v-model="form.findTime">
+          prop="find_time">
+          <el-radio-group v-model="form.find_time">
             <el-radio
               v-for="time in findTimes"
-              :label="time"
-              :key="time">
-              {{ $t(`findTimes.${time}`) }}
-            </el-radio><el-radio
-              label="other">
-              {{ $t('其他') }}
-              <el-input
-                v-if="form.findTime === 'other'"
-                :placeholder="$t('最多50字')"
-                v-model="others.findTime.input"
-                maxlength="50"/>
-            </el-radio>
+              :label="$t(`findTimes.${time}`)"
+              :key="time" /><el-radio
+                label="other">
+                {{ $t('其他') }}
+                <el-input
+                  v-if="form.find_time === 'other'"
+                  :placeholder="$t('最多50字')"
+                  v-model="formOthers.find_time.input"
+                  maxlength="50"/>
+              </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item
@@ -228,16 +231,16 @@
           prop="remark">
           <el-input
             v-model="form.remark"
-            :rows="5"
+            :rows="7"
             type="textarea"/>
         </el-form-item>
       </el-form>
       <p
-        v-t="$t('项目发布前会核实身份证以及公司营业执照')"
+        v-t="'项目发布前会核实身份证以及公司营业执照'"
         class="m0 pb-24 center f-14 black-45" />
     </div>
     <el-button
-      :loading="loading"
+      :loading="publishing"
       class="block w-100 shadow mt-24"
       type="primary"
       @click="onSubmit">{{ $t('g.publish') }}</el-button>
@@ -246,14 +249,16 @@
 
 <script>
 import { publishProject } from '@/api/project'
+import { upload } from '@/api/upload'
+var UPLOAD_SOURCE = null
 export default {
   data () {
     const getCheckBoxValidator = (field) => {
       return (rule, value, callback) => {
-        let other = this.others[field]
-        if (!value.length && !other.checked) {
+        let formOther = this.formOthers[field]
+        if (!value.length && !formOther.checked) {
           callback(new Error(this.$t('请选择此项')))
-        } else if (other.checked && !other.input) {
+        } else if (formOther.checked && !formOther.input) {
           callback(new Error(this.$t('输入框不能为空')))
         } else {
           callback()
@@ -262,10 +267,10 @@ export default {
     }
     const getRadioValidator = (field) => {
       return (rule, value, callback) => {
-        let other = this.others[field]
+        let formOther = this.formOthers[field]
         if (!value) {
           callback(new Error(this.$t('请选择此项')))
-        } else if (value === 'other' && !other.input) {
+        } else if (value === 'other' && !formOther.input) {
           callback(new Error(this.$t('输入框不能为空')))
         } else {
           callback()
@@ -303,19 +308,19 @@ export default {
         'oneMonth'
       ],
       // “其他”表项：是否选择、输入框内容
-      others: {
-        type: {
+      formOthers: {
+        types: {
           checked: false,
           input: ''
         },
-        feature: {
+        features: {
           checked: false,
           input: ''
         },
-        deliveryTime: {
+        delivery_time: {
           input: ''
         },
-        findTime: {
+        find_time: {
           input: ''
         }
       },
@@ -324,42 +329,74 @@ export default {
         types: [],
         features: [],
         area: '',
-        deliveryTime: '',
+        delivery_time: '',
         payment: '',
         description: '',
-        project_file_id: '',
-        findTime: '',
+        project_file_id: null,
+        find_time: '',
         remark: ''
       },
       rules: {
         title: { required: true, message: this.$t('请填写此项') },
-        types: { required: true, validator: getCheckBoxValidator('type') },
-        features: { required: true, validator: getCheckBoxValidator('feature') },
+        types: { required: true, validator: getCheckBoxValidator('types') },
+        features: { required: true, validator: getCheckBoxValidator('features') },
         area: { required: true, message: this.$t('请填写此项') },
-        deliveryTime: { required: true, validator: getRadioValidator('deliveryTime') },
+        delivery_time: { required: true, validator: getRadioValidator('delivery_time') },
         payment: { required: true, message: this.$t('请填写此项') },
         description: { required: true, message: this.$t('请填写此项') },
-        findTime: { required: true, validator: getRadioValidator('findTime') }
+        find_time: { required: true, validator: getRadioValidator('find_time') }
       },
-      loading: false
+      publishing: false,
+      uploading: false
     }
   },
   methods: {
+    onUpload (file) {
+      if (UPLOAD_SOURCE) UPLOAD_SOURCE.cancel('取消上传') // 每次上传文件前先取消旧的上传请求
+      UPLOAD_SOURCE = this.$axios.CancelToken.source()
+      this.uploading = true
+      file.onProgress({ percent: 50 }) // 传一个percent参数，显示loading
+      upload('project_file', file.file, { cancelToken: UPLOAD_SOURCE.token })
+        .then(({ data }) => {
+          this.uploading = false
+          file.onSuccess()
+          this.form.project_file_id = data.id
+        }).catch(error => {
+          this.uploading = false
+          file.onError()
+          console.error(error)
+        })
+    },
+    onRemove () {
+      this.form.project_file_id = null
+    },
+    onExceed () {
+      this.$message.error(this.$t('只能上传一个文件'))
+    },
     onSubmit () {
-      // this.loading = true
+      if (this.uploading) {
+        return this.$message.warning(this.$t('正在上传附件，请稍后'))
+      }
       this.$refs.form.validate(valid => {
         if (valid) {
-          console.log(valid)
-          // publishProject(body).then(({ data: { req_id } }) => {
-          //   this.loading = false
-          //   this.$router.replace(`/publish/result?id=${req_id}`)
-          // }).catch(() => {
-          //   this.loading = false
-          // })
-        } else {
-          // this.loading = false
+          this.publishing = true
+          publishProject(this.getFormData()).then(({ data: { id } }) => {
+            this.publishing = false
+            this.$router.replace(`/publish/result?id=${id}`)
+          }).catch(() => {
+            this.publishing = false
+          })
         }
       })
+    },
+    getFormData () {
+      let form = this.$_.cloneDeep(this.form)
+      const formOthers = this.formOthers
+      formOthers.types.checked && form.types.push(formOthers.types.input)
+      formOthers.features.checked && form.features.push(formOthers.features.input)
+      form.delivery_time === 'other' && (form.delivery_time = formOthers.delivery_time.input)
+      form.find_time === 'other' && (form.find_time = formOthers.find_time.input)
+      return form
     }
   }
 }

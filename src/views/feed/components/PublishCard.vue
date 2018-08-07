@@ -73,7 +73,7 @@
 <script>
 import 'vue-awesome/icons/camera-retro'
 import { publishActivity } from '@/api/activity'
-import { uploadImage } from '@/api/upload'
+import { upload } from '@/api/upload'
 export default {
   data () {
     return {
@@ -111,7 +111,7 @@ export default {
       this.uploadQueue.push(source) // 加入到上传队列中
       this.uploadingCount++ // 信号量+1
       file.onProgress({ percent: 50 }) // 传一个percent参数，显示loading
-      uploadImage('activity_photo', file.file, { cancelToken: source.token })
+      upload('activity_photo', file.file, { cancelToken: source.token })
         .then(({ data }) => {
           this.uploadingCount && this.uploadingCount-- // 信号量-1
           file.onSuccess()

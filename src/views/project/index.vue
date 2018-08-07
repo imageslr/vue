@@ -1,292 +1,318 @@
 <i18n>
 {
-  "zh": {
-    "apply": "我要投标",
-    "cancelApply": "取消投标",
-    "supplementReq": "补充需求",
-    "cancelPublish": "取消发布",
-    "confirmCancelPublish": "此操作将取消发布该需求并不可恢复，是否确认？",
-    "cancelSuccess": "取消成功",
-    "canceledAlertText": "该需求已于 {time} 被甲方取消，无法进行操作",
-    "publisher": "发布者",
-    "publishedAt": "发布时间",
-    "applicationDeadline": "申请截止日期",
-    "canOpen": "允许公开设计成果",
-    "yes": "是",
-    "no": "否",
-    "applicationSituation": "投标情况",
-    "applicationSituationText": "该需求可接受 {max} 名设计师投标，目前还剩 {remain} 个投标名额",
-    "applicationSituationTextUnlimited": "该需求目前已有 {current} 名设计师投标，投标名额无限制",
-    "price": "需求预算",
-    "description": "需求详情",
-    "supplementDescription": "需求补充",
-    "supplementAt": "补充于",
-    "downloadFile": "下载附件",
-    "rewardSettings": "奖项设置"
-  },
   "en": {
-    "apply": "Apply",
-    "cancelApply": "Cancel apply",
-    "supplementReq": "Supplement project",
-    "cancelPublish": "Cancel publish",
-    "confirmCancelPublish": "This operation will unpublish the project and is not recoverable. Is it confirmed?",
-    "cancelSuccess": "Successfully canceled",
-    "canceledAlertText": "The project has been canceled at {time}",
-    "publisher": "Publisher",
-    "publishedAt": "Published at",
-    "applicationDeadline": "Application deadline",
-    "canOpen": "Can open design result",
-    "yes": "Yes",
-    "no": "No",
-    "applicationSituation": "Application situation",
-    "applicationSituationText": "The project accepts max {max} designers to apply，{remain} places remaining",
-    "applicationSituationTextUnlimited": "There are currently {current} designers applying for this project, and there is no limit on the number of application.",
-    "price": "Project price",
-    "description": "Project description",
-    "supplementDescription": "Supplement description",
-    "supplementAt": "Supplement at",
-    "downloadFile": "Download file",
-    "rewardSettings": "Reward setting"
+    "该项目已被甲方取消": "The project has been canceled",
+    "收藏": "Favorite",
+    "取消收藏": "Unfavorite",
+    "我要报名": "Apply",
+    "取消报名": "Cancel apply",
+    "补充项目": "Supplement project",
+    "取消发布": "Cancel publish",
+    "此操作将取消发布该项目并不可恢复，是否确认？": "This operation will unpublish the project and is not recoverable. Is it confirmed?",
+    "取消成功": "Successfully canceled",
+    "甲方": "Party",
+    "发布于": "Published at",
+    "项目的类型是？": "Project type",
+    "项目的功能是？": "Project feature",
+    "项目的面积有多大？": "Project area",
+    "项目的其他描述和需求": "Project description",
+    "项目的交付时间": "Delivery time",
+    "希望用多长时间找设计师？": "How long do you want to find a designer?",
+    "希望付给设计师的费用是多少？": "How much would you want to pay for the designer?",
+    "项目补充": "Project supplement",
+    "补充于": "Supplement at",
+    "请输入项目的补充内容，比如如项目面积、项目风格、希望设计师做到哪种程度等等": "Please enter the supplement description",
+    "补充内容不能为空":"Supplement description cannot be empty",
+    "下载附件": "Download file",
+    "上传附件": "Upload file",
+    "只能上传一个文件，最大不得超过10M": "Allow upload only one file of which size is less than 10M",
+    "只能上传一个文件": "Allow upload only one file",
+    "正在上传附件，请稍后": "File uploading, please wait"
   }
 }
 </i18n>
 
 <template>
   <div>
-    <div class="req-header card">
+    <div class="project-header card">
       <my-alert
-        v-if="isCanceled"
-        :title="$t('canceledAlertText', {time: reqDetail.canceled_at})"
+        v-if="project.canceled_at"
+        :title="$t('该项目已被甲方取消')"
         type="warning"
         class="mb2"/>
-      <div class="req-header__title-area">
-        <h1 class="req-header__title">{{ reqDetail.title }}</h1>
-        <favorite-button
-          v-user.designer
-          :req-detail.sync="reqDetail" />
+      <div class="project-header__title-area">
+        <h1 class="project-header__title">{{ project.title }}</h1>
+        <template v-if="$isDesigner()">
+          <el-button
+            v-if="project.favoriting"
+            icon="el-icon-star-off"
+            size="mini"
+            @click="onUnfavorite"
+          >{{ $t('取消收藏') }} ({{ project.favorite_count }})</el-button>
+          <el-button
+            v-else
+            icon="el-icon-star-off"
+            size="mini"
+            @click="onFavorite"
+          >{{ $t('收藏') }} ({{ project.favorite_count }})</el-button>
+          <el-button
+            v-if="canCancelApply"
+            size="mini"
+            @click="onCancelApply"
+          >{{ $t('取消报名') }}</el-button>
+          <el-button
+            v-if="canApply"
+            type="primary"
+            size="mini"
+            @click="onApply"
+          >{{ $t('我要报名') }}</el-button>
+        </template>
+        <template v-if="$isParty()">
+          <el-button
+            v-if="supplementable"
+            size="mini"
+            @click="supplementDialogVisible = true"
+          >{{ $t('补充项目') }}</el-button>
+          <el-button
+            v-if="cancelable"
+            size="mini"
+            @click="onCancelPublish"
+          >{{ $t('取消发布') }}</el-button>
+        </template>
+      </div>
+      <div class="project-header__info">
+        <div class="project-header__info-item">
+          <span class="black-85">{{ $t('甲方') }}: </span>
+          <router-link :to="'/profile?uid='+project.user.id">{{ project.user.name }}</router-link>
+        </div>
+        <div class="project-header__info-item">
+          <span class="black-85">{{ $t('发布于') }}: </span>
+          {{ project.created_at }}
+        </div>
+      </div>
+    </div>
+    <div
+      v-loading="loading"
+      class="main-container card">
+      <h3 v-t="'项目的类型是？'" />
+      <p>{{ project.types.join('/') }}</p>
+      <h3 v-t="'项目的功能是？'" />
+      <p>{{ project.features.join('/') }}</p>
+      <h3 v-t="'项目的面积有多大？'" />
+      <p v-text="project.area" />
+      <h3 v-t="'项目的其他描述和需求'" />
+      <p
+        class="pre-wrap"
+        v-text="project.description" />
+      <my-alert
+        v-if="project.project_file_url"
+        class="mt-12"><a :href="project.project_file_url">{{ $t('下载附件') }}</a></my-alert>
+      <h3 v-t="'项目的交付时间'" />
+      <p v-text="project.delivery_time" />
+      <h3 v-t="'希望用多长时间找设计师？'" />
+      <p v-text="project.find_time" />
+      <h3 v-t="'希望付给设计师的费用是多少？'" />
+      <p v-text="project.payment" />
+      <template
+        v-if="project.supplement_at">
+        <h3 v-t="'项目补充'" />
+        <p v-text="project.supplement_description" />
+        <my-alert
+          v-if="project.supplement_file_url"
+          class="mt-12"><a :href="project.supplement_file_url">{{ $t('下载附件') }}</a></my-alert>
+        <p class="m0 mt1 f-12 black-65">{{ $t('补充于') }}：{{ project.supplement_at }}</p>
+      </template>
+    </div>
+    <el-dialog
+      :visible.sync="supplementDialogVisible"
+      :title="$t('补充项目')">
+      <el-input
+        v-model="supplementForm.supplement_description"
+        :rows="5"
+        :placeholder="$t('请输入项目的补充内容，比如如项目面积、项目风格、希望设计师做到哪种程度等等')"
+        type="textarea"/>
+      <el-upload
+        :on-exceed="onExceed"
+        :on-remove="onRemove"
+        :http-request="onUpload"
+        :limit="1"
+        action=""
+        class="form__uploader mt-12">
         <el-button
-          v-user.designer
-          v-if="reqDetail.is_participating"
-          size="mini"
-          @click="onCancelApply"
-        >{{ $t('cancelApply') }}</el-button>
+          :loading="supplementUploading"
+          :disabled="!!supplementForm.supplement_file_id">{{ $t('上传附件') }}</el-button>
+        <p
+          v-t="'只能上传一个文件，最大不得超过10M'"
+          slot="tip"
+          class="inline ml-12 black-45"/>
+      </el-upload>
+      <span
+        slot="footer"
+        class="dialog-footer">
+        <el-button @click="onCancelSupplement">{{ $t('g.cancelBtn') }}</el-button>
         <el-button
-          v-user.designer
-          v-else
-          :disabled="!canApply"
+          :loading="supplementButtonLoading"
           type="primary"
-          size="mini"
-          @click="onApply"
-        >{{ $t('apply') }}</el-button>
-        <el-button
-          v-user.party
-          v-if="isPublisher && canSupplement"
-          size="mini"
-          @click="uploadDialogVisible = true"
-        >{{ $t('supplementReq') }}</el-button>
-        <el-button
-          v-user.party
-          v-if="isPublisher && canCancel"
-          size="mini"
-          @click="onCancelPublish"
-        >{{ $t('cancelPublish') }}</el-button>
-      </div>
-      <div class="overflow-hidden">
-        <div class="req-header__info">
-          <div class="req-header__info-item mb1">
-            <span class="req-header__info-item-title">{{ $t('publisher') }}: </span>
-            <router-link :to="'/profile?uid='+reqDetail.user.id">{{ reqDetail.user.name }}</router-link>
-          </div>
-          <div class="req-header__info-item">
-            <span class="req-header__info-item-title">{{ $t('publishedAt') }}: </span>
-            {{ reqDetail.created_at }}
-          </div>
-          <div class="req-header__info-item">
-            <span class="req-header__info-item-title">{{ $t('applicationDeadline') }}: </span>{{ reqDetail.apply_due_date }}
-          </div>
-          <div class="req-header__info-item">
-            <span class="req-header__info-item-title">{{ $t('canOpen') }}: </span>
-            {{ reqDetail.can_open ? $t('yes') : $t('no') }}
-          </div>
-        </div>
-        <div class="req-header__sub">
-          <p
-            v-t="$t('price')"
-            class="req-header__sub-title mb-4" />
-          <span class="req-header__price">￥{{ reqDetail.price }}</span>
-        </div>
-        <div class="req-header__sub">
-          <p
-            v-t="$t('applicationSituation')"
-            class="req-header__sub-title" />
-          <req-progress
-            :req-detail="reqDetail"
-            class="req-header__progress"/>
-        </div>
-      </div>
-      <steps
-        :req-detail="reqDetail"
-        class="req-header__steps" />
-    </div>
-    <my-loader
-      :loading="loading"
-      :error="error"
-      :on-reload="getReqDetail" />
-    <div class="main-container">
-      <card :title="$t('description')">
-        <div class="pre-wrap">{{ reqDetail.tender_description }}</div>
-        <my-alert
-          v-if="reqDetail.tender_document_url"
-          class="mt-12"><a :href="reqDetail.tender_document_url">{{ $t('downloadFile') }}</a></my-alert>
-      </card>
-      <card
-        v-if="reqDetail.supplement_description"
-        :title="$t('supplementDescription')">
-        <div class="pre-wrap">{{ reqDetail.supplement_description }}</div>
-        <my-alert
-          v-if="reqDetail.supplement_document_url"
-          class="mt-12"><a :href="reqDetail.supplement_document_url">{{ $t('downloadFile') }}</a></my-alert>
-        <p class="m0 mt1 f-12 black-65">{{ $t('supplementAt') }}：{{ reqDetail.supplement_at }}</p>
-      </card>
-      <card :title="$t('rewardSettings')">
-        <reward-setting-item
-          v-for="(item, index) in reqDetail.reward_settings"
-          :key="index"
-          :order="index+1"
-          :num="item.num"
-          :bonus="item.bonus"
-        />
-      </card>
-      <card
-        v-if="isPublisher"
-        :title="$t('applicationSituation')">
-        <my-alert
-          :title="applicationSituationText"
-          type="warning" />
-        <application-list
-          :req-detail.sync="reqDetail"
-          show-status
-          class="mt1" />
-      </card>
-    </div>
-    <upload-dialog
-      :req-detail.sync="reqDetail"
-      :type="uploadDialogType"
-      :visible.sync="uploadDialogVisible" />
+          @click="onSupplement">{{ $t('g.confirmBtn') }}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 /* eslint eqeqeq: "off" */
-import Project from '@/models/project'
-import Steps from './components/Steps'
-import FavoriteButton from './components/FavoriteButton'
-import ReqProgress from './components/ReqProgress'
-import RewardSettingItem from './components/RewardSettingItem'
-import UploadDialog from './components/UploadDialog'
-import ApplicationList from './components/ApplicationList'
-import { getReqDetailById, cancelProjectById } from '@/api/project'
+import { Project } from '@/services/constants'
+import { getProjectById, cancelProjectById, supplementProjectById, favoriteProjectById, unfavoriteProjectById } from '@/api/project'
+import { upload } from '@/api/upload'
+var UPLOAD_SOURCE = null // 用于取消上传请求的token
 export default {
-  components: {
-    Steps,
-    FavoriteButton,
-    ReqProgress,
-    RewardSettingItem,
-    UploadDialog,
-    ApplicationList
-  },
   data () {
     return {
       loading: false,
-      error: false,
-      uploadDialogVisible: false,
-      reqDetail: Project.parse()
+      project: {
+        id: null,
+        title: '加载中',
+        types: [],
+        features: [],
+        favorite_count: 0,
+        user: {}
+      },
+      supplementDialogVisible: false,
+      supplementUploading: false, // 是否正在上传文件
+      supplementButtonLoading: false, // 是否正在上传表单数据
+      supplementForm: {
+        supplement_description: '',
+        supplement_file_id: null
+      }
     }
   },
   computed: {
-    // 需求id
+    // 项目id
     id () {
       return this.$route.params.id
     },
-    // 投标情况的说明文字
-    applicationSituationText () {
-      if (this.reqDetail.max_apply_num == 0) {
-        return this.$t('applicationSituationTextUnlimited', { current: this.reqDetail.current_apply_num })
-      } else {
-        return this.$t('applicationSituationText', {
-          max: this.reqDetail.max_apply_num,
-          remain: this.reqDetail.max_apply_num - this.reqDetail.current_apply_num
-        })
-      }
+    // 甲方：能否补充项目
+    supplementable () {
+      const { project } = this
+      const { user } = this.project
+      return user.id == this.$uid() && // 是项目的发布者
+        project.status == Project.STATUS_TENDERING && // 招标状态
+        !project.supplement_at // 未补充
     },
-    // 上传对话框类型：补充需求 / 报名投标
-    uploadDialogType () {
-      return this.$store.getters.userType === 'party' ? 'supplement' : 'apply'
+    // 甲方：能否取消发布项目
+    cancelable () {
+      const { project } = this
+      const { user } = this.project
+      return user.id == this.$uid() && // 是项目的发布者
+        project.status == Project.STATUS_TENDERING // 招标状态
     },
-    // 当前登录用户（设计师）能否报名
+    // 设计师：能否报名
     canApply () {
-      return this.reqDetail.can_apply && this.reqDetail.status == 1000
+      const { project } = this
+      return project.status == Project.STATUS_TENDERING && !project.applying
     },
-    // 当前登录用户（甲方）是否是发布人
-    isPublisher () {
-      return this.reqDetail.user.id == this.$store.getters.uid
-    },
-    // 能否补充需求
-    canSupplement () {
-      return this.reqDetail.status == 1000 && !this.reqDetail.supplement_description
-    },
-    // 能否取消发布
-    canCancel () {
-      return this.reqDetail.status == 1000 || this.reqDetail.status == 1010
-    },
-    // 是否已被取消
-    isCanceled () {
-      return this.reqDetail.status == 500
+    // 设计师：能否取消报名
+    canCancelApply () {
+      const { project } = this
+      return project.status == Project.STATUS_TENDERING && project.applying
     }
   },
   created () {
-    this.getReqDetail()
+    this.getProject()
   },
   methods: {
-    getReqDetail () {
+    getProject () {
       this.loading = true
-      this.error = false
-      getReqDetailById(this.id).then(({ data }) => {
+      getProjectById(this.id).then(({ data }) => {
         this.loading = false
-        this.reqDetail = data
+        this.project = data
       }).catch(() => {
         this.loading = false
-        this.error = true
       })
     },
+    /**
+     * 设计师相关操作：报名、取消报名、收藏、取消收藏
+     */
     onApply () {
 
     },
     onCancelApply () {
 
     },
+    onFavorite () {
+      favoriteProjectById(this.project.id).then(() => {
+        this.project.favoriting = true
+        this.project.favorite_count++
+      })
+    },
+    onUnfavorite () {
+      unfavoriteProjectById(this.project.id).then(() => {
+        this.project.favoriting = false
+        this.project.favorite_count--
+      })
+    },
+    /**
+     * 甲方相关操作：取消发布、补充项目
+     */
     onCancelPublish () {
       this.$confirm(this.$t('confirmCancelPublish'), this.$t('g.notice'), {
         confirmButtonText: this.$t('g.confirmBtn'),
         cancelButtonText: this.$t('g.cancelBtn'),
         type: 'warning'
       }).then(() => {
-        cancelProjectById(this.reqDetail.id).then(() => {
-          this.reqDetail.status = 500
-          this.reqDetail.canceled_at = this.$dayjs().format('YYYY-MM-DD HH:mm:ss')
+        cancelProjectById(this.project.id).then(() => {
+          this.project.status = 500
+          this.project.canceled_at = this.$dayjs().format('YYYY-MM-DD HH:mm:ss')
           this.$message({
             type: 'success',
             message: this.$t('cancelSuccess')
           })
         })
       }).catch(() => {})
+    },
+    onSupplement () {
+      if (!this.supplementForm.supplement_description.length) {
+        return this.$message.error(this.$t('补充内容不能为空'))
+      }
+      if (this.supplementForm.supplementUploading) {
+        return this.$message.warning(this.$t('正在上传附件，请稍后'))
+      }
+      supplementProjectById(this.project.id, this.supplementForm).then(({ data }) => {
+        this.project = data
+      })
+    },
+    onCancelSupplement () {
+      this.supplementDialogVisible = false
+      if (UPLOAD_SOURCE) UPLOAD_SOURCE.cancel('取消上传')
+    },
+    onUpload (file) {
+      if (UPLOAD_SOURCE) UPLOAD_SOURCE.cancel('取消上传')
+      UPLOAD_SOURCE = this.$axios.CancelToken.source()
+      this.supplementUploading = true
+      file.onProgress({ percent: 50 }) // 传一个percent参数，显示loading
+      upload('project_file', file.file, { cancelToken: UPLOAD_SOURCE.token })
+        .then(({ data }) => {
+          this.supplementUploading = false
+          file.onSuccess()
+          this.supplementForm.supplement_file_id = data.id
+        }).catch(error => {
+          this.supplementUploading = false
+          file.onError()
+          console.error(error)
+        })
+    },
+    onRemove () {
+      this.supplementForm.supplement_file_id = null
+    },
+    onExceed () {
+      this.$message.error(this.$t('只能上传一个文件'))
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.req-header {
+.project-header {
   width: 100%;
   padding: 24px calc((100% - 1000px) / 2);
   &__title-area {
@@ -299,55 +325,32 @@ export default {
     flex: 1;
     margin: 0;
     font-size: 20px;
-    font-weight: bold;
     color: rgba(0, 0, 0, 0.85);
   }
   &__info {
-    float: left;
     width: 600px;
-    height: 54px;
     &-item {
       display: inline-block;
       width: 290px;
       font-size: 14px;
       color: rgba(0, 0, 0, 0.65);
-      &-title {
-        color: rgba(0, 0, 0, 0.85);
-      }
     }
-  }
-  &__sub {
-    float: right;
-    display: flex;
-    flex-direction: column;
-    margin-left: 40px;
-    height: 54px;
-    &-title {
-      flex: 1;
-      margin: 0;
-      font-size: 14px;
-      color: rgba(0, 0, 0, 0.45);
-      text-align: right;
-    }
-  }
-  &__price {
-    margin: 0;
-    font-size: 24px;
-    line-height: 28px;
-  }
-  &__progress {
-    width: 180px;
-  }
-  &__steps {
-    margin-top: 32px;
   }
 }
 .main-container {
-  .card {
-    margin-bottom: 24px;
-    &:last-child {
-      margin-bottom: 0;
+  margin-top: 24px;
+  padding: 24px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+  h3 {
+    margin-top: 32px;
+    &:first-child {
+      margin-top: 0;
     }
+  }
+  p {
+    margin: 8px 0;
+    line-height: 1.81em;
   }
 }
 .alert {

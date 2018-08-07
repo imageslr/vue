@@ -4,29 +4,19 @@ export function publishProject (body) {
   return request.post(`/projects`, body)
 }
 
-// 获取需求详情
-export function getReqDetailById (reqId) {
-  return request.get(`/projects/${reqId}`)
+// 获取项目详情
+export function getProjectById (id) {
+  return request.get(`/projects/${id}`)
 }
 
-// 补充需求 TODO: url
-export function supplementProjectById (reqId, data) {
-  return request.post(`/projects2/${reqId}`, data)
+// 补充项目
+export function supplementProjectById (id, data) {
+  return request.patch(`/projects/${id}`, data)
 }
 
-// 取消发布 TODO: url
-export function cancelProjectById (reqId) {
-  return request.delete(`/projects3/${reqId}`)
-}
-
-// 收藏需求
-export function favoriteReqById (id) {
-  return request.post(`/projects/${id}/favorite`)
-}
-
-// 取消收藏
-export function unfavoriteReqById (id) {
-  return request.post(`/projects/${id}/unfavorite`)
+// 取消发布
+export function cancelProjectById (id) {
+  return request.put(`/user/canceled/projects/${id}`)
 }
 
 // 邀请设计师
@@ -43,12 +33,26 @@ export function recall (reqId, uid) {
   })
 }
 
-// 获取一个需求邀请的设计师
+// 获取一个项目邀请的设计师
 export function getInvitedDesignersByReqId (id, start = 0) {
   return request.get(`/projects/${id}/designers/invited?start=${start}`)
 }
 
-// 获取一个需求邀请的设计师
+// 获取一个项目报名的设计师
 export function getApplyDesignersByReqId (id, start = 0) {
   return request.get(`/projects/${id}/designers/apply?start=${start}`)
 }
+
+// 收藏项目
+export function favoriteProjectById (id) {
+  return request.put(`/user/favoriting/projects/${id}`)
+}
+
+// 取消收藏
+export function unfavoriteProjectById (id) {
+  return request.delete(`/user/favoriting/projects/${id}`)
+}
+
+// 报名项目
+
+// 取消报名

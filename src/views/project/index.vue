@@ -21,12 +21,14 @@
     "希望付给设计师的费用是多少？": "How much would you want to pay for the designer?",
     "项目补充": "Project supplement",
     "补充于": "Supplement at",
+    "补充成功": "Successful operation",
     "请输入项目的补充内容，比如如项目面积、项目风格、希望设计师做到哪种程度等等": "Please enter the supplement description",
     "补充内容不能为空":"Supplement description cannot be empty",
     "下载附件": "Download file",
     "上传附件": "Upload file",
     "只能上传一个文件，最大不得超过10M": "Allow upload only one file of which size is less than 10M",
     "只能上传一个文件": "Allow upload only one file",
+    "上传文件大小不能超过10MB！": "File max size is 10M",
     "正在上传附件，请稍后": "File uploading, please wait"
   }
 }
@@ -135,6 +137,7 @@
         :on-exceed="onExceed"
         :on-remove="onRemove"
         :http-request="onUpload"
+        :before-upload="beforeFileUpload"
         :limit="1"
         action=""
         class="form__uploader mt-12">
@@ -274,16 +277,29 @@ export default {
       if (!this.supplementForm.supplement_description.length) {
         return this.$message.error(this.$t('补充内容不能为空'))
       }
-      if (this.supplementForm.supplementUploading) {
+      if (this.supplementUploading) {
         return this.$message.warning(this.$t('正在上传附件，请稍后'))
       }
+      this.supplementButtonLoading = true
       supplementProjectById(this.project.id, this.supplementForm).then(({ data }) => {
+        this.$message.success(this.$t('补充成功'))
+        this.supplementButtonLoading = false
+        this.supplementDialogVisible = false
         this.project = data
+      }).catch(() => {
+        this.supplementButtonLoading = false
       })
     },
     onCancelSupplement () {
       this.supplementDialogVisible = false
       if (UPLOAD_SOURCE) UPLOAD_SOURCE.cancel('取消上传')
+    },
+    beforeFileUpload (file) {
+      const isLt10M = file.size / 1024 / 1024 < 10
+      if (!isLt10M) {
+        this.$message.error('上传文件大小不能超过10MB！')
+      }
+      return isLt10M
     },
     onUpload (file) {
       if (UPLOAD_SOURCE) UPLOAD_SOURCE.cancel('取消上传')
@@ -292,8 +308,8 @@ export default {
       file.onProgress({ percent: 50 }) // 传一个percent参数，显示loading
       upload('project_file', file.file, { cancelToken: UPLOAD_SOURCE.token })
         .then(({ data }) => {
-          this.supplementUploading = false
           file.onSuccess()
+          this.supplementUploading = false
           this.supplementForm.supplement_file_id = data.id
         }).catch(error => {
           this.supplementUploading = false

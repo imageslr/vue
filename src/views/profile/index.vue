@@ -72,13 +72,13 @@
                 class="review-item__user-rate"
                 disabled />
               <p
-                v-t="review.created_at"
-                class="m0 f-12 black-45" />
+                class="m0 f-12 black-45"
+                v-text="review.created_at" />
             </div>
           </div>
           <p
-            v-t="review.content"
-            class="m0 mt-4 f-12 black-45" />
+            class="m0 mt-4 f-12 black-45"
+            v-text="review.content" />
         </div>
         <el-button
           v-if="reviews.length"
@@ -129,13 +129,13 @@
                 class="review-item__user-rate"
                 disabled />
               <p
-                v-t="review.created_at"
-                class="m0 f-12 black-45" />
+                class="m0 f-12 black-45"
+                v-text="review.created_at" />
             </div>
           </div>
           <p
-            v-t="review.content"
-            class="m0 mt-4 f-12 black-45" />
+            class="m0 mt-4 f-12 black-45"
+            v-text="review.content" />
         </div>
         <el-pagination
           :current-page.sync="reviewDialog.currentPage"

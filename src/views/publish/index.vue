@@ -49,6 +49,7 @@
     "上传附件": "Upload file",
     "只能上传一个文件，最大不得超过10M": "Allow upload only one file of which size is less than 10M",
     "只能上传一个文件": "Allow upload only one file",
+    "上传文件大小不能超过10MB！": "File max size is 10M",
     "正在上传附件，请稍后": "File uploading, please wait",
     "申请备注": "Application remark",
     "项目发布前会核实身份证以及公司营业执照": "The identity card and company business license will be verified before the project is published.",
@@ -351,6 +352,13 @@ export default {
     }
   },
   methods: {
+    beforeFileUpload (file) {
+      const isLt10M = file.size / 1024 / 1024 < 10
+      if (!isLt10M) {
+        this.$message.error('上传文件大小不能超过10MB！')
+      }
+      return isLt10M
+    },
     onUpload (file) {
       if (UPLOAD_SOURCE) UPLOAD_SOURCE.cancel('取消上传') // 每次上传文件前先取消旧的上传请求
       UPLOAD_SOURCE = this.$axios.CancelToken.source()

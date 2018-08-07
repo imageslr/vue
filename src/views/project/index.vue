@@ -5,8 +5,11 @@
     "收藏": "Favorite",
     "取消收藏": "Unfavorite",
     "我要报名": "Apply",
+    "报名项目": "Apply the project",
+    "报名成功": "Successfully apply",
     "取消报名": "Cancel apply",
-    "补充项目": "Supplement project",
+    "此操作将取消报名该项目，是否确认？": "This operation will cancel the application for the project. Is it confirmed?",
+    "补充项目": "Supplement the project",
     "取消发布": "Cancel publish",
     "此操作将取消发布该项目并不可恢复，是否确认？": "This operation will unpublish the project and is not recoverable. Is it confirmed?",
     "取消成功": "Successfully canceled",
@@ -32,7 +35,8 @@
     "只能上传一个文件，最大不得超过10M": "Allow upload only one file of which size is less than 10M",
     "只能上传一个文件": "Allow upload only one file",
     "上传文件大小不能超过10MB！": "File max size is 10M",
-    "正在上传附件，请稍后": "File uploading, please wait"
+    "正在上传附件，请稍后": "File uploading, please wait",
+    "简单说点什么，让业主更快了解你（200字以内）": "Say something so that the party can know you quickly (200 characters at most)"
   }
 }
 </i18n>
@@ -69,14 +73,14 @@
             v-if="canApply"
             type="primary"
             size="mini"
-            @click="onApply"
+            @click="dialogVisible = true"
           >{{ $t('我要报名') }}</el-button>
         </template>
         <template v-if="$isParty()">
           <el-button
             v-if="supplementable"
             size="mini"
-            @click="supplementDialogVisible = true"
+            @click="dialogVisible = true"
           >{{ $t('补充项目') }}</el-button>
           <el-button
             v-if="cancelable"
@@ -130,7 +134,7 @@
       <template
         v-if="project.supplement_at">
         <h3 v-t="'项目补充'" />
-        <p v-text="project.supplement_description" />
+        <p v-text="project.textarea" />
         <my-alert
           v-if="project.supplement_file_url"
           class="mt-12"><a :href="project.supplement_file_url">{{ $t('下载附件') }}</a></my-alert>
@@ -138,12 +142,12 @@
       </template>
     </div>
     <el-dialog
-      :visible.sync="supplementDialogVisible"
-      :title="$t('补充项目')">
+      :visible.sync="dialogVisible"
+      :title="dialogText.title">
       <el-input
-        v-model="supplementForm.supplement_description"
+        v-model="dialogForm.textarea"
         :rows="5"
-        :placeholder="$t('请输入项目的补充内容，比如如项目面积、项目风格、希望设计师做到哪种程度等等')"
+        :placeholder="dialogText.placeholder"
         type="textarea"/>
       <el-upload
         :on-exceed="onExceed"
@@ -154,8 +158,8 @@
         action=""
         class="form__uploader mt-12">
         <el-button
-          :loading="supplementUploading"
-          :disabled="!!supplementForm.supplement_file_id">{{ $t('上传附件') }}</el-button>
+          :loading="dialogUploading"
+          :disabled="!!dialogForm.file_id">{{ $t('上传附件') }}</el-button>
         <p
           v-t="'只能上传一个文件，最大不得超过10M'"
           slot="tip"
@@ -164,11 +168,11 @@
       <span
         slot="footer"
         class="dialog-footer">
-        <el-button @click="onCancelSupplement">{{ $t('g.cancelBtn') }}</el-button>
+        <el-button @click="onDialogCancel">{{ $t('g.cancelBtn') }}</el-button>
         <el-button
-          :loading="supplementButtonLoading"
+          :loading="dialogButtonLoading"
           type="primary"
-          @click="onSupplement">{{ $t('g.confirmBtn') }}</el-button>
+          @click="onDialogConfirm">{{ $t('g.confirmBtn') }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -177,7 +181,15 @@
 <script>
 /* eslint eqeqeq: "off" */
 import { Project } from '@/services/constants'
-import { getProjectById, cancelProjectById, supplementProjectById, favoriteProjectById, unfavoriteProjectById } from '@/api/project'
+import {
+  getProjectById,
+  cancelProjectById,
+  supplementProjectById,
+  favoriteProjectById,
+  unfavoriteProjectById,
+  applyProjectById,
+  cancelApplyProjectById
+} from '@/api/project'
 import { upload } from '@/api/upload'
 var UPLOAD_SOURCE = null // 用于取消上传请求的token
 export default {
@@ -192,12 +204,12 @@ export default {
         favorite_count: 0,
         user: {}
       },
-      supplementDialogVisible: false,
-      supplementUploading: false, // 是否正在上传文件
-      supplementButtonLoading: false, // 是否正在上传表单数据
-      supplementForm: {
-        supplement_description: '',
-        supplement_file_id: null
+      dialogVisible: false,
+      dialogUploading: false, // 是否正在上传文件
+      dialogButtonLoading: false, // 是否正在上传表单数据
+      dialogForm: {
+        textarea: '',
+        file_id: null
       }
     }
   },
@@ -245,6 +257,15 @@ export default {
     canCancelApply () {
       const { project } = this
       return project.status == Project.STATUS_TENDERING && project.applying
+    },
+    // Dialog的文字内容，不同身份的用户看到的文字与可选的操作是不一样的
+    dialogText () {
+      return {
+        title: this.$isParty() ? this.$t('补充项目') : this.$t('报名项目'),
+        placeholder: this.$isParty()
+          ? this.$t('请输入项目的补充内容，比如如项目面积、项目风格、希望设计师做到哪种程度等等')
+          : this.$t('简单说点什么，让业主更快了解你（200字以内）')
+      }
     }
   },
   created () {
@@ -263,11 +284,20 @@ export default {
     /**
      * 设计师相关操作：报名、取消报名、收藏、取消收藏
      */
-    onApply () {
-
-    },
     onCancelApply () {
-
+      this.$confirm(this.$t('此操作将取消报名该项目，是否确认？'), this.$t('g.notice'), {
+        confirmButtonText: this.$t('g.confirmBtn'),
+        cancelButtonText: this.$t('g.cancelBtn'),
+        type: 'warning'
+      }).then(() => {
+        cancelApplyProjectById(this.project.id).then(() => {
+          this.project.applying = false
+          this.$message({
+            type: 'success',
+            message: this.$t('取消成功')
+          })
+        })
+      }).catch(() => {})
     },
     onFavorite () {
       favoriteProjectById(this.project.id).then(() => {
@@ -300,25 +330,58 @@ export default {
         })
       }).catch(() => {})
     },
-    onSupplement () {
-      if (!this.supplementForm.supplement_description.length) {
-        return this.$message.error(this.$t('补充内容不能为空'))
-      }
-      if (this.supplementUploading) {
-        return this.$message.warning(this.$t('正在上传附件，请稍后'))
-      }
-      this.supplementButtonLoading = true
-      supplementProjectById(this.project.id, this.supplementForm).then(({ data }) => {
-        this.$message.success(this.$t('补充成功'))
-        this.supplementButtonLoading = false
-        this.supplementDialogVisible = false
-        this.project = data
+    /**
+     * Dialog操作：设计师报名项目、甲方补充项目
+     */
+    onDialogConfirm () {
+      if (!this.checkDialogForm()) return
+      this.dialogButtonLoading = true
+      this.handleConfirm().then(() => {
+        this.dialogButtonLoading = false
+        this.dialogVisible = false
       }).catch(() => {
-        this.supplementButtonLoading = false
+        this.dialogButtonLoading = false
       })
     },
-    onCancelSupplement () {
-      this.supplementDialogVisible = false
+    checkDialogForm () {
+      // 设计师报名的时候可以什么都不填，甲方必须填写补充内容
+      if (this.$isParty() && !this.dialogForm.textarea.length) {
+        this.$message.error(this.$t('补充内容不能为空'))
+        return false
+      }
+      if (this.dialogUploading) {
+        this.$message.warning(this.$t('正在上传附件，请稍后'))
+        return false
+      }
+      return true
+    },
+    handleConfirm () {
+      const handler = this.$isParty() ? supplementProjectById : applyProjectById
+      const { textarea, file_id } = this.dialogForm
+      let form
+      if (this.$isParty()) {
+        form = {
+          supplement_description: textarea,
+          supplement_file_id: file_id
+        }
+      } else {
+        form = {
+          remark: textarea,
+          application_file_id: file_id
+        }
+      }
+      return handler(this.project.id, form).then(({ data }) => {
+        if (this.$isParty()) {
+          this.$message.success(this.$t('补充成功'))
+          this.project = data
+        } else {
+          this.$message.success(this.$t('报名成功'))
+          this.project.applying = true
+        }
+      })
+    },
+    onDialogCancel () {
+      this.dialogVisible = false
       if (UPLOAD_SOURCE) UPLOAD_SOURCE.cancel('取消上传')
     },
     beforeFileUpload (file) {
@@ -331,21 +394,24 @@ export default {
     onUpload (file) {
       if (UPLOAD_SOURCE) UPLOAD_SOURCE.cancel('取消上传')
       UPLOAD_SOURCE = this.$axios.CancelToken.source()
-      this.supplementUploading = true
+
+      this.dialogUploading = true
       file.onProgress({ percent: 50 }) // 传一个percent参数，显示loading
-      upload('project_file', file.file, { cancelToken: UPLOAD_SOURCE.token })
+
+      const fileType = this.$isParty() ? 'project_file' : 'application_file' // 项目附件；报名附件
+      upload(fileType, file.file, { cancelToken: UPLOAD_SOURCE.token })
         .then(({ data }) => {
           file.onSuccess()
-          this.supplementUploading = false
-          this.supplementForm.supplement_file_id = data.id
+          this.dialogUploading = false
+          this.dialogForm.file_id = data.id
         }).catch(error => {
-          this.supplementUploading = false
+          this.dialogUploading = false
           file.onError()
           console.error(error)
         })
     },
     onRemove () {
-      this.supplementForm.supplement_file_id = null
+      this.dialogForm.file_id = null
     },
     onExceed () {
       this.$message.error(this.$t('只能上传一个文件'))
@@ -360,7 +426,7 @@ export default {
   padding: 24px calc((100% - 1000px) / 2);
   &__title-area {
     display: flex;
-    align-content: center;
+    align-items: flex-start;
     margin: 0 0 16px;
     vertical-align: middle;
   }

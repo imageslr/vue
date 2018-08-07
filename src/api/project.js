@@ -54,5 +54,11 @@ export function unfavoriteProjectById (id) {
 }
 
 // 报名项目
+export function applyProjectById (id, body) {
+  return request.post(`/projects/${id}/applications`, body)
+}
 
 // 取消报名
+export function cancelApplyProjectById (id) {
+  return request.delete(`/user/applying/projects/${id}`)
+}

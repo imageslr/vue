@@ -54,6 +54,7 @@
           :maxlength="200"
           :placeholder="`${$t('reply')} ${reply.user.name}`"
           :autosize="{maxRows: 5}"
+          ref="input"
           v-model="content"
           size="small"
           type="textarea"
@@ -79,7 +80,7 @@
         <el-button
           type="text"
           size="mini"
-          @click="showInput = true">{{ $t('reply') }}</el-button>
+          @click="onShowInput">{{ $t('reply') }}</el-button>
         <el-button
           v-if="isDeletable"
           size="mini"
@@ -131,6 +132,10 @@ export default {
     }
   },
   methods: {
+    onShowInput () {
+      this.showInput = true
+      this.$nextTick(() => this.$refs.input.focus())
+    },
     onPost () {
       this.buttonLoading = true
       postReplyByActivityId(this.reply.activity_id, {

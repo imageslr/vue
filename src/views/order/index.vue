@@ -2,8 +2,8 @@
 {
   "en": {
     "输入项目标题或订单编号进行搜索": "Enter title or number of project to search",
-    "搜索订单": "Search projects",
-    "所有订单": "All",
+    "搜索项目": "Search projects",
+    "所有项目": "All",
     "报名中": "Applying",
     "工作中": "Working",
     "已完成": "Completed",
@@ -21,7 +21,7 @@
       :default-active="$route.query.status || 'all'"
       mode="horizontal"
       @select="onNavigate">
-      <el-menu-item index="all">{{ $t('所有订单') }}</el-menu-item>
+      <el-menu-item index="all">{{ $t('所有项目') }}</el-menu-item>
       <el-menu-item index="1000">{{ $t('报名中') }}</el-menu-item>
       <el-menu-item index="1100">{{ $t('工作中') }}</el-menu-item>
       <el-menu-item index="1200">{{ $t('已完成') }}</el-menu-item>
@@ -36,18 +36,19 @@
         <el-button
           slot="append"
           type="primary"
-          @click="onSearch">{{ $t('搜索订单') }}</el-button>
+          @click="onSearch">{{ $t('搜索项目') }}</el-button>
       </el-input>
       <my-loader
+        v-if="loading || error"
         :loading="loading"
         :error="error"
         :btn-text="$t('重新加载')"
         :on-reload="getProjects" />
-      <my-empty v-if="!loading && !projects.length" />
-      <template v-if="!loading && !error">
+      <my-empty v-else-if="!projects.length" />
+      <template v-else>
         <div class="project-list">
           <div
-            v-for="project in projects"
+            v-for="(project, index) in projects"
             :key="project.id"
             class="project-list-item">
             <div class="flex-auto">
@@ -65,6 +66,14 @@
                 {{ $t('查看详情') }}
               </el-button>
             </router-link>
+            <el-button
+              v-if="isFavorite"
+              :loading="favoriteLoadings[index]"
+              size="small"
+              style="margin-left: 8px"
+              @click="onToggleFavorite(index)">
+              {{ project.favoriting ? $t('取消收藏') : $t('收藏') }}
+            </el-button>
           </div>
         </div>
         <el-pagination
@@ -80,7 +89,11 @@
 </template>
 
 <script>
-import { getProjectsOfCurrentUser } from '@/api/project'
+import {
+  getProjectsOfCurrentUser,
+  getFavoriteProjectsOfCurrentUser,
+  favoriteProjectById,
+  unfavoriteProjectById } from '@/api/project'
 export default {
   data () {
     return {
@@ -91,7 +104,16 @@ export default {
       pageCount: 1,
       currentPage: 1,
       loading: false,
-      error: false
+      error: false,
+
+      // favorite loadings
+      favoriteLoadings: {}
+    }
+  },
+  computed: {
+    // 是否是“我收藏的项目”
+    isFavorite () {
+      return this.$route.path === '/order/favorite'
     }
   },
   created () {
@@ -105,7 +127,8 @@ export default {
       this.loading = true
       this.error = false
       const { currentPage, status, keyword } = this
-      getProjectsOfCurrentUser(currentPage, { status, keyword })
+      const fetch = this.isFavorite ? getFavoriteProjectsOfCurrentUser : getProjectsOfCurrentUser
+      fetch(currentPage, { status, keyword })
         .then(({ data: { data: projects, meta: { pagination } } }) => {
           this.loading = false
           this.projects = projects
@@ -123,6 +146,18 @@ export default {
           status: this.status,
           keyword: this.keywordInput
         }
+      })
+    },
+    onToggleFavorite (index) {
+      if (this.favoriteLoadings[index]) return
+      this.$set(this.favoriteLoadings, index, true)
+      const project = this.projects[index]
+      const fetch = project.favoriting ? unfavoriteProjectById : favoriteProjectById
+      fetch(project.id).then(() => {
+        project.favoriting = !project.favoriting
+        this.favoriteLoadings[index] = false
+      }).catch(() => {
+        this.favoriteLoadings[index] = false
       })
     },
     onChangePage (page) {
@@ -145,7 +180,6 @@ export default {
       })
     }
   }
-
 }
 </script>
 

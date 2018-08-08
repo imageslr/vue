@@ -180,8 +180,7 @@ import {
   favoriteProjectById,
   unfavoriteProjectById,
   applyProjectById,
-  cancelApplyProjectById
-} from '@/api/project'
+  cancelApplyProjectById } from '@/api/project'
 export default {
   data () {
     return {

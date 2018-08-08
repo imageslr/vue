@@ -67,3 +67,8 @@ export function cancelApplyProjectById (id) {
 export function getProjectsOfCurrentUser (page, params) {
   return request.get(`/user/projects?page=${page}`, { params })
 }
+
+// 获取当前用户收藏的项目
+export function getFavoriteProjectsOfCurrentUser (page, params) {
+  return request.get(`/user/favoriting/projects?page=${page}`, { params })
+}

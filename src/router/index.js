@@ -125,6 +125,14 @@ export default new Router({
             sidebar: OrderSidebar,
             content: OrderContent
           }
+        },
+        {
+          path: 'favorite',
+          name: 'orderFavorite',
+          components: {
+            sidebar: OrderSidebar,
+            content: OrderContent
+          }
         }
       ]
     },

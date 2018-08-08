@@ -21,8 +21,9 @@ router.beforeEach((to, from, next) => {
   if (store.getters.token) {
     // 如果需要重定向至主页时重定向
     if (to.path === '/signin') {
-      next({ path: '/feed' })
-      NProgress.done() // 如果当前页面就是feed，那跳转到其他页面再next到feed时不会触发afterEach钩子
+      // next({ path: '/feed' })
+      // NProgress.done() // 如果当前页面就是feed，那跳转到其他页面再next到feed时不会触发afterEach钩子
+      next()
     } else {
       // 如果不需要重定向，判断是否获取到用户信息
       if (!store.getters.hasUserInfo) {

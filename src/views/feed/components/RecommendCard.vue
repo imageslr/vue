@@ -44,5 +44,8 @@ export default {
 <style lang="scss" scoped>
 .recommend-list {
   white-space: nowrap;
+  &-item {
+    margin-right: 16px;
+  }
 }
 </style>

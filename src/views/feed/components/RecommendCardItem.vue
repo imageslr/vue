@@ -1,3 +1,11 @@
+<i18n>
+{
+  "en": {
+    "设计师": "Designer"
+  }
+}
+</i18n>
+
 <template>
   <li class="recommend-list-item">
     <router-link :to="'profile?uid=' + designer.id">
@@ -8,7 +16,7 @@
     <router-link :to="'profile?uid=' + designer.id">
       <h3 class="m0 mt-4 mb-4 f-13 ellipsis-1 black">{{ designer.name }}</h3>
     </router-link>
-    <p class="m0 mb1 f-12 black-65 ellipsis-1">{{ designer.title }}</p>
+    <p class="m0 mb1 f-12 black-65 ellipsis-1">{{ designer.title || $t('设计师') }}</p>
     <el-button
       :loading="loading"
       size="mini"
@@ -52,7 +60,6 @@ export default {
   display: inline-block;
   width: 147px;
   padding: 16px;
-  margin-right: 16px;
   text-align: center;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 4px;

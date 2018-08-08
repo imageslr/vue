@@ -28,7 +28,9 @@
         "Have Your Own Online Studio",
         "Socialize with Professionals"
       ]
-    }
+    },
+    "登录": "Sign in",
+    "注册": "Sign up"
   }
 }
 </i18n>
@@ -36,34 +38,50 @@
 <template>
   <div class="container both-center">
     <div class="item">
-      <router-link :to="{ path: '/signup', query: { type: 'party' }}">
-        <el-card shadow="hover">
-          <icon
-            :scale="6"
-            name="user-tie"/>
-          <div class="title">{{ $t('party.title') }}</div>
-          <div class="feature">
-            <div
-              v-for="feat in $t('party.features')"
-              :key="feat">{{ feat }}</div>
-          </div>
-        </el-card>
-      </router-link>
+      <el-card shadow="hover">
+        <icon
+          :scale="6"
+          name="user-tie"/>
+        <div class="title">{{ $t('party.title') }}</div>
+        <div class="feature">
+          <div
+            v-for="feat in $t('party.features')"
+            :key="feat">{{ feat }}</div>
+        </div>
+        <div class="center mt1">
+          <router-link
+            to="/signin"
+            class="mr1">
+            <el-button plain>{{ $t('登录') }}</el-button>
+          </router-link>
+          <router-link :to="{ path: '/signup', query: { type: 'party' }}">
+            <el-button plain>{{ $t('注册') }}</el-button>
+          </router-link>
+        </div>
+      </el-card>
     </div>
     <div class="item">
-      <router-link :to="{ path: '/signup', query: { type: 'designer' }}">
-        <el-card shadow="hover">
-          <icon
-            :scale="6"
-            name="user"/>
-          <div class="title">{{ $t('designer.title') }}</div>
-          <div class="feature">
-            <div
-              v-for="feat in $t('designer.features')"
-              :key="feat">{{ feat }}</div>
-          </div>
-        </el-card>
-      </router-link>
+      <el-card shadow="hover">
+        <icon
+          :scale="6"
+          name="user"/>
+        <div class="title">{{ $t('designer.title') }}</div>
+        <div class="feature">
+          <div
+            v-for="feat in $t('designer.features')"
+            :key="feat">{{ feat }}</div>
+        </div>
+        <div class="center mt1">
+          <router-link
+            to="/signin"
+            class="mr1">
+            <el-button plain>{{ $t('登录') }}</el-button>
+          </router-link>
+          <router-link :to="{ path: '/signup', query: { type: 'designer' }}">
+            <el-button plain>{{ $t('注册') }}</el-button>
+          </router-link>
+        </div>
+      </el-card>
     </div>
   </div>
 </template>

@@ -8,7 +8,7 @@
     "notice": "通知",
     "me": "我",
     "signOut": "退出登录",
-    "square": "需求广场"
+    "square": "项目广场"
   },
   "en": {
     "home": "Home",

@@ -32,9 +32,9 @@
     "补充内容不能为空":"Supplement description cannot be empty",
     "下载附件": "Download file",
     "上传附件": "Upload file",
-    "只能上传一个文件，最大不得超过10M": "Allow upload only one file of which size is less than 10M",
+    "只能上传一个文件，最大不得超过10M": "Allow upload only one file of which size is less than 10MB",
     "只能上传一个文件": "Allow upload only one file",
-    "上传文件大小不能超过10MB！": "File max size is 10M",
+    "上传文件大小不能超过10MB！": "File max size is 10MB",
     "正在上传附件，请稍后": "File uploading, please wait",
     "简单说点什么，让业主更快了解你（200字以内）": "Say something so that the party can know you quickly (200 characters at most)"
   }
@@ -149,22 +149,13 @@
         :rows="5"
         :placeholder="dialogText.placeholder"
         type="textarea"/>
-      <el-upload
-        :on-exceed="onExceed"
-        :on-remove="onRemove"
-        :http-request="onUpload"
-        :before-upload="beforeFileUpload"
-        :limit="1"
-        action=""
-        class="form__uploader mt-12">
-        <el-button
-          :loading="dialogUploading"
-          :disabled="!!dialogForm.file_id">{{ $t('上传附件') }}</el-button>
-        <p
-          v-t="'只能上传一个文件，最大不得超过10M'"
-          slot="tip"
-          class="inline ml-12 black-45"/>
-      </el-upload>
+      <my-upload
+        ref="upload"
+        :type="uploadFileType"
+        @start="onUploadStart"
+        @success="onUploadSuccess"
+        @error="onUploadError"
+        @remove="onUploadRemove"/>
       <span
         slot="footer"
         class="dialog-footer">
@@ -190,8 +181,6 @@ import {
   applyProjectById,
   cancelApplyProjectById
 } from '@/api/project'
-import { upload } from '@/api/upload'
-var UPLOAD_SOURCE = null // 用于取消上传请求的token
 export default {
   data () {
     return {
@@ -266,6 +255,10 @@ export default {
           ? this.$t('请输入项目的补充内容，比如如项目面积、项目风格、希望设计师做到哪种程度等等')
           : this.$t('简单说点什么，让业主更快了解你（200字以内）')
       }
+    },
+    // 上传的文件类别
+    uploadFileType () {
+      return this.$isParty() ? 'project_file' : 'application_file'
     }
   },
   created () {
@@ -333,17 +326,11 @@ export default {
     /**
      * Dialog操作：设计师报名项目、甲方补充项目
      */
-    onDialogConfirm () {
-      if (!this.checkDialogForm()) return
-      this.dialogButtonLoading = true
-      this.handleConfirm().then(() => {
-        this.dialogButtonLoading = false
-        this.dialogVisible = false
-      }).catch(() => {
-        this.dialogButtonLoading = false
-      })
+    onDialogCancel () {
+      this.$refs.upload.cancel()
+      this.dialogVisible = false
     },
-    checkDialogForm () {
+    onDialogConfirm () {
       // 设计师报名的时候可以什么都不填，甲方必须填写补充内容
       if (this.$isParty() && !this.dialogForm.textarea.length) {
         this.$message.error(this.$t('补充内容不能为空'))
@@ -353,9 +340,8 @@ export default {
         this.$message.warning(this.$t('正在上传附件，请稍后'))
         return false
       }
-      return true
-    },
-    handleConfirm () {
+
+      this.dialogButtonLoading = true
       const handler = this.$isParty() ? supplementProjectById : applyProjectById
       const { textarea, file_id } = this.dialogForm
       let form
@@ -370,7 +356,9 @@ export default {
           application_file_id: file_id
         }
       }
-      return handler(this.project.id, form).then(({ data }) => {
+      handler(this.project.id, form).then(({ data }) => {
+        this.dialogButtonLoading = false
+        this.dialogVisible = false
         if (this.$isParty()) {
           this.$message.success(this.$t('补充成功'))
           this.project = data
@@ -378,43 +366,22 @@ export default {
           this.$message.success(this.$t('报名成功'))
           this.project.applying = true
         }
+      }).catch(() => {
+        this.dialogButtonLoading = false
       })
     },
-    onDialogCancel () {
-      this.dialogVisible = false
-      if (UPLOAD_SOURCE) UPLOAD_SOURCE.cancel('取消上传')
-    },
-    beforeFileUpload (file) {
-      const isLt10M = file.size / 1024 / 1024 < 10
-      if (!isLt10M) {
-        this.$message.error('上传文件大小不能超过10MB！')
-      }
-      return isLt10M
-    },
-    onUpload (file) {
-      if (UPLOAD_SOURCE) UPLOAD_SOURCE.cancel('取消上传')
-      UPLOAD_SOURCE = this.$axios.CancelToken.source()
-
+    onUploadStart () {
       this.dialogUploading = true
-      file.onProgress({ percent: 50 }) // 传一个percent参数，显示loading
-
-      const fileType = this.$isParty() ? 'project_file' : 'application_file' // 项目附件；报名附件
-      upload(fileType, file.file, { cancelToken: UPLOAD_SOURCE.token })
-        .then(({ data }) => {
-          file.onSuccess()
-          this.dialogUploading = false
-          this.dialogForm.file_id = data.id
-        }).catch(error => {
-          this.dialogUploading = false
-          file.onError()
-          console.error(error)
-        })
     },
-    onRemove () {
+    onUploadSuccess (data) {
+      this.dialogUploading = false
+      this.dialogForm.file_id = data.id
+    },
+    onUploadError () {
+      this.dialogUploading = false
+    },
+    onUploadRemove () {
       this.dialogForm.file_id = null
-    },
-    onExceed () {
-      this.$message.error(this.$t('只能上传一个文件'))
     }
   }
 }

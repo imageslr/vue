@@ -78,7 +78,7 @@ export default {
   data () {
     return {
       content: '',
-      photoImageIds: [],
+      photoImageIds: [], // {uid: 文件id, id: 数据库id}
       inputing: false,
       publishBtnLoading: false,
       preview: {
@@ -86,7 +86,7 @@ export default {
         src: ''
       },
       uploadingCount: 0, // 正在上传的文件数量
-      uploadQueue: [] // 上传队列的source，可以cancel
+      uploadQueue: [] // 上传队列的source，可以cancel {uid, source}
     }
   },
   methods: {
@@ -98,24 +98,30 @@ export default {
       this.preview.visible = true
       this.preview.src = photo.url
     },
-    onRemove (photo) {
-      this.photoImageIds = this.photoImageIds.filter(id => {
-        return photo.response.id != id // eslint-disable-line eqeqeq
+    onRemove (file) {
+      // 如果是已上传的，从已上传列表里删除
+      this.photoImageIds = this.photoImageIds.filter(v => {
+        return file.uid !== v.uid
+      })
+      // 如果是正在上传的，取消上传
+      this.uploadQueue.forEach(v => {
+        if (v.uid === file.uid) v.source.cancel()
       })
     },
     onExceed () {
       this.$message.error(this.$t('maxPhotoNumber'))
     },
     onUpload (file) {
+      let uid = file.file.uid
       let source = this.$axios.CancelToken.source()
-      this.uploadQueue.push(source) // 加入到上传队列中
+      this.uploadQueue.push({ source, uid }) // 加入到上传队列中
       this.uploadingCount++ // 信号量+1
       file.onProgress({ percent: 50 }) // 传一个percent参数，显示loading
       upload('activity_photo', file.file, { cancelToken: source.token })
         .then(({ data }) => {
           this.uploadingCount && this.uploadingCount-- // 信号量-1
           file.onSuccess()
-          this.photoImageIds.push(data.id)
+          this.photoImageIds.push({ uid, id: data.id })
         }).catch(error => {
           this.uploadingCount && this.uploadingCount-- // 信号量-1
           file.onError()
@@ -135,6 +141,7 @@ export default {
       }
       this.publishBtnLoading = true
       let { content, photoImageIds } = this
+      photoImageIds = photoImageIds.map(v => v.id)
       publishActivity({ content, photo_image_ids: photoImageIds }).then(({ data }) => {
         this.$refs.upload.clearFiles()
         Object.assign(this.$data, this.$options.data()) // 重置data

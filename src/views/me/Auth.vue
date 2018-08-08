@@ -15,7 +15,8 @@
     "已提交，点击下载文件": "Has already committed, click to download",
     "注意": "Notice",
     "认证信息一经上传将无法修改！": "Once the certification information is uploaded, it cannot be modified!",
-    "身份证照片请上传人像面！": "Please upload a portrait of the ID card!"
+    "身份证照片请上传人像面！": "Please upload a portrait of the ID card!",
+    "认证信息一经上传将无法修改，确定上传吗？": "Once the certification information is uploaded, it cannot be modified. Is it confirmed?"
   }
 }
 </i18n>
@@ -42,7 +43,9 @@
           maxlength="100"/>
       </el-form-item>
       <el-form-item :label="$t('营业执照')" >
-        <my-alert v-if="user.business_license_url" ><a :href="user.business_license_url">{{ $t('已提交，点击下载文件') }}</a></my-alert>
+        <my-alert v-if="user.business_license_url" ><a
+          :href="user.business_license_url"
+          :download="$t('营业执照')">{{ $t('已提交，点击下载文件') }}</a></my-alert>
         <my-upload
           v-else
           :button-text="$t('上传图片')"
@@ -61,7 +64,9 @@
           maxlength="100"/>
       </el-form-item>
       <el-form-item :label="$t('身份证照片')" >
-        <my-alert v-if="user.id_card_url"><a :href="user.id_card_url">{{ $t('已提交，点击下载文件') }}</a></my-alert>
+        <my-alert v-if="user.id_card_url"><a
+          :href="user.id_card_url"
+          :download="$t('身份证照片')">{{ $t('已提交，点击下载文件') }}</a></my-alert>
         <my-upload
           v-else
           :button-text="$t('上传图片')"
@@ -75,6 +80,7 @@
       </el-form-item>
       <el-form-item>
         <el-button
+          v-if="!hiddenButton"
           :disabled="disabled"
           :loading="loading"
           type="primary"
@@ -129,6 +135,12 @@ export default {
     },
     disabled () {
       return JSON.stringify(this.dirtyForm) === '{}' // 没有数据修改过的话就禁用按钮
+    },
+    // 所有数据都已设置时，无法修改
+    hiddenButton () {
+      const user = this.$store.getters.userInfo
+      return user.company_name && user.registration_number &&
+      user.id_number && user.business_license_url && user.id_card_url
     }
   },
   created () {
@@ -145,14 +157,20 @@ export default {
       if (this.uploadings[0] || this.uploadings[1]) {
         return this.$message.warning(this.$t('正在上传文件，请稍后'))
       }
-      this.loading = true
-      updateCurrentUserInfo(this.dirtyForm).then(({ data }) => {
-        this.loading = false
-        this.$store.commit('SET_USERINFO', data)
-        this.$message.success(this.$t('上传成功'))
-      }).catch(() => {
-        this.loading = false
-      })
+      this.$confirm(this.$t('认证信息一经上传将无法修改，确定上传吗？'), this.$t('g.notice'), {
+        confirmButtonText: this.$t('g.confirmBtn'),
+        cancelButtonText: this.$t('g.cancelBtn'),
+        type: 'warning'
+      }).then(() => {
+        this.loading = true
+        updateCurrentUserInfo(this.dirtyForm).then(({ data }) => {
+          this.loading = false
+          this.$store.commit('SET_USERINFO', data)
+          this.$message.success(this.$t('上传成功'))
+        }).catch(() => {
+          this.loading = false
+        })
+      }).catch(() => {})
     },
     onUploadStart (index) {
       this.uploadings[index] = true

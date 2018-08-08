@@ -5,7 +5,7 @@
   },
   "en": {
     "编辑个人资料": "Edit Personal Information",
-    "头像": "avatar",
+    "头像": "Avatar",
     "姓名": "Name",
     "职位/公司": "Title/Company",
     "简介": "Introduction",

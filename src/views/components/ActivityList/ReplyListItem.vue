@@ -51,10 +51,10 @@
       <p class="reply-list-item__content-text">{{ reply.content }}</p>
       <template v-if="showInput">
         <el-input
+          ref="input"
           :maxlength="200"
           :placeholder="`${$t('reply')} ${reply.user.name}`"
           :autosize="{maxRows: 5}"
-          ref="input"
           v-model="content"
           size="small"
           type="textarea"

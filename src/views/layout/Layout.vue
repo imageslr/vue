@@ -32,7 +32,7 @@ export default {
   background-color: #f9f9f9;
 }
 .app-nav {
-  z-index: 50;
+  z-index: 5;
   position: fixed;
   top: 0;
   width: 100%;

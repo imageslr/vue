@@ -20,14 +20,15 @@
     :http-request="onUpload"
     :before-upload="beforeFileUpload"
     :limit="1"
+    :accept="accept"
     action=""
     class="form__uploader mt-12">
     <el-button
       :loading="uploading"
-      :disabled="!!fileData">{{ $t('上传附件') }}</el-button>
+      :disabled="!!fileData">{{ buttonText }}</el-button>
     <p
       slot="tip"
-      class="inline ml-12 black-45"
+      class="inline ml-12 black-45 f-14"
       v-text="$t('tip', { size: maxSize })"/>
   </el-upload>
 </template>
@@ -50,6 +51,16 @@ export default {
     maxSize: {
       type: Number,
       default: 10
+    },
+    accept: {
+      type: String,
+      default: ''
+    },
+    buttonText: {
+      type: String,
+      default () {
+        return this.$t('上传附件')
+      }
     }
   },
   data () {
@@ -90,13 +101,20 @@ export default {
         }).catch(error => {
           console.error(error)
           this.uploading = false
-          file.onError()
+          file.onError() // file可能已经被remove，这里可能会报错
           this.$emit('error', error)
         })
     },
     onRemove () {
+      if (this.UPLOAD_SOURCE) this.UPLOAD_SOURCE.cancel('取消上传')
       this.fileData = null
-      this.$emit('remove')
+      // 上传过程中删除相当于上传出错
+      if (this.uploading) {
+        this.uploading = false
+        this.$emit('error', new Error('上传过程中删除'))
+      } else {
+        this.$emit('remove')
+      }
     },
     onExceed () {
       this.$message.error(this.$t('只能上传一个文件'))

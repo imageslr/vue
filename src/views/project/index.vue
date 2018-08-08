@@ -92,6 +92,7 @@
       <div class="project-header__info">
         <div class="project-header__info-item">
           <span class="black-85">{{ $t('甲方') }}: </span>
+          <my-avatar :avatar-url="project.user.avatar_url"/>
           <router-link :to="'/profile?uid='+project.user.id">{{ project.user.name }}</router-link>
         </div>
         <div class="project-header__info-item">
@@ -410,6 +411,11 @@ export default {
       width: 290px;
       font-size: 14px;
       color: rgba(0, 0, 0, 0.65);
+      .avatar {
+        width: 20px;
+        height: 20px;
+        vertical-align: bottom;
+      }
     }
   }
 }

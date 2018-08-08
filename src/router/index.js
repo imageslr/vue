@@ -15,7 +15,8 @@ import Project from '../views/project'
 import OrderSidebar from '../views/order/Sidebar'
 import OrderContent from '../views/order/index'
 import MeSidebar from '../views/me/Sidebar'
-import MeContent from '../views/me/index'
+import MeIndex from '../views/me/index'
+import MeAuth from '../views/me/Auth'
 import Error404 from '../views/error/404'
 
 Vue.use(Router)
@@ -136,7 +137,15 @@ export default new Router({
           name: 'me',
           components: {
             sidebar: MeSidebar,
-            content: MeContent
+            content: MeIndex
+          }
+        },
+        {
+          path: 'auth',
+          name: 'authentication',
+          components: {
+            sidebar: MeSidebar,
+            content: MeAuth
           }
         }
       ]

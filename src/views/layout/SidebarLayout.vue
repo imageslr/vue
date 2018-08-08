@@ -33,6 +33,7 @@ export default {
   padding-left: 200px;
   min-height: 100%;
   .app-navbar {
+    z-index: 5;
     position: fixed;
     height: 52px;
     top: 0;

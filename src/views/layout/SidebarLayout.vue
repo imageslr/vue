@@ -3,10 +3,12 @@
   <div class="app-container">
     <navbar class="app-navbar"/>
     <router-view
+      :key="$route.fullPath"
       class="app-sidebar"
       name="sidebar"/>
     <div class="app-main">
       <router-view
+        :key="$route.fullPath"
         class="app-content"
         name="content"/>
       <app-footer />

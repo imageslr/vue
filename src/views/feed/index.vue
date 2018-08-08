@@ -1,20 +1,13 @@
 <i18n>
 {
-  "zh": {
-    "publishProject": "发布项目",
-    "publishedProjects": "已发布的项目",
-    "followingDesigners": "收藏的设计师",
-    "searchProjects": "搜索项目",
-    "myProjects": "我的项目",
-    "myWorks": "我的作品集"
-  },
   "en": {
-    "publishProject": "Publish project",
-    "publishedProjects": "Published projects",
-    "followingDesigners": "Following designers",
-    "searchProjects": "Search projects",
-    "myProjects": "My projects",
-    "myWorks": "My works"
+    "发布项目": "Publish project",
+    "已发布的项目": "Published projects",
+    "收藏的设计师": "Following designers",
+    "设计师广场": "Designer square",
+    "搜索项目": "Search projects",
+    "我的项目": "My projects",
+    "我的作品集": "My works"
   }
 }
 </i18n>
@@ -36,24 +29,27 @@
         <template v-if="$isParty()">
           <router-link
             class="action-area-item"
-            to="publish">{{ $t('publishProject') }}</router-link>
+            to="publish">{{ $t('发布项目') }}</router-link>
           <router-link
             class="action-area-item"
-            to="order">{{ $t('publishedProjects') }}</router-link>
+            to="order">{{ $t('已发布的项目') }}</router-link>
           <router-link
             class="action-area-item"
-            to="follow">{{ $t('followingDesigners') }}</router-link>
+            to="follow">{{ $t('收藏的设计师') }}</router-link>
+          <router-link
+            class="action-area-item"
+            to="/square/designer">{{ $t('设计师广场') }}</router-link>
         </template>
         <template v-if="$isDesigner()">
           <router-link
             class="action-area-item"
-            to="search">{{ $t('searchProjects') }}</router-link>
+            to="search">{{ $t('搜索项目') }}</router-link>
           <router-link
             class="action-area-item"
-            to="order">{{ $t('myProjects') }}</router-link>
+            to="order">{{ $t('我的项目') }}</router-link>
           <router-link
             class="action-area-item"
-            to="work">{{ $t('myWorks') }}</router-link>
+            to="work">{{ $t('我的作品集') }}</router-link>
         </template>
         <app-footer/>
       </aside>

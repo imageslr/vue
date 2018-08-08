@@ -1,137 +1,146 @@
 <i18n>
 {
-  "zh": {
-    "placeholder": "输入项目标题或订单号进行搜索",
-    "search": "搜索订单",
-    "captions": {
-      "title": "需求名称",
-      "budget": "需求预算",
-      "type": "类型",
-      "actualPayment": "实付金额",
-      "status": "订单状态",
-      "action": "订单操作"
-    }
-  },
   "en": {
-    "search": "Search order"
+    "输入项目标题或订单编号进行搜索": "Enter title or number of project to search",
+    "搜索订单": "Search projects",
+    "所有订单": "All",
+    "报名中": "Applying",
+    "工作中": "Working",
+    "已完成": "Completed",
+    "已取消": "Canceled",
+    "发布于": "Published at",
+    "查看详情": "View detail",
+    "重新加载": "Reload"
   }
 }
 </i18n>
 
 <template>
   <div>
-    <order-menu :order-nums="orderNums"/>
-    <div class="order-list-container">
+    <el-menu
+      :default-active="$route.query.status || 'all'"
+      mode="horizontal"
+      @select="onNavigate">
+      <el-menu-item index="all">{{ $t('所有订单') }}</el-menu-item>
+      <el-menu-item index="1000">{{ $t('报名中') }}</el-menu-item>
+      <el-menu-item index="1100">{{ $t('工作中') }}</el-menu-item>
+      <el-menu-item index="1200">{{ $t('已完成') }}</el-menu-item>
+      <el-menu-item index="500">{{ $t('已取消') }}</el-menu-item>
+    </el-menu>
+    <div class="container">
       <el-input
-        v-model="keywordTemp"
-        :placeholder="$t('placeholder')"
-        size="small">
+        v-model="keywordInput"
+        :placeholder="$t('输入项目标题或订单编号进行搜索')"
+        size="small"
+        @keyup.native.enter="onSearch">
         <el-button
           slot="append"
           type="primary"
-          @click="onSearch">{{ $t('search') }}</el-button>
+          @click="onSearch">{{ $t('搜索订单') }}</el-button>
       </el-input>
-      <div class="order-list">
-        <div class="order-list__caption">
+      <my-loader
+        :loading="loading"
+        :error="error"
+        :btn-text="$t('重新加载')"
+        :on-reload="getProjects" />
+      <my-empty v-if="!loading && !projects.length" />
+      <template v-if="!loading && !error">
+        <div class="project-list">
           <div
-            v-t="$t('captions.title')"
-            class="order-list__caption-item"
-            style="width:35%" />
-          <div
-            v-t="$t('captions.type')"
-            class="order-list__caption-item"
-            style="width:10%" />
-          <div
-            v-t="$t('captions.budget')"
-            class="order-list__caption-item"
-            style="width:10%" />
-          <div
-            v-t="$t('captions.actualPayment')"
-            class="order-list__caption-item"
-            style="width:10%" />
-          <div
-            v-t="$t('captions.status')"
-            class="order-list__caption-item"
-            style="width:25%" />
-          <div
-            v-t="$t('captions.action')"
-            class="order-list__caption-item"
-            style="width:10%" />
+            v-for="project in projects"
+            :key="project.id"
+            class="project-list-item">
+            <div class="flex-auto">
+              <router-link
+                :to="`/project/${project.id}`"
+                tag="p"
+                class="project-list-item__title"
+                v-text="project.title" />
+              <p class="m0 f-14 black-45">{{ $t('发布于') }}：{{ project.created_at }}</p>
+            </div>
+            <router-link :to="'/project/'+project.id">
+              <el-button
+                type="primary"
+                size="small">
+                {{ $t('查看详情') }}
+              </el-button>
+            </router-link>
+          </div>
         </div>
-        <order-list-item
-          v-for="order in orders"
-          :key="order.id"
-          :order="order"
-          class="order-list__item" />
         <el-pagination
           :current-page.sync="currentPage"
-          :total="total"
-          :page-size="20"
+          :page-count="pageCount"
           background
           layout="prev, pager, next"
-          @current-change="onNavigate"/>
-      </div>
+          class="mt2 center"
+          @current-change="onChangePage"/>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
-import OrderMenu from './components/OrderMenu'
-import OrderListItem from './components/OrderListItem'
-import { getOrdersByUID } from '@/api/order'
+import { getProjectsOfCurrentUser } from '@/api/project'
 export default {
-  components: {
-    OrderMenu,
-    OrderListItem
-  },
   data () {
     return {
-      orderNums: {},
-      orders: [],
+      projects: [],
+      status: null, // 页面状态
+      keyword: '', // query中的关键字
+      keywordInput: '', // 搜索输入框的内容
+      pageCount: 1,
       currentPage: 1,
-      total: 0,
-      type: 'all',
-      keywordTemp: '', // 输入框中的关键字
-      keyword: '' // query 中的关键字
+      loading: false,
+      error: false
     }
   },
   created () {
     if (this.$route.query.p) this.currentPage = parseInt(this.$route.query.p)
-    if (this.$route.query.type) this.type = this.$route.query.type
-    if (this.$route.query.keyword) this.keywordTemp = this.keyword = this.$route.query.keyword
-    this.getOrders()
+    if (this.$route.query.status) this.status = this.$route.query.status
+    if (this.$route.query.keyword) this.keywordInput = this.keyword = this.$route.query.keyword
+    this.getProjects()
   },
   methods: {
-    getOrders () {
-      const { currentPage, type, keyword } = this
-      const params = {
-        start: currentPage * 20,
-        type,
-        keyword
-      }
-      getOrdersByUID(this.$store.getters.uid, params).then(({ data }) => {
-        this.orderNums = data.order_nums
-        this.orders = data.orders
-        this.total = data.total
-      })
+    getProjects () {
+      this.loading = true
+      this.error = false
+      const { currentPage, status, keyword } = this
+      getProjectsOfCurrentUser(currentPage, { status, keyword })
+        .then(({ data: { data: projects, meta: { pagination } } }) => {
+          this.loading = false
+          this.projects = projects
+          this.pageCount = pagination.total_pages
+        }).catch(() => {
+          this.loading = false
+          this.error = true
+        })
     },
     onSearch () {
-      if (!this.keywordTemp) return
+      if (!this.keywordInput) return
       this.$router.push({
         path: this.$route.path,
         query: {
-          type: this.type,
-          keyword: this.keywordTemp
+          status: this.status,
+          keyword: this.keywordInput
         }
       })
     },
-    onNavigate (page) {
+    onChangePage (page) {
       this.$router.push({
         path: this.$route.path,
         query: {
-          type: this.type,
-          keyword: this.keyword,
+          status: this.status,
+          keyword: this.keywordInput,
           p: page
+        }
+      })
+    },
+    onNavigate (index) {
+      this.$router.push({
+        path: this.$route.path,
+        query: {
+          status: index === 'all' ? null : index,
+          p: 1
         }
       })
     }
@@ -141,33 +150,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.order-list-container {
+.container {
   padding: 24px 32px;
   background-color: #fff;
   .el-input {
     width: 350px;
   }
-  .order-list {
-    &__caption {
-      display: table;
-      width: 100%;
-      padding: 16px 0;
-      margin-top: 24px;
-      background-color: #fafafa;
-      &-item {
-        display: table-cell;
-        font-size: 14px;
+  .project-list {
+    &-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba($color: #000000, $alpha: 0.15);
+      &__title {
+        display: inline-block;
+        font-size: 16px;
         font-weight: bold;
-        color: rgba(0, 0, 0, 0.85);
-        text-align: center;
+        cursor: pointer;
       }
-    }
-    &__item {
-      margin-top: 16px;
-    }
-    .el-pagination {
-      padding: 16px 0;
-      text-align: center;
     }
   }
 }

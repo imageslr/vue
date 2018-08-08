@@ -62,3 +62,8 @@ export function applyProjectById (id, body) {
 export function cancelApplyProjectById (id) {
   return request.delete(`/user/applying/projects/${id}`)
 }
+
+// 获取项目列表
+export function getProjectsOfCurrentUser (page, params) {
+  return request.get(`/user/projects?page=${page}`, { params })
+}

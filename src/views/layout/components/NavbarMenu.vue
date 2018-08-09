@@ -87,7 +87,7 @@
     </li>
     <li :class="['navbar-menu-item', { 'is-active': isActive('square')}]">
       <router-link
-        to="/square"
+        to="/search"
         class="navbar-menu-item__container">
         <my-svg-icon icon-class="appstore"/>
         <span>{{ $t('square') }}</span>

@@ -17,6 +17,7 @@ import OrderContent from '../views/order/index'
 import MeSidebar from '../views/me/Sidebar'
 import MeIndex from '../views/me/index'
 import MeAuth from '../views/me/Auth'
+import Search from '../views/search'
 import Error404 from '../views/error/404'
 
 Vue.use(Router)
@@ -155,6 +156,17 @@ export default new Router({
             sidebar: MeSidebar,
             content: MeAuth
           }
+        }
+      ]
+    },
+    {
+      path: '/search',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'search',
+          component: Search
         }
       ]
     },

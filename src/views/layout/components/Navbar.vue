@@ -1,7 +1,7 @@
 <i18n>
 {
   "zh": {
-    "searchPlaceholder": "搜索需求、设计师",
+    "searchPlaceholder": "搜索项目、设计师",
     "signIn": "登录",
     "signUp": "马上加入"
   },

@@ -1,7 +1,7 @@
 <i18n>
 {
   "en": {
-    "输入项目标题或订单编号进行搜索": "Enter title or number of project to search",
+    "输入项目标题进行搜索": "Enter project title to search",
     "搜索项目": "Search projects",
     "所有项目": "All",
     "报名中": "Applying",
@@ -30,7 +30,7 @@
     <div class="container">
       <el-input
         v-model="keywordInput"
-        :placeholder="$t('输入项目标题或订单编号进行搜索')"
+        :placeholder="$t('输入项目标题进行搜索')"
         size="small"
         @keyup.native.enter="onSearch">
         <el-button

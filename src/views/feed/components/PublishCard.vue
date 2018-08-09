@@ -152,7 +152,7 @@ export default {
       })
     },
     onCancel () {
-      this.uploadQueue.forEach(v => v.cancel('取消上传')) // 取消全部上传请求
+      this.uploadQueue.forEach(v => v.source.cancel('取消上传')) // 取消全部上传请求
       Object.assign(this.$data, this.$options.data())
     }
   }

@@ -72,3 +72,10 @@ export function getProjectsOfCurrentUser (page, params) {
 export function getFavoriteProjectsOfCurrentUser (page, params) {
   return request.get(`/user/favoriting/projects?page=${page}`, { params })
 }
+
+// 搜索项目
+export function searchProjects (page = 1, keyword = null, status = null) {
+  return request.get('/projects', {
+    params: { page, keyword, status }
+  })
+}

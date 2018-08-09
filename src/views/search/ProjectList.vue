@@ -70,6 +70,7 @@
           v-for="project in projects"
           :key="project.id"
           class="project-list-item">
+          <el-tag :type="project.status | statusToType">{{ $t(`status.${project.status}`) }}</el-tag>
           <router-link
             :to="`/project/${project.id}`"
             class="project-list-item__title"
@@ -106,6 +107,16 @@
 <script>
 import { searchProjects } from '@/api/project'
 export default {
+  filters: {
+    statusToType (status) {
+      const t = {
+        1000: null,
+        1100: 'warning',
+        1200: 'info'
+      }
+      return t[status]
+    }
+  },
   data () {
     return {
       statusOptions: ['1000', '1100', '1200'],

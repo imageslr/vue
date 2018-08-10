@@ -135,7 +135,7 @@
       <template
         v-if="project.supplement_at">
         <h3 v-t="'项目补充'" />
-        <p v-text="project.textarea" />
+        <p v-text="project.supplement_description" />
         <my-alert
           v-if="project.supplement_file_url"
           class="mt-12"><a :href="project.supplement_file_url">{{ $t('下载附件') }}</a></my-alert>

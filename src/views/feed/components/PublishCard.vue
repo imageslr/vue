@@ -1,16 +1,9 @@
 <i18n>
 {
-  "zh": {
-    "placeholder": "发照片或者动态",
-    "photoBtn": "发照片",
-    "maxPhotoNumber": "最多可上传 9 张照片",
-    "uploading": "图片正在上传中，请稍候"
-  },
   "en": {
-    "placeholder": "Publish photo or activity",
-    "photoBtn": "Choose photo",
-    "maxPhotoNumber": "Add 9 photos at most",
-    "uploading": "Photo is uploading, please wait"
+    "发照片或者动态": "Publish photo or activity",
+    "发照片": "Choose photo",
+    "图片正在上传中，请稍候": "Photo is uploading, please wait"
   }
 }
 </i18n>
@@ -20,7 +13,7 @@
     <el-input
       ref="input"
       v-model="content"
-      :placeholder="$t('placeholder')"
+      :placeholder="$t('发照片或者动态')"
       resize="none"
       autosize
       maxlength="200"
@@ -33,20 +26,10 @@
     <my-divider margin="12"/>
     <div class="clearfix p-12">
       <template v-if="inputing">
-        <el-upload
+        <my-multi-upload
           ref="upload"
-          :limit="9"
-          :on-preview="onPreview"
-          :on-remove="onRemove"
-          :on-exceed="onExceed"
-          :http-request="onUpload"
-          action=""
-          multiple
-          class="mb-12"
-          list-type="picture-card"
-          accept="image/jpeg, image/jpg, image/png, image/bmp">
-          <i class="el-icon-plus"/>
-        </el-upload>
+          type="activity_photo"
+          class="mb-12" />
         <el-button
           class="left"
           @click="onCancel">{{ $t('g.cancelBtn') }}</el-button>
@@ -55,38 +38,25 @@
         v-else
         round
         class="left publish-card__photo-btn"
-        @click="onFocus"><icon name="camera-retro" />{{ $t('photoBtn') }}</el-button>
+        @click="onFocus"><icon name="camera-retro" />{{ $t('发照片') }}</el-button>
       <el-button
         :loading="publishBtnLoading"
         type="primary"
         class="right"
         @click="onPublish">{{ $t('g.publish') }}</el-button>
     </div>
-    <el-dialog :visible.sync="preview.visible">
-      <img
-        :src="preview.src"
-        width="100%" >
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import 'vue-awesome/icons/camera-retro'
 import { publishActivity } from '@/api/activity'
-import { upload } from '@/api/upload'
 export default {
   data () {
     return {
       content: '',
-      photoImageIds: [], // {uid: 文件id, id: 数据库id}
       inputing: false,
-      publishBtnLoading: false,
-      preview: {
-        visible: false,
-        src: ''
-      },
-      uploadingCount: 0, // 正在上传的文件数量
-      uploadQueue: [] // 上传队列的source，可以cancel {uid, source}
+      publishBtnLoading: false
     }
   },
   methods: {
@@ -94,65 +64,30 @@ export default {
       // this.uploadingCount = 0
       this.inputing = true
     },
-    onPreview (photo) {
-      this.preview.visible = true
-      this.preview.src = photo.url
-    },
-    onRemove (file) {
-      // 如果是已上传的，从已上传列表里删除
-      this.photoImageIds = this.photoImageIds.filter(v => {
-        return file.uid !== v.uid
-      })
-      // 如果是正在上传的，取消上传
-      this.uploadQueue.forEach(v => {
-        if (v.uid === file.uid) v.source.cancel()
-      })
-    },
-    onExceed () {
-      this.$message.error(this.$t('maxPhotoNumber'))
-    },
-    onUpload (file) {
-      let uid = file.file.uid
-      let source = this.$axios.CancelToken.source()
-      this.uploadQueue.push({ source, uid }) // 加入到上传队列中
-      this.uploadingCount++ // 信号量+1
-      file.onProgress({ percent: 50 }) // 传一个percent参数，显示loading
-      upload('activity_photo', file.file, { cancelToken: source.token })
-        .then(({ data }) => {
-          this.uploadingCount && this.uploadingCount-- // 信号量-1
-          file.onSuccess()
-          this.photoImageIds.push({ uid, id: data.id })
-        }).catch(error => {
-          this.uploadingCount && this.uploadingCount-- // 信号量-1
-          file.onError()
-          console.error(error)
-        })
-    },
     onPublish () {
       if (!this.inputing) {
-        this.inputing = true
+        this.inputing = true // 不聚焦的时候点击按钮自动聚焦
         return
       }
-      if (this.uploadingCount > 0) {
-        return this.$message.warning(this.$t('uploading'))
+      let { content } = this
+      let photoIds = this.$refs.upload.getImageIds()
+      if (photoIds === false) {
+        return this.$message.warning(this.$t('图片正在上传中，请稍候'))
       }
-      if (this.content.length === 0 && !this.photoImageIds.length) {
+      if (this.content.length === 0 && !photoIds.length) {
         return
       }
       this.publishBtnLoading = true
-      let { content, photoImageIds } = this
-      photoImageIds = photoImageIds.map(v => v.id)
-      publishActivity({ content, photo_image_ids: photoImageIds }).then(({ data }) => {
-        this.$refs.upload.clearFiles()
+      publishActivity({ content, photo_image_ids: photoIds }).then(({ data }) => {
+        this.$refs.upload.clear()
         Object.assign(this.$data, this.$options.data()) // 重置data
         this.$emit('published', data)
       }).catch((e) => {
-        console.log(e.message)
         this.publishBtnLoading = false
       })
     },
     onCancel () {
-      this.uploadQueue.forEach(v => v.source.cancel('取消上传')) // 取消全部上传请求
+      this.$refs.upload.clear() // 取消全部上传请求
       Object.assign(this.$data, this.$options.data())
     }
   }

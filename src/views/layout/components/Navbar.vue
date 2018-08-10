@@ -23,7 +23,6 @@
       v-model="keyword"
       :fetch-suggestions="onInputKeyword"
       :placeholder="$t('搜索项目、设计师')"
-      :trigger-on-focus="false"
       class="search"
       popper-class="search-popover"
       select-when-unmatched
@@ -55,6 +54,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import NavbarMenu from './NavbarMenu'
 export default {
   components: { NavbarMenu },
@@ -70,20 +70,22 @@ export default {
   },
   methods: {
     onInputKeyword (keyword, cb) {
-      // eslint-disable-next-line
-      cb([{
-        value: keyword,
-        type: 'project',
-        label: this.$t('项目')
-      }, {
-        value: keyword,
-        type: 'designer',
-        label: this.$t('设计师')
-      }, {
-        value: keyword,
-        type: 'party',
-        label: this.$t('甲方')
-      }])
+      if (!keyword) cb([])
+      else {
+        cb([{
+          value: keyword,
+          type: 'project',
+          label: this.$t('项目')
+        }, {
+          value: keyword,
+          type: 'designer',
+          label: this.$t('设计师')
+        }, {
+          value: keyword,
+          type: 'party',
+          label: this.$t('甲方')
+        }])
+      }
     },
     onSelectItem (item) {
       if (!item.value) return // 有可能在没有输入时按回车

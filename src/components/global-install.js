@@ -11,6 +11,7 @@ import MyProgress from './Progress.vue'
 import MyCard from './Card.vue'
 import MyBadgeStatus from './BadgeStatus.vue'
 import MyUpload from './Upload.vue'
+import MyMultiUpload from './MultiUpload.vue'
 import MyInviteAlert from './InviteAlert.vue'
 const components = {
   MyDivider,
@@ -25,6 +26,7 @@ const components = {
   MyCard,
   MyBadgeStatus,
   MyUpload,
+  MyMultiUpload,
   MyInviteAlert
 }
 const install = function (Vue, opts = {}) {

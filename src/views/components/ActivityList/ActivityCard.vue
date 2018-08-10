@@ -1,10 +1,8 @@
 <i18n>
 {
-  "zh": {
-    "delete": "删除"
-  },
   "en": {
-    "delete": "Delete"
+    "确认删除该动态？": "Is it confirmed to delete the activity?",
+    "删除": "Delete"
   }
 }
 </i18n>
@@ -35,7 +33,7 @@
             icon="el-icon-arrow-down"/>
           <el-dropdown-menu
             slot="dropdown">
-            <el-dropdown-item command="delete">{{ $t('delete') }}</el-dropdown-item>
+            <el-dropdown-item command="delete">{{ $t('删除') }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-dropdown
@@ -193,9 +191,15 @@ export default {
         this.onUnfollow()
       }
       if (command === 'delete') {
-        deleteActivityById(this.activity.id).then(() => {
-          this.$emit('deleted', this.activity)
-        })
+        this.$confirm(this.$t('确认删除该动态？'), this.$t('g.notice'), {
+          confirmButtonText: this.$t('g.confirmBtn'),
+          cancelButtonText: this.$t('g.cancelBtn'),
+          type: 'warning'
+        }).then(() => {
+          deleteActivityById(this.activity.id).then(() => {
+            this.$emit('deleted', this.activity)
+          })
+        }).catch(() => {})
       }
     }
   }

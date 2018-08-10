@@ -81,7 +81,7 @@
         @current-change="onChangePage"/>
     </template>
     <my-invite-alert
-      v-if="!loading && !error"
+      v-if="!loading && !error && userType === 'designer'"
       class="mt2"/>
   </div>
 </template>

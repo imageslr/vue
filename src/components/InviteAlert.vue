@@ -38,7 +38,11 @@ export default {
   mounted () {
     this.clipboard = new Clipboard(this.$refs.copyBtn)
     this.clipboard.on('success', () => {
-      this.$message.success(this.$t('success'))
+      this.$message({
+        message: this.$t('success'),
+        type: 'success',
+        showClose: true
+      })
     })
     this.clipboard.on('error', () => {
       this.$message({

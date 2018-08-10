@@ -183,11 +183,11 @@ export default {
   padding: 24px 32px;
   background-color: #fff;
   .el-input {
-    width: 350px;
+    width: 200px;
   }
   .project-list-item {
     padding: 16px 24px;
-    border-bottom: 1px solid rgba($color: #000000, $alpha: 0.15);
+    border-bottom: 1px solid #e9e9e9;
     &__title {
       font-size: 16px;
       font-weight: bold;

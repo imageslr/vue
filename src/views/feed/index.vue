@@ -35,7 +35,7 @@
             to="order">{{ $t('已发布的项目') }}</router-link>
           <router-link
             class="action-area-item"
-            to="follow">{{ $t('收藏的设计师') }}</router-link>
+            to="/follow?userType=designer">{{ $t('收藏的设计师') }}</router-link>
           <router-link
             class="action-area-item"
             to="/square/designer">{{ $t('设计师广场') }}</router-link>

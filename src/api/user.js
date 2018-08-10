@@ -40,12 +40,9 @@ export function getRecommendedDesigners () {
   return request.get(`/user/recommend`)
 }
 
-// 搜索设计师
-export function searchDesignersByName (name, params) {
-  params = {
-    type: 'designer',
-    name,
-    ...params
-  }
-  return request.get('/users', { params })
+// 搜索用户
+export function searchUsers (page = 1, keyword = null, type = null) {
+  return request.get('/users', {
+    params: { page, type, keyword }
+  })
 }

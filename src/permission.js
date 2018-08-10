@@ -12,7 +12,7 @@ function hasPermission (userType, permissionRoles) {
   return permissionRoles.indexOf(userType) >= 0
 }
 
-const whiteList = ['/', '/signup', '/signin'] // 免登录白名单
+const whiteList = ['/', '/signup', '/signin', '/profile', '/search'] // 免登录白名单
 
 // 路由前权限判断
 router.beforeEach((to, from, next) => {

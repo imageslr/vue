@@ -10,12 +10,22 @@ export function unfollowUserByUID (uid) {
   return request.delete(`/user/following/${uid}`)
 }
 
-// 获取某个用户关注的人
-export function getFollowingUsersByUID (uid, page = 1) {
-  return request.get(`/users/${uid}/following?page=${page}`)
+/**
+ * 获取某个用户关注的人
+ * type: 用户类型, designer party
+ */
+export function getFollowingUsersByUID (uid, page = 1, type = null) {
+  return request.get(`/users/${uid}/following`, {
+    params: { page, type }
+  })
 }
 
-// 获取关注某个用户的人
-export function getFollowersByUID (uid, page = 1) {
-  return request.get(`/users/${uid}/followers?page=${page}`)
+/**
+ * 获取关注某个用户的人
+ * type: 用户类型, designer party
+ */
+export function getFollowersByUID (uid, page = 1, type = null) {
+  return request.get(`/users/${uid}/followers`, {
+    params: { page, type }
+  })
 }

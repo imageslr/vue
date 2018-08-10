@@ -35,8 +35,15 @@ service.interceptors.response.use(
     if (axios.isCancel(error)) {
       // 是被取消的请求的话，不输出错误信息
     } else if (!response) {
+      console.error(error)
+      let msg
+      if (error.message && error.message.indexOf('timeout') !== -1) {
+        msg = i18n.locale === 'zh' ? '网络超时，请刷新重试' : 'Timeout, please refresh and try again'
+      } else {
+        msg = i18n.locale === 'zh' ? '网络错误' : 'Network error'
+      }
       Message({
-        message: i18n.locale === 'zh' ? '网络错误' : 'Network error',
+        message: msg,
         type: 'error',
         duration: 3500,
         showClose: true
@@ -46,7 +53,7 @@ service.interceptors.response.use(
       console.error('网络响应错误', error.response)
       if (response.status === 401) {
         store.dispatch('SIGN_OUT').then(() => {
-          router.replace({ path: '/signin' })
+          router.push({ path: '/signin' })
         })
       } else if (response.data) {
         let errmsg = ''

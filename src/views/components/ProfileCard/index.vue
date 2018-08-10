@@ -23,13 +23,11 @@
         :avatar-url="userInfo.avatar_url"
         class="profile-card__info-avatar"/>
       <h1 class="m0 mb1">{{ userInfo.name }}</h1>
-      <p class="m0 f-12 black-65">
-        {{ userInfo.title }}
-        <span
-          v-t="$t(`g.${userInfo.type}`)"
-          v-if="userInfo.type"/>
-      </p>
-      <p class="m0 mt-4 f-12 black-65">{{ userInfo.introduction }}</p>
+      <p v-text="userInfo.title" />
+      <p
+        v-t="$t(`g.${userInfo.type}`)"
+        v-if="userInfo.type"/>
+      <p v-text="userInfo.introduction" />
     </div>
     <div class="profile-card__follow">
       <div class="p-12">
@@ -83,11 +81,19 @@ export default {
   text-align: center;
   &__info {
     padding: 0 12px 12px;
-  }
-  &__info-avatar {
-    margin: -40px auto 16px;
-    width: 80px;
-    height: 80px;
+    &-avatar {
+      margin: -40px auto 16px;
+      width: 80px;
+      height: 80px;
+    }
+    p {
+      margin: 0 0 4px;
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.65);
+      &:last-child {
+        margin: 0;
+      }
+    }
   }
   &__follow {
     border-top: 1px solid rgba(0, 0, 0, 0.15);

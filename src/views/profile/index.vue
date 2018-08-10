@@ -153,7 +153,6 @@
 import ProfileCard from '@/views/components/ProfileCard'
 import ActivityList from '@/views/components/ActivityList'
 import { getUserInfoByUID } from '@/api/user'
-import { followUserByUID, unfollowUserByUID } from '@/api/follow'
 import { getActivitiesByUID } from '@/api/activity'
 import { getReceivedReviewsByUID } from '@/api/review'
 export default {
@@ -227,8 +226,8 @@ export default {
     },
     onToggleFollow () {
       this.followBtnLoading = true
-      const fn = this.userInfo.following ? unfollowUserByUID : followUserByUID
-      fn(this.pageUID).then(() => {
+      const action = this.userInfo.following ? 'UNFOLLOW' : 'FOLLOW'
+      this.$store.dispatch(action, this.pageUID).then(() => {
         this.followBtnLoading = false
         this.userInfo.following = !this.userInfo.following
       }).catch(() => {

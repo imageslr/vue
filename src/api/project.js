@@ -79,3 +79,8 @@ export function searchProjects (page = 1, keyword = null, status = null) {
     params: { page, keyword, status }
   })
 }
+
+// 获取一个项目的报名列表
+export function getApplicationsByProjectId (id, page = 1) {
+  return request.get(`/projects/${id}/applications?page=${page}`)
+}

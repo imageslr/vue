@@ -41,7 +41,7 @@ const user = {
       return signUp(userInfo).then(({ data }) => {
         setToken(data.meta.token)
         commit('SET_TOKEN', data.meta.token)
-        commit('SET_USERINFO', User.parse(data))
+        commit('SET_USERINFO', data)
       })
     },
 
@@ -50,7 +50,7 @@ const user = {
       return signIn(phone, password).then(({ data }) => {
         setToken(data.meta.token)
         commit('SET_TOKEN', data.meta.token)
-        commit('SET_USERINFO', User.parse(data))
+        commit('SET_USERINFO', data)
       })
     },
 
@@ -59,7 +59,7 @@ const user = {
       return new Promise((resolve, reject) => {
         getCurrentUserInfo()
           .then(({ data }) => {
-            commit('SET_USERINFO', User.parse(data))
+            commit('SET_USERINFO', data)
             resolve()
           })
           .catch(error => {

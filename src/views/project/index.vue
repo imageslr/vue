@@ -28,6 +28,7 @@
     "项目补充": "Project supplement",
     "补充于": "Supplement at",
     "补充成功": "Successful operation",
+    "报名列表": "Application list",
     "请输入项目的补充内容，比如如项目面积、项目风格、希望设计师做到哪种程度等等": "Please enter the supplement description",
     "补充内容不能为空":"Supplement description cannot be empty",
     "下载附件": "Download file",
@@ -36,7 +37,11 @@
     "只能上传一个文件": "Allow upload only one file",
     "上传文件大小不能超过10MB！": "File max size is 10MB",
     "正在上传附件，请稍后": "File uploading, please wait",
-    "简单说点什么，让业主更快了解你（200字以内）": "Say something so that the party can know you quickly (200 characters at most)"
+    "简单说点什么，让业主更快了解你（200字以内）": "Say something so that the party can know you quickly (200 characters at most)",
+    "我的报名信息": "My application",
+    "报名于": "Applied at",
+    "查看备注": "View remark",
+    "备注": "Remark"
   }
 }
 </i18n>
@@ -110,63 +115,143 @@
         <el-step :title="$t('项目已完成')" />
       </el-steps>
     </div>
-    <div
-      v-loading="loading"
-      class="main-container card">
-      <h3 v-t="'项目的类型是？'" />
-      <p>{{ project.types.join('/') }}</p>
-      <h3 v-t="'项目的功能是？'" />
-      <p>{{ project.features.join('/') }}</p>
-      <h3 v-t="'项目的面积有多大？'" />
-      <p v-text="project.area" />
-      <h3 v-t="'项目的其他描述和需求'" />
-      <p
-        class="pre-wrap"
-        v-text="project.description" />
-      <my-alert
-        v-if="project.project_file_url"
-        class="mt-12"><a :href="project.project_file_url">{{ $t('下载附件') }}</a></my-alert>
-      <h3 v-t="'项目的交付时间'" />
-      <p v-text="project.delivery_time" />
-      <h3 v-t="'希望用多长时间找设计师？'" />
-      <p v-text="project.find_time" />
-      <h3 v-t="'希望付给设计师的费用是多少？'" />
-      <p v-text="project.payment" />
-      <template
-        v-if="project.supplement_at">
-        <h3 v-t="'项目补充'" />
-        <p v-text="project.supplement_description" />
+    <div class="main-container">
+      <div
+        v-if="project.applying"
+        class="card">
+        <h3 v-t="'我的报名信息'" />
+        <p v-text="project.application.remark" />
         <my-alert
-          v-if="project.supplement_file_url"
-          class="mt-12"><a :href="project.supplement_file_url">{{ $t('下载附件') }}</a></my-alert>
-        <p class="m0 mt1 f-12 black-65">{{ $t('补充于') }}：{{ project.supplement_at }}</p>
-      </template>
+          v-if="project.application.application_file_url"
+          class="mt-12"><a :href="project.application.application_file_url">{{ $t('下载附件') }}</a></my-alert>
+        <p class="m0 mt1 f-12 black-65">{{ $t('报名于') }}：{{ project.application.created_at }}</p>
+      </div>
+      <div
+        v-loading="loading"
+        class="card">
+        <h3 v-t="'项目的类型是？'" />
+        <p>{{ project.types.join('/') }}</p>
+        <h3 v-t="'项目的功能是？'" />
+        <p>{{ project.features.join('/') }}</p>
+        <h3 v-t="'项目的面积有多大？'" />
+        <p v-text="project.area" />
+        <h3 v-t="'项目的其他描述和需求'" />
+        <p
+          class="pre-wrap"
+          v-text="project.description" />
+        <my-alert
+          v-if="project.project_file_url"
+          class="mt-12"><a :href="project.project_file_url">{{ $t('下载附件') }}</a></my-alert>
+        <h3 v-t="'项目的交付时间'" />
+        <p v-text="project.delivery_time" />
+        <h3 v-t="'希望用多长时间找设计师？'" />
+        <p v-text="project.find_time" />
+        <h3 v-t="'希望付给设计师的费用是多少？'" />
+        <p v-text="project.payment" />
+        <template
+          v-if="project.supplement_at">
+          <h3 v-t="'项目补充'" />
+          <p v-text="project.supplement_description" />
+          <my-alert
+            v-if="project.supplement_file_url"
+            class="mt-12"><a :href="project.supplement_file_url">{{ $t('下载附件') }}</a></my-alert>
+          <p class="m0 mt1 f-12 black-65">{{ $t('补充于') }}：{{ project.supplement_at }}</p>
+        </template>
+      </div>
+      <div
+        v-loading="applicationLoading"
+        v-if="isPublisher"
+        class="card">
+        <h3 v-t="'报名列表'" />
+        <my-empty v-if="!applicationList.length" />
+        <div
+          v-else
+          class="application-list">
+          <div
+            v-for="application in applicationList"
+            :key="application.id"
+            class="application-list-item">
+            <router-link :to="'/profile?uid=' + application.user.id">
+              <my-avatar
+                :avatar-url="application.user.avatar_url"
+                class="application-list-item__avatar"/>
+            </router-link>
+            <div class="application-list-item__info">
+              <router-link
+                :to="'/profile?uid=' + application.user.id"
+                class="bold black-85">{{ application.user.name }}</router-link>
+              <p>
+                <span class="color-primary">{{ $t('关注') }}</span>
+                <span v-text="application.user.following_count" />
+                <span class="color-primary">{{ $t('粉丝') }}</span>
+                <span v-text="application.user.follower_count" />
+              </p>
+              <p v-text="application.user.title" />
+              <p v-text="application.user.introduction" />
+            </div>
+            <div class="black-45 f-14">
+              <div
+                v-t="'报名于'"
+                class="m0 mb-4" />
+              <div
+                class="m0"
+                v-text="application.created_at" />
+            </div>
+            <div class="application-list-item__action">
+              <el-button
+                :disabled="!application.remark"
+                type="text"
+                @click="onViewDetail(application)">
+                {{ $t('查看备注') }}
+              </el-button>
+              <el-button
+                :disabled="!application.application_file_url"
+                type="text"
+                @click="onDownloadApplicationFile(application)" >
+                {{ $t('下载附件') }}
+              </el-button>
+            </div>
+          </div>
+          <el-pagination
+            :current-page.sync="currentPage"
+            :page-count="pageCount"
+            background
+            layout="prev, pager, next"
+            class="mt2 center"
+            @current-change="getApplications"/>
+        </div>
+      </div>
+      <el-dialog
+        :visible.sync="dialogVisible"
+        :title="dialogText.title">
+        <el-input
+          v-model="dialogForm.textarea"
+          :rows="5"
+          :placeholder="dialogText.placeholder"
+          type="textarea"/>
+        <my-upload
+          ref="upload"
+          :type="uploadFileType"
+          @start="onUploadStart"
+          @success="onUploadSuccess"
+          @error="onUploadError"
+          @remove="onUploadRemove"/>
+        <span
+          slot="footer"
+          class="dialog-footer">
+          <el-button @click="onDialogCancel">{{ $t('g.cancelBtn') }}</el-button>
+          <el-button
+            :loading="dialogButtonLoading"
+            type="primary"
+            @click="onDialogConfirm">{{ $t('g.confirmBtn') }}</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        :visible.sync="applicationDialog.visible"
+        :title="$t('备注')">
+        <p v-text="applicationDialog.remark" />
+      </el-dialog>
     </div>
-    <el-dialog
-      :visible.sync="dialogVisible"
-      :title="dialogText.title">
-      <el-input
-        v-model="dialogForm.textarea"
-        :rows="5"
-        :placeholder="dialogText.placeholder"
-        type="textarea"/>
-      <my-upload
-        ref="upload"
-        :type="uploadFileType"
-        @start="onUploadStart"
-        @success="onUploadSuccess"
-        @error="onUploadError"
-        @remove="onUploadRemove"/>
-      <span
-        slot="footer"
-        class="dialog-footer">
-        <el-button @click="onDialogCancel">{{ $t('g.cancelBtn') }}</el-button>
-        <el-button
-          :loading="dialogButtonLoading"
-          type="primary"
-          @click="onDialogConfirm">{{ $t('g.confirmBtn') }}</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -180,25 +265,35 @@ import {
   favoriteProjectById,
   unfavoriteProjectById,
   applyProjectById,
-  cancelApplyProjectById } from '@/api/project'
+  cancelApplyProjectById,
+  getApplicationsByProjectId } from '@/api/project'
 export default {
   data () {
     return {
-      loading: false,
       project: {
         id: null,
         title: '加载中',
         types: [],
         features: [],
         favorite_count: 0,
-        user: {}
+        user: {},
+        application: {}
       },
+      applicationList: [], // 报名列表
+      currentPage: 1, // 报名列表当前页
+      pageCount: 1, // 报名列表总页数
+      loading: false, // 是否正在获取项目详情
+      applicationLoading: false, // 是否正在获取报名信息
       dialogVisible: false,
       dialogUploading: false, // 是否正在上传文件
       dialogButtonLoading: false, // 是否正在上传表单数据
       dialogForm: {
         textarea: '',
         file_id: null
+      },
+      applicationDialog: { // 报名详情Dialog
+        remark: '', // 备注信息
+        visible: false
       }
     }
   },
@@ -221,6 +316,10 @@ export default {
     // 项目是否取消
     isCanceled () {
       return this.project.status == Project.STATUS_CANCELED
+    },
+    // 甲方：是否是项目的发布者
+    isPublisher () {
+      return this.project.user.id == this.$uid()
     },
     // 甲方：能否补充项目
     supplementable () {
@@ -261,6 +360,11 @@ export default {
       return this.$isParty() ? 'project_file' : 'application_file'
     }
   },
+  watch: {
+    project () {
+      if (this.isPublisher) this.getApplications()
+    }
+  },
   created () {
     this.getProject()
   },
@@ -273,6 +377,17 @@ export default {
       }).catch(() => {
         this.loading = false
       })
+    },
+    getApplications (page = 1) {
+      this.applicationLoading = true
+      getApplicationsByProjectId(this.id, page)
+        .then(({ data: { data, meta: { pagination } } }) => {
+          this.applicationLoading = false
+          this.applicationList = data
+          this.pageCount = pagination.total_pages
+        }).catch(() => {
+          this.applicationLoading = false
+        })
     },
     /**
      * 设计师相关操作：报名、取消报名、收藏、取消收藏
@@ -322,6 +437,16 @@ export default {
           })
         })
       }).catch(() => {})
+    },
+    /**
+     * 查看报名详情
+     */
+    onViewDetail (application) {
+      this.applicationDialog.visible = true
+      this.applicationDialog.remark = application.remark
+    },
+    onDownloadApplicationFile (application) {
+      window.open(application.application_file_url)
     },
     /**
      * Dialog操作：设计师报名项目、甲方补充项目
@@ -418,11 +543,14 @@ export default {
     }
   }
 }
-.main-container {
-  margin-top: 24px;
+.card {
+  margin-bottom: 24px;
   padding: 24px;
   font-size: 14px;
   color: rgba(0, 0, 0, 0.85);
+  &:last-child {
+    margin-bottom: 0;
+  }
   h3 {
     margin-top: 32px;
     &:first-child {
@@ -436,5 +564,34 @@ export default {
 }
 .alert {
   font-size: 14px;
+}
+.application-list {
+  &-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px;
+    font-size: 14px;
+    &__avatar {
+      width: 48px;
+      height: 48px;
+      margin-right: 24px;
+    }
+    &__info {
+      flex: 1;
+      overflow: hidden;
+      margin-right: 24px;
+      p {
+        margin: 4px 0 0;
+        color: rgba(0, 0, 0, 0.45);
+        font-size: 12px;
+      }
+    }
+    &__action {
+      margin-left: 100px;
+      .el-button {
+        padding: 0;
+      }
+    }
+  }
 }
 </style>

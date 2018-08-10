@@ -80,6 +80,9 @@
         class="mt2 center"
         @current-change="onChangePage"/>
     </template>
+    <my-invite-alert
+      v-if="!loading && !error"
+      class="mt2"/>
   </div>
 </template>
 

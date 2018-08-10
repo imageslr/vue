@@ -53,7 +53,7 @@ router.beforeEach((to, from, next) => {
       // 在免登录白名单，直接进入
       next()
     } else {
-      next({ path: '/signin' })
+      next({ path: '/signin', replace: true })
       NProgress.done() // 如果当前页面就是signin，那跳转到其他页面再next到signin时不会触发afterEach钩子
     }
   }

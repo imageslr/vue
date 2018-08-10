@@ -2,7 +2,8 @@ export default {
   app: {
     title: '尤歌',
     description: '一个连接甲方与设计师的平台',
-    cpr: 'YoGooooo'
+    cpr: 'YoGooooo',
+    link: 'www.yogooooo.com'
   },
   // global
   g: {

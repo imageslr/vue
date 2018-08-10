@@ -5,8 +5,8 @@
       class="alert__icon"/>
     <slot>
       <p
-        v-t="title"
-        class="alert__title"/>
+        class="alert__title"
+        v-text="title"/>
     </slot>
     <el-button
       v-if="actionText"

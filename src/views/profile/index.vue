@@ -1,30 +1,19 @@
 <i18n>
 {
-  "zh": {
-    "profile": "个人资料",
-    "editProfile": "编辑个人资料",
-    "partyReviews": "甲方评价",
-    "designerReviews": "设计师评价",
-    "personalActivities": "个人动态",
-    "following": "已关注",
-    "contact": "联系",
-    "noReviews": "暂未收到评价",
-    "viewAll": "查看所有评价",
-    "allReviews": "所有评价",
-    "works": "作品集"
-  },
   "en": {
-    "profile": "Profile",
-    "editProfile": "Edit profile",
-    "partyReviews": "Party Reviews",
-    "designerReviews": "Designer Reviews",
-    "personalActivities": "Personal Activities",
-    "following": "Following",
-    "contact": "Contact",
-    "noReviews": "No received reviews",
-    "viewAll": "View all reviews",
-    "allReviews": "All reviews",
-    "works": "Works"
+    "个人资料": "Profile",
+    "编辑个人资料": "Edit profile",
+    "甲方评价": "Party Reviews",
+    "设计师评价": "Designer Reviews",
+    "个人动态": "Personal Activities",
+    "已关注": "Following",
+    "关注": "Follow",
+    "联系": "Contact",
+    "暂未收到评价": "No received reviews",
+    "查看所有评价": "View all reviews",
+    "所有评价": "All reviews",
+    "作品集": "Works",
+    "拼命加载中": "Loading user info"
   }
 }
 </i18n>
@@ -33,22 +22,22 @@
   <div class="main-container">
     <div class="main-container__left">
       <h2
-        v-t="$t('profile')"
+        v-t="'个人资料'"
         class="title" />
       <profile-card :user-info="userInfo">
         <el-button
           v-if="isCurrentUser"
-          @click="$router.push({path: '/me'})">{{ $t('editProfile') }}</el-button>
+          @click="$router.push({path: '/me'})">{{ $t('编辑个人资料') }}</el-button>
         <template v-else>
           <el-button
             :loading="followBtnLoading"
             type="primary"
-            @click="onToggleFollow">{{ userInfo.following ? $t('following') : $t('g.follow') }}</el-button>
+            @click="onToggleFollow">{{ userInfo.following ? $t('已关注') : $t('关注') }}</el-button>
           <el-button>{{ $t('contact') }}</el-button>
         </template>
       </profile-card>
       <h2
-        v-t="$t((userInfo.type === 'party' ? 'designer' : 'party') + 'Reviews')"
+        v-t="$t((userInfo.type === 'party' ? '设计师评价' : '甲方评价'))"
         class="title" />
       <div class="card review-card">
         <div
@@ -84,9 +73,9 @@
           v-if="reviews.length"
           type="text"
           class="center w-100"
-          @click="reviewDialog.visible=true">{{ $t('viewAll') }} </el-button>
+          @click="reviewDialog.visible=true">{{ $t('查看所有评价') }} </el-button>
         <p
-          v-t="$t('noReviews')"
+          v-t="$t('暂未收到评价')"
           v-if="!reviews.length"
           class="m0 p-12 f-12 black-45 center"/>
       </div>
@@ -94,19 +83,32 @@
     <div class="main-container__right">
       <template v-if="userInfo.type === 'designer'">
         <h2
-          v-t="$t('works')"
-          class="title" />
-        <div class="card f-14 center p3 black-65">暂无作品</div>
+          v-t="'作品集'"
+          :class="{'unactive': pageType != 'work' }"
+          class="title title--inline mr2"
+          @click="onTogglePageType" />
+        <h2
+          v-t="'个人动态'"
+          :class="{'unactive': pageType != 'activity' }"
+          class="title title--inline"
+          @click="onTogglePageType" />
+        <work-list v-if="pageType === 'work'" />
+        <activity-list
+          v-else
+          :get-activities="getActivities"
+          :show-action-button="isCurrentUser"/>
       </template>
-      <h2
-        v-t="$t('personalActivities')"
-        class="title" />
-      <activity-list
-        :get-activities="getActivities"
-        :show-action-button="isCurrentUser"/>
+      <template v-else>
+        <h2
+          v-t="'个人动态'"
+          class="title" />
+        <activity-list
+          :get-activities="getActivities"
+          :show-action-button="isCurrentUser"/>
+      </template>
     </div>
     <el-dialog
-      :title="$t('allReviews')"
+      :title="$t('所有评价')"
       :visible.sync="reviewDialog.visible">
       <div v-loading="reviewDialog.loading">
         <div
@@ -152,13 +154,15 @@
 <script>
 import ProfileCard from '@/views/components/ProfileCard'
 import ActivityList from '@/views/components/ActivityList'
+import WorkList from './components/WorkList'
 import { getUserInfoByUID } from '@/api/user'
 import { getActivitiesByUID } from '@/api/activity'
 import { getReceivedReviewsByUID } from '@/api/review'
 export default {
   components: {
     ProfileCard,
-    ActivityList
+    ActivityList,
+    WorkList
   },
   data () {
     return {
@@ -182,6 +186,10 @@ export default {
     }
   },
   computed: {
+    // 页面类型，默认是作品集
+    pageType () {
+      return this.$route.query.type || 'work'
+    },
     // 页面参数上的uid，为空的时候默认是自己的主页
     pageUID () {
       return this.$route.query.uid || this.$uid()
@@ -195,8 +203,17 @@ export default {
     if (this.isCurrentUser) {
       this.userInfo = this.$store.getters.userInfo
     } else {
+      const loading = this.$loading({
+        lock: true,
+        spinner: 'el-icon-loading',
+        text: this.$t('拼命加载中'),
+        background: 'rgba(255, 255, 255)'
+      })
       getUserInfoByUID(this.pageUID).then(({ data }) => {
         this.userInfo = data
+        loading.close()
+      }).catch(() => {
+        loading.close()
       })
     }
 
@@ -233,6 +250,15 @@ export default {
       }).catch(() => {
         this.followBtnLoading = false
       })
+    },
+    onTogglePageType () {
+      this.$router.push({
+        path: this.$route.path,
+        query: {
+          uid: this.pageUID,
+          type: this.pageType === 'work' ? 'activity' : 'work'
+        }
+      })
     }
   }
 }
@@ -257,11 +283,20 @@ export default {
 .title {
   padding: 12px 16px;
   font-size: 11px;
-  color: #4b4f56;
+  color: rgba(0, 0, 0, 0.85);
   background: #f6f7f9;
   border-radius: 2px;
   box-shadow: 0 1px 1px 0 #b5b5b5, 0 2px 1px 0 #e2e1e1,
     0 1px 4px 1px rgba(0, 0, 0, 0.1);
+  &--inline {
+    display: inline-block;
+    width: 220px;
+    cursor: pointer;
+    &.unactive {
+      color: rgba(0, 0, 0, 0.65);
+      font-weight: normal;
+    }
+  }
 }
 .review-item {
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
@@ -273,10 +308,6 @@ export default {
       width: 56px;
       height: 56px;
       margin-right: 8px;
-      // border: none;
-      // border-radius: 0;
-      // box-shadow: none;
-      // background: none;
     }
     &-rate /deep/ .el-rate__icon {
       margin-right: 0;

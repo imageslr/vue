@@ -7,6 +7,7 @@
     "设计师广场": "Designer square",
     "搜索项目": "Search projects",
     "我的项目": "My projects",
+    "添加作品": "Add work",
     "我的作品集": "My works"
   }
 }
@@ -49,7 +50,10 @@
             to="order">{{ $t('我的项目') }}</router-link>
           <router-link
             class="action-area-item"
-            to="work">{{ $t('我的作品集') }}</router-link>
+            to="/work/add">{{ $t('添加作品') }}</router-link>
+          <router-link
+            class="action-area-item"
+            to="/profile">{{ $t('我的作品集') }}</router-link>
         </template>
         <app-footer/>
       </aside>

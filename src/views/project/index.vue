@@ -118,7 +118,7 @@
     <div class="main-container">
       <div
         v-if="project.applying"
-        class="card">
+        class="card my-applicaion">
         <h3 v-t="'我的报名信息'" />
         <p v-text="project.application.remark" />
         <my-alert
@@ -128,7 +128,7 @@
       </div>
       <div
         v-loading="loading"
-        class="card">
+        class="card project-info">
         <h3 v-t="'项目的类型是？'" />
         <p>{{ project.types.join('/') }}</p>
         <h3 v-t="'项目的功能是？'" />
@@ -162,7 +162,9 @@
         v-loading="applicationLoading"
         v-if="isPublisher"
         class="card">
-        <h3 v-t="'报名列表'" />
+        <h3
+          v-t="'报名列表'"
+          class="mt0 mb2" />
         <my-empty v-if="!applicationList.length" />
         <div
           v-else
@@ -543,55 +545,60 @@ export default {
     }
   }
 }
-.card {
-  margin-bottom: 24px;
-  padding: 24px;
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.85);
-  &:last-child {
-    margin-bottom: 0;
-  }
-  h3 {
-    margin-top: 32px;
-    &:first-child {
-      margin-top: 0;
+.main-container {
+  .card {
+    margin-bottom: 24px;
+    padding: 24px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.85);
+    &:last-child {
+      margin-bottom: 0;
+    }
+    &.project-info {
+      h3 {
+        margin-top: 32px;
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+      p {
+        margin: 8px 0;
+        line-height: 1.81em;
+      }
     }
   }
-  p {
-    margin: 8px 0;
-    line-height: 1.81em;
+  .application-list {
+    &-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 16px;
+      font-size: 14px;
+      &__avatar {
+        width: 48px;
+        height: 48px;
+        margin-right: 24px;
+      }
+      &__info {
+        flex: 1;
+        overflow: hidden;
+        margin-right: 24px;
+        p {
+          margin: 4px 0 0;
+          color: rgba(0, 0, 0, 0.45);
+          font-size: 12px;
+        }
+      }
+      &__action {
+        margin-left: 100px;
+        .el-button {
+          padding: 0;
+        }
+      }
+    }
   }
 }
+
 .alert {
   font-size: 14px;
-}
-.application-list {
-  &-item {
-    display: flex;
-    align-items: flex-start;
-    padding: 16px;
-    font-size: 14px;
-    &__avatar {
-      width: 48px;
-      height: 48px;
-      margin-right: 24px;
-    }
-    &__info {
-      flex: 1;
-      overflow: hidden;
-      margin-right: 24px;
-      p {
-        margin: 4px 0 0;
-        color: rgba(0, 0, 0, 0.45);
-        font-size: 12px;
-      }
-    }
-    &__action {
-      margin-left: 100px;
-      .el-button {
-        padding: 0;
-      }
-    }
-  }
 }
 </style>

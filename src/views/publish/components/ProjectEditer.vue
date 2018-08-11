@@ -234,7 +234,7 @@ export default {
           { max: 50, message: maxLen(this.$t('title'), 50) }
         ],
         price: { required: true, type: 'number', message: plsEnter(this.$t('price')) },
-        description: { required: true, message: plsEnter(this.$t('description')) },
+        description: { required: true, message: plsEnter(this.$t('description')), whitespace: true },
         biddingNum: { required: true, message: this.$t('placeholders.biddingNum') },
         rewardNum: { required: true, message: plsCheck(this.$t('rewardNum')) },
         rewardSettings: {

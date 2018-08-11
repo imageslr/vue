@@ -8,7 +8,7 @@ import SignIn from '../views/login/SignIn'
 import Feed from '../views/feed'
 import Activity from '../views/activity'
 import Publish from '../views/publish'
-import Result from '../views/publish/Result'
+import PublishResult from '../views/publish/Result'
 import Follow from '../views/follow'
 import Profile from '../views/profile'
 import Project from '../views/project'
@@ -18,6 +18,8 @@ import MeSidebar from '../views/me/Sidebar'
 import MeIndex from '../views/me/index'
 import MeAuth from '../views/me/Auth'
 import Search from '../views/search'
+import AddWork from '../views/work/add'
+import AddWorkResult from '../views/work/Result'
 import Error404 from '../views/error/404'
 
 Vue.use(Router)
@@ -100,7 +102,7 @@ export default new Router({
           meta: {
             roles: ['party']
           },
-          component: Result
+          component: PublishResult
         }
       ]
     },
@@ -167,6 +169,28 @@ export default new Router({
           path: '',
           name: 'search',
           component: Search
+        }
+      ]
+    },
+    {
+      path: '/work',
+      component: Layout,
+      children: [
+        {
+          path: 'add',
+          name: 'addWork',
+          meta: {
+            roles: ['designer']
+          },
+          component: AddWork
+        },
+        {
+          path: 'result',
+          name: 'addWorkResult',
+          meta: {
+            roles: ['designer']
+          },
+          component: AddWorkResult
         }
       ]
     },

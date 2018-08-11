@@ -78,7 +78,7 @@ export default {
         return
       }
       this.publishBtnLoading = true
-      publishActivity({ content, photo_image_ids: photoIds }).then(({ data }) => {
+      publishActivity({ content, photo_ids: photoIds }).then(({ data }) => {
         this.$refs.upload.clear()
         Object.assign(this.$data, this.$options.data()) // 重置data
         this.$emit('published', data)

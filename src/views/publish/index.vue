@@ -341,10 +341,10 @@ export default {
         title: { required: true, message: this.$t('请填写此项') },
         types: { required: true, validator: getCheckBoxValidator('types') },
         features: { required: true, validator: getCheckBoxValidator('features') },
-        area: { required: true, message: this.$t('请填写此项') },
+        area: { required: true, message: this.$t('请填写此项'), whitespace: true },
         delivery_time: { required: true, validator: getRadioValidator('delivery_time') },
         payment: { required: true, message: this.$t('请填写此项') },
-        description: { required: true, message: this.$t('请填写此项') },
+        description: { required: true, message: this.$t('请填写此项'), whitespace: true },
         find_time: { required: true, validator: getRadioValidator('find_time') }
       },
       publishing: false,

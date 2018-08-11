@@ -19,7 +19,9 @@
 </i18n>
 
 <template>
-  <div class="main-container">
+  <div
+    v-if="userInfo.id"
+    class="main-container">
     <div class="main-container__left">
       <h2
         v-t="'个人资料'"
@@ -86,17 +88,19 @@
           v-t="'作品集'"
           :class="{'unactive': pageType != 'work' }"
           class="title title--inline mr2"
-          @click="onTogglePageType" />
+          @click="pageType = 'work'" />
         <h2
           v-t="'个人动态'"
           :class="{'unactive': pageType != 'activity' }"
           class="title title--inline"
-          @click="onTogglePageType" />
-        <work-list v-if="pageType === 'work'" />
-        <activity-list
-          v-else
-          :get-activities="getActivities"
-          :show-action-button="isCurrentUser"/>
+          @click="pageType = 'activity'" />
+        <keep-alive>
+          <work-list v-if="pageType === 'work'" />
+          <activity-list
+            v-else
+            :get-activities="getActivities"
+            :show-action-button="isCurrentUser"/>
+        </keep-alive>
       </template>
       <template v-else>
         <h2
@@ -182,14 +186,11 @@ export default {
         reviews: [],
         currentPage: 1,
         pageCount: 1
-      }
+      },
+      pageType: 'work' // 设计师主页当前显示的信息流类型，work（作品集）或activity（动态）
     }
   },
   computed: {
-    // 页面类型，默认是作品集
-    pageType () {
-      return this.$route.query.type || 'work'
-    },
     // 页面参数上的uid，为空的时候默认是自己的主页
     pageUID () {
       return this.$route.query.uid || this.$uid()
@@ -200,6 +201,7 @@ export default {
     }
   },
   created () {
+    // 获取用户信息
     if (this.isCurrentUser) {
       this.userInfo = this.$store.getters.userInfo
     } else {
@@ -249,15 +251,6 @@ export default {
         this.userInfo.following = !this.userInfo.following
       }).catch(() => {
         this.followBtnLoading = false
-      })
-    },
-    onTogglePageType () {
-      this.$router.push({
-        path: this.$route.path,
-        query: {
-          uid: this.pageUID,
-          type: this.pageType === 'work' ? 'activity' : 'work'
-        }
       })
     }
   }

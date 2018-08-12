@@ -28,9 +28,6 @@
         @unfollow="onToggleFollow($event, false)"
         @deleted="onDeleted(index)"/>
     </transition-group>
-    <my-preview
-      :visible.sync="preview.visible"
-      :src="preview.src" />
     <my-loader
       :loading="loading"
       :error="error"
@@ -40,6 +37,7 @@
       v-t="$t('g.nomore')"
       v-if="nomore"
       class="no-more"/>
+    <my-multi-preview ref="preview"/>
   </div>
 </template>
 
@@ -59,10 +57,6 @@ export default {
   },
   data () {
     return {
-      preview: {
-        visible: false,
-        src: ''
-      },
       activities: [],
       currentPage: 0,
       loading: false,
@@ -93,10 +87,7 @@ export default {
       this.error = false
     },
     onPreview (e) {
-      if (e.target.tagName === 'IMG') {
-        this.preview.visible = true
-        this.preview.src = e.target.src
-      }
+      this.$refs.preview.open(e.urls, e.index)
     },
     onDeleted (index) {
       this.activities.splice(index, 1)

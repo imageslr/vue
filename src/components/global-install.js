@@ -3,6 +3,7 @@ import MyDivider from './Divider.vue'
 import MyLangSelect from './LangSelect.vue'
 import MyAvatar from './Avatar.vue'
 import MyPreview from './Preview.vue'
+import MyMultiPreview from './MultiPreview.vue'
 import MyLoader from './Loader.vue'
 import MySvgIcon from './SvgIcon.vue'
 import MyAlert from './Alert.vue'
@@ -18,6 +19,7 @@ const components = {
   MyLangSelect,
   MyAvatar,
   MyPreview,
+  MyMultiPreview,
   MyLoader,
   MySvgIcon,
   MyAlert,

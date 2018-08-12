@@ -67,11 +67,11 @@
         :autoplay="false"
         class="activity-card__content-carousel"
         trigger="click"
-        height="250px"
-        @click.native="$emit('preview', $event)">
+        height="250px">
         <el-carousel-item
-          v-for="photo in activity.photo_urls"
-          :key="photo">
+          v-for="(photo, index) in activity.photo_urls"
+          :key="photo"
+          @click.native="$emit('preview', {urls: activity.photo_urls, index})">
           <img
             :src="photo"
             class="activity-card__content-carousel-item">

@@ -1,8 +1,12 @@
 <template>
-  <activity-card
-    :activity="activity"
-    default-show-reply-list
-    style="margin: 24px auto; width: 600px;" />
+  <div>
+    <activity-card
+      :activity="activity"
+      default-show-reply-list
+      style="margin: 24px auto; width: 600px;"
+      @preview="onPreview" />
+    <my-multi-preview ref="preview"/>
+  </div>
 </template>
 
 <script>
@@ -35,6 +39,11 @@ export default {
     getActivityById(this.$route.params.id).then(({ data }) => {
       this.activity = data
     })
+  },
+  methods: {
+    onPreview (e) {
+      this.$refs.preview.open(e.urls, e.index)
+    }
   }
 }
 </script>

@@ -7,3 +7,7 @@ export function addWork (body) {
 export function getWorksByUID (uid, page = 1) {
   return request.get(`/users/${uid}/works?page=${page}`)
 }
+
+export function deleteWorkById (id) {
+  return request.delete(`/works/${id}`)
+}

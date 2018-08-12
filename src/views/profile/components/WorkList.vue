@@ -2,7 +2,8 @@
 {
   "en": {
     "加载更多": "Load more",
-    "删除": "Delete"
+    "删除": "Delete",
+    "确认删除该作品？": "Is it confirmed to delete the work?"
   }
 }
 </i18n>
@@ -13,20 +14,20 @@
     infinite-scroll-disabled="busy"
     infinite-scroll-distance="200">
     <div
-      v-for="work in works"
+      v-for="(work, index) in works"
       :key="work.id"
       class="card work-card">
       <el-dropdown
         v-if="isCurrentUser"
         class="work-card__dropdown"
         trigger="click"
-        @command="onClickCommand">
+        @command="onDelete">
         <el-button
           type="text"
           icon="el-icon-arrow-down"/>
         <el-dropdown-menu
           slot="dropdown">
-          <el-dropdown-item command="delete">{{ $t('删除') }}</el-dropdown-item>
+          <el-dropdown-item :command="index">{{ $t('删除') }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <el-carousel
@@ -65,7 +66,7 @@
 </template>
 
 <script>
-import { getWorksByUID } from '@/api/work'
+import { getWorksByUID, deleteWorkById } from '@/api/work'
 export default {
   data () {
     return {
@@ -110,8 +111,16 @@ export default {
     onPreview (urls, index) {
       this.$refs.preview.open(urls, index)
     },
-    onClickCommand (e) {
-      console.log(e)
+    onDelete (index) {
+      this.$confirm(this.$t('确认删除该作品？'), this.$t('g.notice'), {
+        confirmButtonText: this.$t('g.confirmBtn'),
+        cancelButtonText: this.$t('g.cancelBtn'),
+        type: 'warning'
+      }).then(() => {
+        deleteWorkById(this.works[index].id).then(() => {
+          this.works.splice(index, 1)
+        })
+      }).catch(() => {})
     }
   }
 }
@@ -124,8 +133,10 @@ export default {
   margin-bottom: 8px;
   &__dropdown {
     position: absolute;
-    right: 8px;
+    right: 12px;
+    top: 12px;
     .el-button {
+      padding-top: 0;
       color: rgba(0, 0, 0, 0.65);
     }
   }

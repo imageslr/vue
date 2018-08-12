@@ -39,7 +39,7 @@
             to="/follow?userType=designer">{{ $t('收藏的设计师') }}</router-link>
           <router-link
             class="action-area-item"
-            to="/square/designer">{{ $t('设计师广场') }}</router-link>
+            to="/square">{{ $t('设计师广场') }}</router-link>
         </template>
         <template v-if="$isDesigner()">
           <router-link
@@ -54,6 +54,9 @@
           <router-link
             class="action-area-item"
             to="/profile">{{ $t('我的作品集') }}</router-link>
+          <router-link
+            class="action-area-item"
+            to="/square">{{ $t('设计师广场') }}</router-link>
         </template>
         <app-footer/>
       </aside>

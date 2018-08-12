@@ -13,45 +13,49 @@
     v-infinite-scroll="onReachBottom"
     infinite-scroll-disabled="busy"
     infinite-scroll-distance="200">
-    <div
-      v-for="(work, index) in works"
-      :key="work.id"
-      class="card work-card">
-      <el-dropdown
-        v-if="isCurrentUser"
-        class="work-card__dropdown"
-        trigger="click"
-        @command="onDelete">
-        <el-button
-          type="text"
-          icon="el-icon-arrow-down"/>
-        <el-dropdown-menu
-          slot="dropdown">
-          <el-dropdown-item :command="index">{{ $t('删除') }}</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-      <el-carousel
-        :autoplay="false"
-        class="work-card__carousel"
-        trigger="click">
-        <el-carousel-item
-          v-for="(photo, index) in work.photo_urls"
-          :key="photo"
-          @click.native="onPreview(work.photo_urls, index)">
-          <img
-            :src="photo"
-            class="work-card__carousel-item">
-        </el-carousel-item>
-      </el-carousel>
-      <div class="work-card__info">
-        <p
-          class="work-card__info-title"
-          v-text="work.title" />
-        <p
-          class="work-card__info-description"
-          v-text="work.description" />
+    <transition-group
+      tag="div"
+      name="fade-transform-y">
+      <div
+        v-for="(work, index) in works"
+        :key="work.id"
+        class="card work-card">
+        <el-dropdown
+          v-if="isCurrentUser"
+          class="work-card__dropdown"
+          trigger="click"
+          @command="onDelete">
+          <el-button
+            type="text"
+            icon="el-icon-arrow-down"/>
+          <el-dropdown-menu
+            slot="dropdown">
+            <el-dropdown-item :command="index">{{ $t('删除') }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-carousel
+          :autoplay="false"
+          class="work-card__carousel"
+          trigger="click">
+          <el-carousel-item
+            v-for="(photo, index) in work.photo_urls"
+            :key="photo"
+            @click.native="onPreview(work.photo_urls, index)">
+            <img
+              :src="photo"
+              class="work-card__carousel-item">
+          </el-carousel-item>
+        </el-carousel>
+        <div class="work-card__info">
+          <p
+            class="work-card__info-title"
+            v-text="work.title" />
+          <p
+            class="work-card__info-description"
+            v-text="work.description" />
+        </div>
       </div>
-    </div>
+    </transition-group>
     <my-loader
       :loading="loading"
       :error="error"
@@ -105,9 +109,6 @@ export default {
     onReload () {
       this.error = false
     },
-    onDeleted (index) {
-      this.works.splice(index, 1)
-    },
     onPreview (urls, index) {
       this.$refs.preview.open(urls, index)
     },
@@ -119,6 +120,7 @@ export default {
       }).then(() => {
         deleteWorkById(this.works[index].id).then(() => {
           this.works.splice(index, 1)
+          this.$message.success(this.$t('g.successfullyDeleted'))
         })
       }).catch(() => {})
     }

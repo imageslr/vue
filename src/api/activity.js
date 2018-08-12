@@ -8,6 +8,11 @@ export function getActivitiesByUID (uid, page = 1) {
   return request.get(`/users/${uid}/activities?page=${page}`)
 }
 
+// 获取热门动态
+export function getTrendingActitivies (page = 1) {
+  return request.get(`/activities/trending?page=${page}`)
+}
+
 export function publishActivity (body) {
   return request.post(`/activities`, body)
 }

@@ -20,6 +20,7 @@ import MeAuth from '../views/me/Auth'
 import Search from '../views/search'
 import AddWork from '../views/work/add'
 import AddWorkResult from '../views/work/Result'
+import Square from '../views/square'
 import Error404 from '../views/error/404'
 
 Vue.use(Router)
@@ -54,6 +55,11 @@ export default new Router({
           path: 'follow',
           name: 'follow',
           component: Follow
+        },
+        {
+          path: 'square',
+          name: 'square',
+          component: Square
         },
         {
           path: '404',

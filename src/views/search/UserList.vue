@@ -55,21 +55,23 @@
             <p v-text="user.title" />
             <p v-text="user.introduction" />
           </div>
-          <el-button
-            v-if="user.following"
-            :loading="followLoadings[index]"
-            plain
-            size="mini"
-            class="list-item__action"
-            @click="onToggleFollow(index)">{{ $t('取消关注') }}</el-button>
-          <el-button
-            v-else
-            :loading="followLoadings[index]"
-            plain
-            type="primary"
-            size="mini"
-            class="list-item__action"
-            @click="onToggleFollow(index)">{{ $t('关注') }}</el-button>
+          <template v-if="user.id != $uid()">
+            <el-button
+              v-if="user.following"
+              :loading="followLoadings[index]"
+              plain
+              size="mini"
+              class="list-item__action"
+              @click="onToggleFollow(index)">{{ $t('取消关注') }}</el-button>
+            <el-button
+              v-else
+              :loading="followLoadings[index]"
+              plain
+              type="primary"
+              size="mini"
+              class="list-item__action"
+              @click="onToggleFollow(index)">{{ $t('关注') }}</el-button>
+          </template>
         </div>
       </div>
       <el-pagination

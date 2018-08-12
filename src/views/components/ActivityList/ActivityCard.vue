@@ -198,6 +198,7 @@ export default {
         }).then(() => {
           deleteActivityById(this.activity.id).then(() => {
             this.$emit('deleted', this.activity)
+            this.$message.success(this.$t('g.successfullyDeleted'))
           })
         }).catch(() => {})
       }

@@ -85,7 +85,7 @@
         </el-dropdown-menu>
       </el-dropdown>
     </li>
-    <li :class="['navbar-menu-item', { 'is-active': isActive('square')}]">
+    <li :class="['navbar-menu-item', { 'is-active': isActive('search')}]">
       <router-link
         to="/search"
         class="navbar-menu-item__container">

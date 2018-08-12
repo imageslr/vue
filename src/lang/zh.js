@@ -25,7 +25,8 @@ export default {
     confirmBtn: '确 定',
     cancelBtn: '取 消',
     party: '甲方',
-    designer: '设计师'
+    designer: '设计师',
+    successfullyDeleted: '删除成功'
   },
   ordinalNum: ['一', '二', '三', '四', '五', '六'],
   errmsgs: {

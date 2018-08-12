@@ -25,7 +25,8 @@ export default {
     confirmBtn: 'Confirm',
     cancelBtn: 'Cancel',
     party: 'Party',
-    designer: 'Designer'
+    designer: 'Designer',
+    successfullyDeleted: 'Successfully deleted'
   },
   ordinalNum: ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'],
   errmsgs: {

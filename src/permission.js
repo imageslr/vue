@@ -12,7 +12,14 @@ function hasPermission (userType, permissionRoles) {
   return permissionRoles.indexOf(userType) >= 0
 }
 
-const whiteList = ['/', '/signup', '/signin', '/profile', '/search'] // 免登录白名单
+const grayList = ['/profile'] // 免登陆灰名单：如果query里没有uid参数，则必须登录
+const whiteList = [
+  '/',
+  '/signup',
+  '/signin',
+  '/profile',
+  '/search'
+] // 免登录白名单
 
 // 路由前权限判断
 router.beforeEach((to, from, next) => {
@@ -48,8 +55,13 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {
+    console.log(to.path)
     // 没有登录
-    if (whiteList.indexOf(to.path) !== -1) {
+    if (grayList.indexOf(to.path) !== -1 && !to.query.uid) {
+      // 在免登录灰名单，query中没有uid时要求登录
+      next({ path: '/signin', replace: true })
+      NProgress.done() // hack
+    } else if (whiteList.indexOf(to.path) !== -1) {
       // 在免登录白名单，直接进入
       next()
     } else {

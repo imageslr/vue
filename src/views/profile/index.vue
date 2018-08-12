@@ -9,6 +9,8 @@
     "已关注": "Following",
     "关注": "Follow",
     "联系": "Contact",
+    "分享": "Share",
+    "复制链接": "Copy the link",
     "暂未收到评价": "No received reviews",
     "查看所有评价": "View all reviews",
     "所有评价": "All reviews",
@@ -35,8 +37,12 @@
             :loading="followBtnLoading"
             type="primary"
             @click="onToggleFollow">{{ userInfo.following ? $t('已关注') : $t('关注') }}</el-button>
-          <el-button>{{ $t('contact') }}</el-button>
+          <el-button>{{ $t('联系') }}</el-button>
         </template>
+        <el-button @click="onShare">
+          {{ $t('分享') }}
+          <i class="el-icon-share" />
+        </el-button>
       </profile-card>
       <h2
         v-t="$t((userInfo.type === 'party' ? '设计师评价' : '甲方评价'))"
@@ -84,16 +90,18 @@
     </div>
     <div class="main-container__right">
       <template v-if="userInfo.type === 'designer'">
-        <h2
-          v-t="'作品集'"
-          :class="{'unactive': pageType != 'work' }"
-          class="title title--inline mr2"
-          @click="pageType = 'work'" />
-        <h2
-          v-t="'个人动态'"
-          :class="{'unactive': pageType != 'activity' }"
-          class="title title--inline"
-          @click="pageType = 'activity'" />
+        <div class="flex-title">
+          <h2
+            v-t="'作品集'"
+            :class="{'unactive': pageType != 'work' }"
+            class="title"
+            @click="pageType = 'work'" />
+          <h2
+            v-t="'个人动态'"
+            :class="{'unactive': pageType != 'activity' }"
+            class="title"
+            @click="pageType = 'activity'" />
+        </div>
         <keep-alive>
           <work-list v-if="pageType === 'work'" />
           <activity-list
@@ -252,6 +260,12 @@ export default {
       }).catch(() => {
         this.followBtnLoading = false
       })
+    },
+    onShare () {
+      let link = this.$t('app.link') + this.$route.path + '?uid=' + this.pageUID
+      this.$alert(link, this.$t('复制链接'), {
+        confirmButtonText: this.$t('g.confirmBtn')
+      })
     }
   }
 }
@@ -281,10 +295,18 @@ export default {
   border-radius: 2px;
   box-shadow: 0 1px 1px 0 #b5b5b5, 0 2px 1px 0 #e2e1e1,
     0 1px 4px 1px rgba(0, 0, 0, 0.1);
-  &--inline {
-    display: inline-block;
-    width: 220px;
+}
+.flex-title {
+  display: flex;
+  .title {
+    flex: 1;
     cursor: pointer;
+    &:first-child {
+      margin-right: 4px;
+    }
+    &:last-child {
+      margin-left: 4px;
+    }
     &.unactive {
       color: rgba(0, 0, 0, 0.65);
       font-weight: normal;

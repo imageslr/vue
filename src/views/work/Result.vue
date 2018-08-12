@@ -18,7 +18,7 @@
       <el-button
         class="block w-100 shadow"
         type="primary"
-        @click="$router.push(`/works/add`)">{{ $t('继续添加作品') }}</el-button>
+        @click="$router.push(`/work/add`)">{{ $t('继续添加作品') }}</el-button>
       <el-button
         class="block w-100 shadow"
         style="margin: 16px 0 0;"

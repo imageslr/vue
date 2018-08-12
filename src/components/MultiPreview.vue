@@ -83,8 +83,8 @@ export default {
       var items = urls.map(url => {
         return {
           src: url,
-          w: 1000, // 临时设置一个值，防止报错
-          h: 1000
+          w: 100, // 临时设置一个值，防止报错
+          h: 100
         }
       })
       var pswpElement = document.querySelectorAll('.pswp')[0]

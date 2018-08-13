@@ -492,6 +492,7 @@ export default {
         } else {
           this.$message.success(this.$t('报名成功'))
           this.project.applying = true
+          this.project.application = data
         }
       }).catch(() => {
         this.dialogButtonLoading = false
@@ -554,17 +555,15 @@ export default {
     &:last-child {
       margin-bottom: 0;
     }
-    &.project-info {
-      h3 {
-        margin-top: 32px;
-        &:first-child {
-          margin-top: 0;
-        }
+    h3 {
+      margin-top: 32px;
+      &:first-child {
+        margin-top: 0;
       }
-      p {
-        margin: 8px 0;
-        line-height: 1.81em;
-      }
+    }
+    p {
+      margin: 8px 0;
+      line-height: 1.81em;
     }
   }
   .application-list {

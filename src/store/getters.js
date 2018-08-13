@@ -5,6 +5,7 @@ const getters = {
   userType: state => state.user.userInfo.type,
   hasUserInfo: state => !!state.user.userInfo.id,
   isSignIn: state => !!state.user.userInfo.id,
-  language: state => state.app.language
+  language: state => state.app.language,
+  notifications: state => state.notification.notifications
 }
 export default getters

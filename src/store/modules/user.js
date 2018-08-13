@@ -1,12 +1,26 @@
 import { signIn, signUp, getCurrentUserInfo } from '@/api/user'
 import { followUserByUID, unfollowUserByUID } from '@/api/follow'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import User from '@/models/user'
+
+const UserModel = {
+  id: null,
+  type: '',
+  phone: '',
+  email: '',
+  name: '',
+  avatar_url: '',
+  title: '',
+  introduction: '',
+  follower_count: 0,
+  following_count: 0,
+  notification_count: 0,
+  following: false
+}
 
 const user = {
   state: {
     // 用户信息
-    userInfo: User.parse(),
+    userInfo: { ...UserModel },
     token: getToken()
   },
 
@@ -18,11 +32,14 @@ const user = {
       state.userInfo = userInfo
     },
     SIGN_OUT: state => {
-      state.userInfo = User.parse()
+      state.userInfo = { ...UserModel }
       state.token = ''
     },
     SET_FOLLOWING_COUNT: (state, followingCount) => {
       state.userInfo.following_count = followingCount
+    },
+    SET_NOTICICATION_COUNT: (state, count) => {
+      state.userInfo.notification_count = count
     },
     // TODO 删除
     SWITCH_TYPE: state => {

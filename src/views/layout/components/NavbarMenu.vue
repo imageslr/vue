@@ -5,7 +5,7 @@
     "follow": "关注",
     "order": "订单",
     "message": "消息",
-    "notice": "通知",
+    "notification": "通知",
     "me": "我",
     "signOut": "退出登录",
     "square": "项目广场"
@@ -15,7 +15,7 @@
     "follow": "Follow",
     "order": "Order",
     "message": "Message",
-    "notice": "Notice",
+    "notification": "Notice",
     "me": "Me",
     "signOut": "Sign out",
     "square": "Square"
@@ -57,14 +57,20 @@
         <span>{{ $t('message') }}</span>
       </router-link>
     </li>
-    <li :class="['navbar-menu-item', { 'is-active': isActive('notice')}]">
-      <el-dropdown trigger="click">
-        <div class="navbar-menu-item__container">
+    <li :class="['navbar-menu-item', { 'is-active': isActive('notification')}]">
+      <router-link
+        to="/notification"
+        class="navbar-menu-item__container">
+        <el-badge
+          v-if="hasUnreadNotifications"
+          is-dot>
           <my-svg-icon icon-class="bell"/>
-          <span>{{ $t('notice') }}</span>
-        </div>
-        <el-dropdown-menu slot="dropdown">通知</el-dropdown-menu>
-      </el-dropdown>
+        </el-badge>
+        <my-svg-icon
+          v-else
+          icon-class="bell"/>
+        <span>{{ $t('notification') }}</span>
+      </router-link>
     </li>
     <li :class="['navbar-menu-item', { 'is-active': isActive('me')}, 'border-right']">
       <el-dropdown
@@ -101,6 +107,9 @@ export default {
   computed: {
     avatarUrl () {
       return this.$store.getters.userInfo.avatar_url
+    },
+    hasUnreadNotifications () {
+      return !!this.$store.getters.userInfo.notification_count
     }
   },
   methods: {
@@ -165,5 +174,10 @@ export default {
       color: #fff;
     }
   }
+}
+</style>
+<style>
+.navbar-menu-item .el-badge__content.is-fixed.is-dot {
+  top: 2px;
 }
 </style>

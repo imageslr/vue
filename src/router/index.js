@@ -14,6 +14,8 @@ import Profile from '../views/profile'
 import Project from '../views/project'
 import OrderSidebar from '../views/order/Sidebar'
 import OrderContent from '../views/order/index'
+import NotificationSidebar from '../views/notification/Sidebar'
+import NotificationContent from '../views/notification/index'
 import MeSidebar from '../views/me/Sidebar'
 import MeIndex from '../views/me/index'
 import MeAuth from '../views/me/Auth'
@@ -163,6 +165,20 @@ export default new Router({
           components: {
             sidebar: MeSidebar,
             content: MeAuth
+          }
+        }
+      ]
+    },
+    {
+      path: '/notification',
+      component: SidebarLayout,
+      children: [
+        {
+          path: '',
+          name: 'notification',
+          components: {
+            sidebar: NotificationSidebar,
+            content: NotificationContent
           }
         }
       ]

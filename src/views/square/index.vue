@@ -1,7 +1,7 @@
 <i18n>
 {
   "zh": {
-    "tip1": "设计师广场包含设计师们近一个月的热门动态（依据点赞数与评论数排列）与作品。"
+    "tip1": "设计师广场包含设计师们近一个月的热门动态（依据点赞数与评论数排列）与作品集。"
   },
   "en": {
     "tip1": "Designer Square contains the trending activities of designers for nearly a month (according to the number of likes and comments) and their works.",

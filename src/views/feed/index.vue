@@ -1,5 +1,8 @@
 <i18n>
 {
+  "zh": {
+    "nomore": "已看完所有动态，前往{0}发现更多精彩内容"
+  },
   "en": {
     "发布项目": "Publish project",
     "已发布的项目": "Published projects",
@@ -8,7 +11,8 @@
     "搜索项目": "Search projects",
     "我的项目": "My projects",
     "添加作品": "Add work",
-    "我的作品集": "My works"
+    "我的作品集": "My works",
+    "nomore": "All activities have been read, go to {0} and discover more exciting things"
   }
 }
 </i18n>
@@ -23,7 +27,15 @@
       <activity-list
         ref="activityList"
         :get-activities="getActivities"
-        show-action-button/>
+        show-action-button>
+        <i18n
+          slot="nomore"
+          path="nomore"
+          class="f-12 m0 pt2 center black-65"
+          tag="p">
+          <router-link to="/square">{{ $t('设计师广场') }}</router-link>
+        </i18n>
+      </activity-list>
     </main>
     <div class="action-area-container">
       <aside class="action-area card">

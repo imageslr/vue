@@ -33,10 +33,13 @@
       :error="error"
       :btn-text="$t('loadmore')"
       :on-reload="onReload" />
-    <p
-      v-t="$t('g.nomore')"
+    <slot
       v-if="nomore"
-      class="no-more"/>
+      name="nomore">
+      <p
+        v-t="$t('g.nomore')"
+        class="no-more"/>
+    </slot>
     <my-multi-preview ref="preview"/>
   </div>
 </template>

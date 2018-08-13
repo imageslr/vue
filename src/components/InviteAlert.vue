@@ -78,6 +78,7 @@ export default {
     color: rgba(0, 119, 181, 0.9);
     font-size: 14px;
     line-height: 1;
+    cursor: pointer;
   }
   &.info {
     background: rgba(0, 160, 220, 0.1);

@@ -131,6 +131,7 @@ export default {
 <style lang="scss" scoped>
 .work-card {
   display: flex;
+  align-items: center;
   position: relative;
   margin-bottom: 8px;
   &__dropdown {
@@ -144,13 +145,14 @@ export default {
   }
   &__carousel {
     flex: 1;
+    height: 300px;
     &-item {
       width: 100%;
       cursor: pointer;
     }
   }
   &__info {
-    width: 200px;
+    width: 250px;
     padding: 16px;
     &-title {
       margin: 0 0 12px;

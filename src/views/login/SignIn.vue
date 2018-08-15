@@ -36,13 +36,15 @@
       <el-form-item prop="phone">
         <el-input
           v-model="form.phone"
-          :placeholder="$t('phone')"/>
+          :placeholder="$t('phone')"
+          @keyup.native.enter="onSubmit"/>
       </el-form-item>
       <el-form-item prop="password">
         <el-input
           v-model="form.password"
           :placeholder="$t('password')"
-          type="password"/>
+          type="password"
+          @keyup.native.enter="onSubmit"/>
       </el-form-item>
       <el-form-item>
         <el-button

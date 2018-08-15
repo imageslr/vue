@@ -217,6 +217,7 @@ export default {
   }
   &__content {
     display: flex;
+    align-items: flex-start;
     margin-top: 8px;
     &-carousel {
       flex: 1;
@@ -227,7 +228,7 @@ export default {
     }
     &-info {
       width: 200px;
-      padding: 16px;
+      padding: 0 16px;
       &-title {
         margin: 0 0 12px;
         font-size: 16px;

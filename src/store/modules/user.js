@@ -4,17 +4,22 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const UserModel = {
   id: null,
-  type: '',
-  phone: '',
-  email: '',
   name: '',
+  type: '',
   avatar_url: '',
   title: '',
   introduction: '',
+  phone: '',
+  email: '',
+  company_name: '',
+  registration_number: '',
+  id_number: '',
+  business_license_url: '',
+  id_card_url: '',
   follower_count: 0,
   following_count: 0,
   notification_count: 0,
-  following: false
+  unread_message_count: 0
 }
 
 const user = {
@@ -44,6 +49,9 @@ const user = {
     DECREMENT_NOTICICATION_COUNT: state => {
       state.userInfo.notification_count > 0 &&
         state.userInfo.notification_count--
+    },
+    SET_UNREAD_MESSAGE_COUNT: (state, count) => {
+      state.userInfo.unread_message_count = count
     },
     // TODO 删除
     SWITCH_TYPE: state => {

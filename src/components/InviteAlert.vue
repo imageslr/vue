@@ -8,7 +8,8 @@
   "en": {
     "title": "Didn't find the designer you are interested in? Invite them to register as a member of the platform!",
     "success": "The platform link has been successfully copied to your clipboard. Sent to your designer friends now.",
-    "error": "Please manually copy the address: {link} and send it to your designer friends."
+    "error": "Please manually copy the address: {link} and send it to your designer friends.",
+    "立即邀请": "Invite now"
   }
 }
 </i18n>

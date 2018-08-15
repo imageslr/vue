@@ -2,6 +2,7 @@
 {
   "en": {
     "标记所有通知为已读": "Mark all as read",
+    "清空所有通知": "Delete all notifications",
     "标记成功": "Successfully marked all notifications as read"
   }
 }
@@ -16,11 +17,17 @@
       :on-reload="getNotifications" />
     <template v-if="!loading && !error" >
       <template v-if="notifications.length">
-        <el-button
-          :loading="buttonLoading"
-          class="mark-button"
-          size="small"
-          @click="markAllAsRead">{{ $t('标记所有通知为已读') }} </el-button>
+        <div class="button-area">
+          <el-button
+            :loading="markButtonLoading"
+            size="small"
+            @click="markAllAsRead">{{ $t('标记所有通知为已读') }} </el-button>
+            <!-- <el-button
+            v-if="type === 'all'"
+            :loading="deleteButtonLoading"
+            size="small"
+            @click="deleteAll">{{ $t('清空所有通知') }} </el-button> -->
+        </div>
         <transition-group
           tag="div"
           name="fade">
@@ -53,7 +60,8 @@ export default {
       pageCount: 0,
       loading: false,
       error: false,
-      buttonLoading: false
+      markButtonLoading: false,
+      deleteButtonLoading: false
     }
   },
   computed: {
@@ -87,12 +95,20 @@ export default {
         })
     },
     markAllAsRead () {
-      this.buttonLoading = true
+      this.markButtonLoading = true
       this.$store.dispatch('markAllAsRead').then(() => {
-        this.buttonLoading = false
+        this.markButtonLoading = false
         this.$message.success(this.$t('标记成功'))
       }).catch(() => {
-        this.buttonLoading = false
+        this.markButtonLoading = false
+      })
+    },
+    deleteAll () {
+      this.deleteButtonLoading = true
+      this.$store.dispatch('deleteAllNotifications').then(() => {
+        this.deleteButtonLoading = false
+      }).catch(() => {
+        this.deleteButtonLoading = false
       })
     },
     onCurrentPageChange (page) {
@@ -117,7 +133,7 @@ export default {
   width: 600px;
   margin-bottom: 16px;
 }
-.mark-button {
+.button-area {
   position: fixed;
   right: 60px;
   top: 76px;

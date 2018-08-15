@@ -9,16 +9,34 @@
     "activity_replied": "{name} replied your activity {activityContent}",
     "reply_replied": "{name} replied your reply under activity {activityContent}",
     "project_applied": "{name} applied your project {projectTitle}",
-    "点击查看": "Click to view"
+    "点击查看": "Click to view",
+    "标为已读": "Mark as read",
+    "删除": "Delete"
   }
 }
 </i18n>
 
 <template>
   <div
+    v-loading="loading"
     v-if="data.type === 'activity_replied' || data.type === 'reply_replied'"
-    :class="{unread: !notification.read_at}"
+    :class="{unread}"
     class="notification-item">
+    <el-dropdown
+      class="notification-item__dropdown"
+      trigger="click"
+      @command="onClickCommand">
+      <el-button
+        type="text"
+        icon="el-icon-arrow-down"/>
+      <el-dropdown-menu
+        slot="dropdown">
+        <el-dropdown-item
+          v-if="unread"
+          command="markAsRead">{{ $t('标为已读') }}</el-dropdown-item>
+        <el-dropdown-item command="delete">{{ $t('删除') }}</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
     <i18n
       :path="data.type"
       tag="div">
@@ -74,14 +92,37 @@ export default {
       }
     }
   },
+  data () {
+    return {
+      loading: false
+    }
+  },
   computed: {
     data () {
       return this.notification.data
+    },
+    unread () {
+      return !this.notification.read_at
     }
   },
   methods: {
-    markAsRead () {
-
+    onClickCommand (command) {
+      if (command === 'markAsRead') {
+        this.loading = true
+        this.$store.dispatch('markAsReadById', this.notification.id).then(() => {
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
+      }
+      if (command === 'delete') {
+        this.loading = true
+        this.$store.dispatch('deleteNotificationById', this.notification).then(() => {
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
+      }
     }
   }
 }
@@ -89,13 +130,21 @@ export default {
 
 <style lang="scss">
 .notification-item {
+  position: relative;
   padding: 16px;
   font-size: 14px;
-  border: 1px solid rgba($color: #000000, $alpha: 0.15);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
   border-radius: 4px;
   &.unread {
     background-color: #e6f7ff;
-    border: 1px solid #bae7ff;
+  }
+  &__dropdown {
+    position: absolute;
+    right: 16px;
+    top: 6px;
+    .el-button {
+      color: rgba(0, 0, 0, 0.65);
+    }
   }
   a {
     color: rgba(0, 0, 0, 0.85);

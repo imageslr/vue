@@ -9,5 +9,13 @@ export function markAsReadById (id) {
 }
 
 export function markAllAsRead () {
-  return request.patch('user/read/notifications')
+  return request.patch('/user/read/notifications')
+}
+
+export function deleteNotificationById (id) {
+  return request.delete(`/notifications/${id}`)
+}
+
+export function deleteAllNotifications () {
+  return request.delete('/user/notifications')
 }

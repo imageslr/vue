@@ -41,6 +41,10 @@ const user = {
     SET_NOTICICATION_COUNT: (state, count) => {
       state.userInfo.notification_count = count
     },
+    DECREMENT_NOTICICATION_COUNT: state => {
+      state.userInfo.notification_count > 0 &&
+        state.userInfo.notification_count--
+    },
     // TODO 删除
     SWITCH_TYPE: state => {
       state.userInfo.type =

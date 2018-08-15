@@ -16,6 +16,6 @@ export function deleteNotificationById (id) {
   return request.delete(`/notifications/${id}`)
 }
 
-export function deleteAllNotifications () {
-  return request.delete('/user/notifications')
+export function deleteAllReadNotifications () {
+  return request.delete('/user/read/notifications')
 }

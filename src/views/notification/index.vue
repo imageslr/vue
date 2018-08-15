@@ -2,7 +2,7 @@
 {
   "en": {
     "标记所有通知为已读": "Mark all as read",
-    "清空所有通知": "Delete all notifications",
+    "清空所有已读通知": "Delete all read notifications",
     "标记成功": "Successfully marked all notifications as read"
   }
 }
@@ -22,11 +22,11 @@
             :loading="markButtonLoading"
             size="small"
             @click="markAllAsRead">{{ $t('标记所有通知为已读') }} </el-button>
-            <!-- <el-button
+          <el-button
             v-if="type === 'all'"
             :loading="deleteButtonLoading"
             size="small"
-            @click="deleteAll">{{ $t('清空所有通知') }} </el-button> -->
+            @click="deleteAllRead">{{ $t('清空所有已读通知') }} </el-button>
         </div>
         <transition-group
           tag="div"
@@ -103,9 +103,9 @@ export default {
         this.markButtonLoading = false
       })
     },
-    deleteAll () {
+    deleteAllRead () {
       this.deleteButtonLoading = true
-      this.$store.dispatch('deleteAllNotifications').then(() => {
+      this.$store.dispatch('deleteAllReadNotifications').then(() => {
         this.deleteButtonLoading = false
       }).catch(() => {
         this.deleteButtonLoading = false

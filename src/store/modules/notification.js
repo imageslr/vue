@@ -3,7 +3,7 @@ import {
   markAllAsRead,
   markAsReadById,
   deleteNotificationById,
-  deleteAllNotifications
+  deleteAllReadNotifications
 } from '@/api/notification'
 
 const notification = {
@@ -28,6 +28,9 @@ const notification = {
           }
         }) => {
           commit('SET_NOTIFICATIONS', notifications)
+          if (type === 'unread') {
+            commit('SET_NOTICICATION_COUNT', pagination.total)
+          }
           return pagination
         }
       )
@@ -63,10 +66,10 @@ const notification = {
         commit('SET_NOTIFICATIONS', notifications)
       })
     },
-    deleteAllNotifications ({ commit }) {
-      return deleteAllNotifications().then(() => {
-        commit('SET_NOTICICATION_COUNT', 0)
-        commit('SET_NOTIFICATIONS', [])
+    deleteAllReadNotifications ({ commit, state }) {
+      return deleteAllReadNotifications().then(() => {
+        let notifications = state.notifications.filter(v => !v.read_at)
+        commit('SET_NOTIFICATIONS', notifications)
       })
     }
   }

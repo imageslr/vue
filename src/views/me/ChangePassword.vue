@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { resetPassword } from '@/api/user'
+import { changePassword } from '@/api/user'
 export default {
   data () {
     return {
@@ -112,7 +112,7 @@ export default {
         if (valid) {
           this.loading = true
           const { password, newPassword } = this.form
-          resetPassword(password, newPassword).then(() => {
+          changePassword(password, newPassword).then(() => {
             this.loading = false
             this.$message.success(this.$t('修改密码成功'))
           }).catch(() => {

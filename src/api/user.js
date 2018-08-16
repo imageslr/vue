@@ -26,10 +26,16 @@ export function getCurrentUserInfo (token) {
 }
 
 // 修改密码
-export function resetPassword(password, newPassword) {
+export function changePassword (password, newPassword) {
   return request.patch(`/user/password`, {
-    password, new_password: newPassword
+    password,
+    new_password: newPassword
   })
+}
+
+// 修改手机号
+export function changePhone (code, phone) {
+  return request.patch(`/user/phone`, { code, phone })
 }
 
 // 获取用户信息

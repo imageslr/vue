@@ -35,7 +35,7 @@ service.interceptors.response.use(
     if (axios.isCancel(error)) {
       // 是被取消的请求的话，不输出错误信息
     } else if (!response) {
-      console.error(error)
+      // console.error(error)
       let msg
       if (error.message && error.message.indexOf('timeout') !== -1) {
         msg = getErrMsg('timeout')
@@ -49,7 +49,7 @@ service.interceptors.response.use(
         showClose: true
       })
     } else {
-      console.error('网络响应错误', error.response)
+      // console.error('网络响应错误', error.response)
       if (response.status === 401) {
         store.dispatch('SIGN_OUT').then(() => {
           router.push({ path: '/signin' })

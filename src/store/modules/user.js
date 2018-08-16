@@ -36,6 +36,9 @@ const user = {
     SET_USERINFO: (state, userInfo) => {
       state.userInfo = userInfo
     },
+    SET_PHONE: (state, phone) => {
+      state.userInfo.phone = phone
+    },
     SIGN_OUT: state => {
       state.userInfo = { ...UserModel }
       state.token = ''

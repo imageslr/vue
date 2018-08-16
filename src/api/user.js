@@ -25,6 +25,13 @@ export function getCurrentUserInfo (token) {
   return request.get(`/user`)
 }
 
+// 修改密码
+export function resetPassword(password, newPassword) {
+  return request.patch(`/user/password`, {
+    password, new_password: newPassword
+  })
+}
+
 // 获取用户信息
 export function getUserInfoByUID (uid) {
   return request.get(`/users/${uid}`)

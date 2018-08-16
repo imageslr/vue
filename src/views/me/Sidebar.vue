@@ -5,6 +5,7 @@
     "上传认证信息": "Authentication",
     "绑定手机号": "Binding Phone",
     "绑定邮箱": "Binding Email",
+    "修改密码": "Reset password",
     "我发表的评论": "My Replies"
   }
 }
@@ -19,6 +20,7 @@
     <el-menu-item index="/me/auth">{{ $t('上传认证信息') }}</el-menu-item>
     <el-menu-item index="/me/phone">{{ $t('绑定手机号') }}</el-menu-item>
     <el-menu-item index="/me/email">{{ $t('绑定邮箱') }}</el-menu-item>
+    <el-menu-item index="/me/password">{{ $t('修改密码') }}</el-menu-item>
     <el-menu-item index="/me/reply">{{ $t('我发表的评论') }}</el-menu-item>
   </el-menu>
 </template>

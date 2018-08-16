@@ -19,6 +19,7 @@ import NotificationContent from '../views/notification/index'
 import MeSidebar from '../views/me/Sidebar'
 import MeIndex from '../views/me/index'
 import MeAuth from '../views/me/Auth'
+import MeChangePassword from '../views/me/ChangePassword'
 import Search from '../views/search'
 import AddWork from '../views/work/add'
 import AddWorkResult from '../views/work/Result'
@@ -167,6 +168,14 @@ export default new Router({
           components: {
             sidebar: MeSidebar,
             content: MeAuth
+          }
+        },
+        {
+          path: 'password',
+          name: 'changePassword',
+          components: {
+            sidebar: MeSidebar,
+            content: MeChangePassword
           }
         }
       ]

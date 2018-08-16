@@ -38,12 +38,9 @@ service.interceptors.response.use(
       console.error(error)
       let msg
       if (error.message && error.message.indexOf('timeout') !== -1) {
-        msg =
-          i18n.locale === 'zh'
-            ? '网络超时，请刷新重试'
-            : 'Timeout, please refresh and try again'
+        msg = getErrMsg('timeout')
       } else {
-        msg = i18n.locale === 'zh' ? '网络错误' : 'Network error'
+        msg = getErrMsg('networkError')
       }
       Message({
         message: msg,
@@ -56,6 +53,13 @@ service.interceptors.response.use(
       if (response.status === 401) {
         store.dispatch('SIGN_OUT').then(() => {
           router.push({ path: '/signin' })
+        })
+      } else if (response.status === 429) {
+        Message({
+          message: getErrMsg(429),
+          type: 'error',
+          duration: 3500,
+          showClose: true
         })
       } else if (response.data) {
         let errmsg = ''
@@ -77,5 +81,21 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+function getErrMsg (key) {
+  const ERR_MESSAGES = {
+    zh: {
+      timeout: '网络超时，请刷新重试',
+      networkError: '网络错误',
+      429: '请求过于频繁，请过一分钟再试'
+    },
+    en: {
+      timeout: 'Timeout, please refresh and try again',
+      networkError: 'Network error',
+      429: 'Too many requests. Please try again after one minute'
+    }
+  }
+  return ERR_MESSAGES[i18n.locale][key]
+}
 
 export default service

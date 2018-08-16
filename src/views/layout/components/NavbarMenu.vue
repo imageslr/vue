@@ -53,7 +53,11 @@
       <router-link
         to="/message"
         class="navbar-menu-item__container">
-        <my-svg-icon icon-class="message"/>
+        <el-badge
+          :hidden="!hasUnreadMessages"
+          is-dot>
+          <my-svg-icon icon-class="message"/>
+        </el-badge>
         <span>{{ $t('message') }}</span>
       </router-link>
     </li>
@@ -62,13 +66,10 @@
         to="/notification"
         class="navbar-menu-item__container">
         <el-badge
-          v-if="hasUnreadNotifications"
+          :hidden="!hasUnreadNotifications"
           is-dot>
           <my-svg-icon icon-class="bell"/>
         </el-badge>
-        <my-svg-icon
-          v-else
-          icon-class="bell"/>
         <span>{{ $t('notification') }}</span>
       </router-link>
     </li>
@@ -110,6 +111,9 @@ export default {
     },
     hasUnreadNotifications () {
       return !!this.$store.getters.userInfo.notification_count
+    },
+    hasUnreadMessages () {
+      return !!this.$store.getters.userInfo.unread_message_count
     }
   },
   methods: {

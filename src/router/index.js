@@ -191,7 +191,7 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'threadList',
+          name: 'message',
           component: ThreadList
         },
         {

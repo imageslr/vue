@@ -33,6 +33,7 @@ const notification = {
   },
 
   actions: {
+    // 获取对话列表
     getThreads ({ commit, state }, page = 1) {
       // 如果page是1，说明是重新获取对话列表，那么清空原有数据
       // eslint-disable-next-line eqeqeq
@@ -43,10 +44,14 @@ const notification = {
         ({
           data: {
             data: threads,
-            meta: { pagination }
+            meta: {
+              pagination,
+              extra: { unread_count }
+            }
           }
         }) => {
           commit('SET_THREADS', state.threads.concat(threads))
+          commit('SET_UNREAD_MESSAGE_COUNT', unread_count)
           return pagination
         }
       )
@@ -64,13 +69,15 @@ const notification = {
             data: messages,
             meta: {
               pagination,
-              thread: { participant }
+              thread: { participant },
+              extra: { unread_count }
             }
           }
         }) => {
           // 服务器返回的是按照发送时间降序排列，需要转成正序
           commit('SET_MESSAGES', messages.reverse().concat(state.messages))
           commit('SET_PARTICIPANT', participant)
+          commit('SET_UNREAD_MESSAGE_COUNT', unread_count)
           return pagination
         }
       )

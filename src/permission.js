@@ -12,7 +12,15 @@ function hasPermission (userType, permissionRoles) {
   return permissionRoles.indexOf(userType) >= 0
 }
 
-const whiteList = ['/', '/signup', '/signin', '/profile', '/search', '/square'] // 免登录白名单
+const whiteList = [
+  '/',
+  '/signup',
+  '/signin',
+  '/profile',
+  '/search',
+  '/square',
+  '/reset'
+] // 免登录白名单
 const grayList = ['/profile'] // 免登陆灰名单：白名单的子集，如果query里没有uid参数，则必须登录
 
 // 路由前权限判断

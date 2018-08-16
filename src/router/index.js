@@ -5,6 +5,7 @@ import SidebarLayout from '../views/layout/SidebarLayout'
 import Guide from '../views/login/Guide'
 import SignUp from '../views/login/SignUp'
 import SignIn from '../views/login/SignIn'
+import ResetPassword from '../views/login/ResetPassword'
 import Feed from '../views/feed'
 import Activity from '../views/activity'
 import Publish from '../views/publish'
@@ -51,6 +52,11 @@ export default new Router({
           path: 'signin',
           name: 'signin',
           component: SignIn
+        },
+        {
+          path: 'reset',
+          name: 'resetPassword',
+          component: ResetPassword
         },
         {
           path: 'feed',

@@ -38,6 +38,11 @@ export function changePhone (code, phone) {
   return request.patch(`/user/phone`, { code, phone })
 }
 
+// 重置密码
+export function resetPassword (code, phone, password) {
+  return request.patch(`/users/reset`, { code, phone, password })
+}
+
 // 获取用户信息
 export function getUserInfoByUID (uid) {
   return request.get(`/users/${uid}`)

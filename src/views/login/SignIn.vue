@@ -53,7 +53,7 @@
           @click="onSubmit">{{ $t('signIn') }}</el-button>
       </el-form-item>
       <el-form-item class="forget-password">
-        <a @click="onForget">{{ $t('forgetPassword') }}</a>
+        <router-link to="/reset">{{ $t('forgetPassword') }}</router-link>
       </el-form-item>
       <div class="extra-action">
         <third-party form-type="signIn"/>
@@ -96,9 +96,6 @@ export default {
           })
         }
       })
-    },
-    onForget () {
-      this.$message.error('TODO')
     }
   }
 }

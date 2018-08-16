@@ -18,7 +18,11 @@
           tag="i"
           to="/message"
           class="el-icon-back" />
-        {{ participant.name }}
+        <router-link
+          :to="`/profile?uid=${participant.id}`"
+          tag="span"
+          style="cursor: pointer"
+          v-text="participant.name"/>
       </h1>
       <div
         ref="messageBox"

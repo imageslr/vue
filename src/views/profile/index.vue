@@ -15,7 +15,12 @@
     "查看所有评价": "View all reviews",
     "所有评价": "All reviews",
     "作品集": "Works",
-    "拼命加载中": "Loading user info"
+    "拼命加载中": "Loading user info",
+    "发送站内信": "Send direct message",
+    "发 送": "Send",
+    "消息不能为空": "Message cannot be empty",
+    "发送成功后，您可在消息列表中查看对话": "You can view the conversation in the message list once sent",
+    "发送成功": "Successfully sent message"
   }
 }
 </i18n>
@@ -37,7 +42,7 @@
             :loading="followBtnLoading"
             type="primary"
             @click="onToggleFollow">{{ userInfo.following ? $t('已关注') : $t('关注') }}</el-button>
-          <el-button>{{ $t('联系') }}</el-button>
+          <el-button @click="messageDialog.visible = true">{{ $t('联系') }}</el-button>
         </template>
         <el-button @click="onShare">
           {{ $t('分享') }}
@@ -120,6 +125,22 @@
       </template>
     </div>
     <el-dialog
+      :title="$t('发送站内信')"
+      :visible.sync="messageDialog.visible"
+      width="500px">
+      <el-input
+        v-model="messageDialog.input"
+        :placeholder="$t('发送成功后，您可在消息列表中查看对话')"
+        @keyup.native.enter="onSendMessage"/>
+      <div slot="footer">
+        <el-button @click="messageDialog.visible = false">{{ $t('g.cancelBtn') }}</el-button>
+        <el-button
+          :loading="messageDialog.loading"
+          type="primary"
+          @click="onSendMessage">{{ $t('发 送') }}</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
       :title="$t('所有评价')"
       :visible.sync="reviewDialog.visible">
       <div v-loading="reviewDialog.loading">
@@ -170,6 +191,7 @@ import WorkList from './components/WorkList'
 import { getUserInfoByUID } from '@/api/user'
 import { getActivitiesByUID } from '@/api/activity'
 import { getReceivedReviewsByUID } from '@/api/review'
+import { postMessage } from '@/api/message'
 export default {
   components: {
     ProfileCard,
@@ -194,6 +216,11 @@ export default {
         reviews: [],
         currentPage: 1,
         pageCount: 1
+      },
+      messageDialog: {
+        visible: false,
+        input: '',
+        loading: false
       },
       pageType: 'work' // 设计师主页当前显示的信息流类型，work（作品集）或activity（动态）
     }
@@ -265,6 +292,23 @@ export default {
       let link = this.$t('app.link') + this.$route.path + '?uid=' + this.pageUID
       this.$alert(link, this.$t('复制链接'), {
         confirmButtonText: this.$t('g.confirmBtn')
+      })
+    },
+    onSendMessage () {
+      const { input } = this.messageDialog
+      if (!input || !input.trim()) {
+        return this.$message.warning(this.$t('消息不能为空'))
+      }
+      this.messageDialog.loading = true
+      postMessage(this.pageUID, input).then(() => {
+        this.messageDialog = {
+          visible: false,
+          input: '',
+          loading: false
+        }
+        this.$message.success(this.$t('发送成功'))
+      }).catch(() => {
+        this.messageDialog.loading = false
       })
     }
   }

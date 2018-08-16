@@ -68,8 +68,10 @@ const notification = {
             }
           }
         }) => {
+          // 服务器返回的是按照发送时间降序排列，需要转成正序
+          commit('SET_MESSAGES', messages.reverse().concat(state.messages))
           commit('SET_PARTICIPANT', participant)
-          commit('SET_MESSAGES', state.messages.concat(messages))
+          return pagination
         }
       )
     },

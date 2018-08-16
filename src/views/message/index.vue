@@ -18,6 +18,7 @@
         infinite-scroll-disabled="busy"
         infinite-scroll-distance="200"
         class="list">
+        <my-empty v-if="nodata"/>
         <thread-item
           v-for="thread in threads"
           :key="thread.id"
@@ -52,6 +53,9 @@ export default {
     },
     busy () {
       return this.initing || this.loading || this.nomore || this.error
+    },
+    nodata () {
+      return !this.initing && !this.loading && !this.threads.length
     }
   },
   created () {
@@ -91,7 +95,7 @@ export default {
   width: 550px;
   margin: 0 auto;
   .list {
-    min-height: 700px;
+    min-height: 500px;
   }
   .thread-item {
     padding: 16px;

@@ -38,7 +38,10 @@ service.interceptors.response.use(
       console.error(error)
       let msg
       if (error.message && error.message.indexOf('timeout') !== -1) {
-        msg = i18n.locale === 'zh' ? '网络超时，请刷新重试' : 'Timeout, please refresh and try again'
+        msg =
+          i18n.locale === 'zh'
+            ? '网络超时，请刷新重试'
+            : 'Timeout, please refresh and try again'
       } else {
         msg = i18n.locale === 'zh' ? '网络错误' : 'Network error'
       }
@@ -49,7 +52,6 @@ service.interceptors.response.use(
         showClose: true
       })
     } else {
-      // TODO 401/403重定向
       console.error('网络响应错误', error.response)
       if (response.status === 401) {
         store.dispatch('SIGN_OUT').then(() => {

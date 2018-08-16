@@ -8,6 +8,7 @@ const getters = {
   language: state => state.app.language,
   notifications: state => state.notification.notifications,
   threads: state => state.message.threads,
-  messages: state => state.message.messages
+  messages: state => state.message.messages,
+  participant: state => state.message.participant
 }
 export default getters

@@ -7,19 +7,24 @@ import {
 const notification = {
   state: {
     threads: [], // 全部对话列表
-    messages: [] // 当前对话(thread)的消息列表
+    messages: [], // 当前对话(thread)的消息列表
+    participant: {} // 当前对话的用户
   },
 
   mutations: {
     RESET: state => {
       state.threads = []
       state.messages = []
+      state.participant = {}
     },
     SET_THREADS: (state, threads) => {
       state.threads = threads
     },
     SET_MESSAGES: (state, messages) => {
       state.messages = messages
+    },
+    SET_PARTICIPANT: (state, participant) => {
+      state.participant = participant
     },
     // 添加一条消息
     ADD_MESSAGE: (state, message) => {
@@ -51,14 +56,19 @@ const notification = {
       // eslint-disable-next-line eqeqeq
       if (page == 1) {
         commit('SET_MESSAGES', [])
+        commit('SET_PARTICIPANT', {})
       }
       return getMessagesByThreadId(id, page).then(
         ({
           data: {
             data: messages,
-            meta: { pagination }
+            meta: {
+              pagination,
+              thread: { participant }
+            }
           }
         }) => {
+          commit('SET_PARTICIPANT', participant)
           commit('SET_MESSAGES', state.messages.concat(messages))
         }
       )

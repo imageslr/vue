@@ -24,6 +24,7 @@ import AddWork from '../views/work/add'
 import AddWorkResult from '../views/work/Result'
 import Square from '../views/square'
 import ThreadList from '../views/message'
+import Chat from '../views/message/Chat'
 import Error404 from '../views/error/404'
 
 Vue.use(Router)
@@ -192,6 +193,11 @@ export default new Router({
           path: '',
           name: 'threadList',
           component: ThreadList
+        },
+        {
+          path: ':id',
+          name: 'chat',
+          component: Chat
         }
       ]
     },

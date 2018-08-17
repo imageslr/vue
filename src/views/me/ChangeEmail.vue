@@ -30,26 +30,28 @@
         <el-input
           :value="$store.getters.userInfo.email || $t('还未绑定邮箱')"
           disabled/>
-        <my-alert
-          v-if="isEmailNotActivated"
-          class="alert">
-          <div>
-            {{ $t('您的邮箱还未激活，请前往邮箱查看您的激活邮件。如果未收到邮件或邮件已过期，您可以') }}
-            <el-button
-              v-if="!sended"
-              :loading="sending"
-              type="text"
-              @click="onSend">{{ $t('重新发送激活邮件') }} </el-button>
-            <el-button
-              v-else
-              disabled
-              type="text">{{ $t('已发送') }} </el-button>
-          </div>
-        </my-alert>
-        <my-alert
-          v-else
-          :title="$t('已激活')"
-          class="alert"/>
+        <template v-if="$store.getters.userInfo.email">
+          <my-alert
+            v-if="isEmailNotActivated"
+            class="alert">
+            <div>
+              {{ $t('您的邮箱还未激活，请前往邮箱查看您的激活邮件。如果未收到邮件或邮件已过期，您可以') }}
+              <el-button
+                v-if="!sended"
+                :loading="sending"
+                type="text"
+                @click="onSend">{{ $t('重新发送激活邮件') }} </el-button>
+              <el-button
+                v-else
+                disabled
+                type="text">{{ $t('已发送') }} </el-button>
+            </div>
+          </my-alert>
+          <my-alert
+            v-else
+            :title="$t('已激活')"
+            class="alert"/>
+        </template>
       </el-form-item>
       <el-form-item :label="$t('更换邮箱')">
         <el-input v-model="email" />

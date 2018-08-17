@@ -6,8 +6,8 @@ export function checkPhoneAvailable (phone) {
 }
 
 // 发送验证码
-export function sendCode (phone) {
-  return request.post(`/verificationCode`, { phone })
+export function sendCode (phone, type) {
+  return request.post(`/verificationCode`, { phone, type })
 }
 
 // 注册

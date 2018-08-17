@@ -128,7 +128,7 @@ export default {
   methods: {
     onSend () {
       this.loading = true
-      sendCode(this.phone).then(res => {
+      sendCode(this.phone, 'register').then(res => {
         this.loading = false
         this.step = 'sended'
         this.$message.success(this.$t('success'))

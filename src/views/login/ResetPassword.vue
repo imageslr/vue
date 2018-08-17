@@ -100,7 +100,7 @@ export default {
     onSend () {
       if (validatePhone(this.form.phone)) {
         this.sending = true
-        sendCode(this.form.phone).then(() => {
+        sendCode(this.form.phone, 'resetPassword').then(() => {
           this.sending = false
           this.count = 60
           this.countDown()

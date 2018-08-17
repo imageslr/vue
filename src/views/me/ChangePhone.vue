@@ -105,7 +105,7 @@ export default {
       if (validatePhone(this.form.phone)) {
         this.sending = true
         checkPhoneAvailable(this.form.phone).then(() => {
-          return sendCode(this.form.phone).then(() => {
+          return sendCode(this.form.phone, 'changePhone').then(() => {
             this.sending = false
             this.count = 60
             this.countDown()

@@ -56,15 +56,6 @@ const user = {
     },
     SET_UNREAD_MESSAGE_COUNT: (state, count) => {
       state.userInfo.unread_message_count = count
-    },
-    // TODO 删除
-    SWITCH_TYPE: state => {
-      state.userInfo.type =
-        state.userInfo.type === 'designer' ? 'party' : 'designer'
-      state.token =
-        state.userInfo.type === 'designer'
-          ? 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNTMyOTY0NzY5LCJleHAiOjE1NjQ1MDA3NjksIm5iZiI6MTUzMjk2NDc2OSwianRpIjoiUU1zRjloYUZlUThDQlRYSCIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.MrDhRl4E0dSTagEs8VFGD8YlVp5bgih-jmrnhwqujvw'
-          : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNTMzMDA1NzM4LCJleHAiOjE1NjQ1NDE3MzgsIm5iZiI6MTUzMzAwNTczOCwianRpIjoiam5UWmxqRmRxOW5zUGFqbSIsInN1YiI6MiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.M5cM9bqXIrzezLjO7EqH8r0mzjW18-5CQtKwepElFBU'
     }
   },
 

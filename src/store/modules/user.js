@@ -11,6 +11,7 @@ const UserModel = {
   introduction: '',
   phone: '',
   email: '',
+  email_activated: false,
   company_name: '',
   registration_number: '',
   id_number: '',

@@ -43,6 +43,11 @@ export function resetPassword (code, phone, password) {
   return request.patch(`/users/reset`, { code, phone, password })
 }
 
+// 发送激活邮件
+export function sendActiveMail () {
+  return request.post(`/user/mails`)
+}
+
 // 获取用户信息
 export function getUserInfoByUID (uid) {
   return request.get(`/users/${uid}`)

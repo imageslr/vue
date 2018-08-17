@@ -22,6 +22,7 @@ import MeIndex from '../views/me/index'
 import MeAuth from '../views/me/Auth'
 import MeChangePhone from '../views/me/ChangePhone'
 import MeChangePassword from '../views/me/ChangePassword'
+import MeChangeEmail from '../views/me/ChangeEmail'
 import Search from '../views/search'
 import AddWork from '../views/work/add'
 import AddWorkResult from '../views/work/Result'
@@ -191,6 +192,14 @@ export default new Router({
           components: {
             sidebar: MeSidebar,
             content: MeChangePassword
+          }
+        },
+        {
+          path: 'email',
+          name: 'changeEmail',
+          components: {
+            sidebar: MeSidebar,
+            content: MeChangeEmail
           }
         }
       ]

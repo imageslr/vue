@@ -21,7 +21,7 @@
     <el-menu-item index="/me/phone">{{ $t('绑定手机号') }}</el-menu-item>
     <el-menu-item index="/me/email">{{ $t('绑定邮箱') }}</el-menu-item>
     <el-menu-item index="/me/password">{{ $t('修改密码') }}</el-menu-item>
-    <el-menu-item index="/me/reply">{{ $t('我发表的评论') }}</el-menu-item>
+    <!-- <el-menu-item index="/me/reply">{{ $t('我发表的评论') }}</el-menu-item> -->
   </el-menu>
 </template>
 

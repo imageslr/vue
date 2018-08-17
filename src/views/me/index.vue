@@ -11,6 +11,7 @@
     "简介": "Introduction",
     "手机号": "Phone",
     "邮箱": "Email",
+    "还未绑定邮箱": "Have not bound email yet",
     "应用修改": "Update",
     "修改成功": "Successful Operation",
     "中文名或英文名，2~50个字符": "2 to 50 characters",
@@ -78,7 +79,7 @@
       </el-form-item>
       <el-form-item :label="$t('邮箱')" >
         <el-input
-          :value="$store.getters.userInfo.email"
+          :value="$store.getters.userInfo.email || $t('还未绑定邮箱')"
           disabled/>
       </el-form-item>
       <el-form-item

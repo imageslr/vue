@@ -4,6 +4,7 @@
     "修改绑定邮箱": "Change Email Address",
     "已绑定邮箱": "Current email address",
     "还未绑定邮箱": "Have not bound email yet",
+    "新邮箱不能与原邮箱相同": "New and original email address cannot be same",
     "您的邮箱还未激活，请前往邮箱查看您的激活邮件。如果未收到邮件或邮件已过期，您可以": "Your email has not been activated. Please go to the email to view your activation email. If you have not received the message or the message has expired, you can",
     "重新发送激活邮件": "Resend activation email",
     "已发送": "Sended",
@@ -85,6 +86,9 @@ export default {
       const { email } = this
       if (!validateEmail(email)) {
         return this.$message.warning(this.$t('请输入正确的邮箱地址'))
+      }
+      if (email === this.$store.getters.userInfo.email) {
+        return this.$message.warning(this.$t('新邮箱不能与原邮箱相同'))
       }
       this.loading = true
       updateCurrentUserInfo({ email }).then(({ data }) => {

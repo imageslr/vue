@@ -4,6 +4,7 @@
     "修改绑定邮箱": "Change Email Address",
     "已绑定邮箱": "Current email address",
     "还未绑定邮箱": "Have not bound email yet",
+    "绑定并激活邮箱后，您将可以使用邮箱接收通知": "You can receive notifications via email after binding and activation",
     "新邮箱不能与原邮箱相同": "New and original email address cannot be same",
     "您的邮箱还未激活，请前往邮箱查看您的激活邮件。如果未收到邮件或邮件已过期，您可以": "Your email has not been activated. Please go to the email to view your activation email. If you have not received the message or the message has expired, you can",
     "重新发送激活邮件": "Resend activation email",
@@ -52,6 +53,7 @@
             :title="$t('已激活')"
             class="alert"/>
         </template>
+        <el-card class="tips-card">{{ $t('绑定并激活邮箱后，您将可以使用邮箱接收通知') }}</el-card>
       </el-form-item>
       <el-form-item :label="$t('更换邮箱')">
         <el-input v-model="email" />
@@ -132,5 +134,14 @@ export default {
       }
     }
   }
+}
+.tips-card {
+  position: absolute;
+  top: 0px;
+  left: 660px;
+  width: 250px;
+  font-size: 14px;
+  line-height: 1.8em;
+  color: rgba($color: #000000, $alpha: 0.65);
 }
 </style>

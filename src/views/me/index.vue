@@ -60,6 +60,7 @@
           v-model="form.name"
           :placeholder="$t('中文名或英文名，2~50个字符')"
           maxlength="50"/>
+        <el-card class="tips-card">{{ $t('tips') }}</el-card>
       </el-form-item>
       <el-form-item :label="$t('职位/公司')" >
         <el-input
@@ -95,7 +96,6 @@
           @click="onSubmit">{{ $t('应用修改') }}</el-button>
       </el-form-item>
     </el-form>
-    <el-card class="tips-card">{{ $t('tips') }}</el-card>
   </div>
 </template>
 
@@ -182,8 +182,8 @@ export default {
 }
 .tips-card {
   position: absolute;
-  top: 300px;
-  right: 30px;
+  top: 0px;
+  left: 660px;
   width: 250px;
   font-size: 14px;
   line-height: 1.8em;

@@ -35,6 +35,15 @@
           v-model="form.company_name"
           :placeholder="$t('最多50个字符')"
           maxlength="50"/>
+        <el-card class="tips-card">
+          <h4
+            v-t="'注意'"
+            class="m0 f-16" />
+          <p v-t="'认证信息一经上传将无法修改！'" />
+          <p
+            v-t="'身份证照片请上传人像面！'"
+            class="mb0" />
+        </el-card>
       </el-form-item>
       <el-form-item :label="$t('注册号')" >
         <el-input
@@ -87,15 +96,6 @@
           @click="onSubmit">{{ $t('确定上传') }}</el-button>
       </el-form-item>
     </el-form>
-    <el-card class="tips-card">
-      <h4
-        v-t="'注意'"
-        class="m0 f-16" />
-      <p v-t="'认证信息一经上传将无法修改！'" />
-      <p
-        v-t="'身份证照片请上传人像面！'"
-        class="mb0" />
-    </el-card>
   </div>
 </template>
 
@@ -202,8 +202,8 @@ export default {
 }
 .tips-card {
   position: absolute;
-  top: 200px;
-  right: 30px;
+  top: 0px;
+  left: 670px;
   width: 250px;
   font-size: 14px;
   line-height: 1.8em;

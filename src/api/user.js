@@ -69,3 +69,10 @@ export function searchUsers (page = 1, keyword = null, type = null) {
     params: { page, type, keyword }
   })
 }
+
+// 搜索用户以邀请
+export function searchUsersToInvite (page = 1, keyword = null) {
+  return request.get('/users', {
+    params: { page, keyword, is_inviting: true }
+  })
+}

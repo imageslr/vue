@@ -1,14 +1,14 @@
 <i18n>
 {
   "zh": {
-    "title": "没有找到你感兴趣的设计师？邀请他们注册成为平台的一员吧！",
-    "success": "平台链接已成功复制到您的剪贴板，快去发送给你的设计师好友吧",
-    "error": "请手动复制网址：{link}，发送给你的设计师好友"
+    "title": "没有找到你感兴趣的用户？邀请他们注册成为平台的一员吧！",
+    "success": "平台链接已成功复制到您的剪贴板，快去发送给你的好友吧",
+    "error": "请手动复制网址：{link}，发送给你的好友"
   },
   "en": {
-    "title": "Didn't find the designer you are interested in? Invite them to register as a member of the platform!",
-    "success": "The platform link has been successfully copied to your clipboard. Sent to your designer friends now.",
-    "error": "Please manually copy the address: {link} and send it to your designer friends.",
+    "title": "Didn't find the user you are interested in? Invite them to register as a member of the platform!",
+    "success": "The platform link has been successfully copied to your clipboard. Sent to your friends now.",
+    "error": "Please manually copy the address: {link} and send it to your friends.",
     "立即邀请": "Invite now"
   }
 }

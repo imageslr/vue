@@ -9,7 +9,7 @@ export function getReceivedReviewsByUID (uid, page = 1, per_page = 20) {
 
 // 邀请评价
 export function inviteUserByUID (uid) {
-  return request.post('/users/reviews/users', {
+  return request.post('/user/reviews/users', {
     invited_user_id: uid
   })
 }

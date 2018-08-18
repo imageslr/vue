@@ -24,6 +24,7 @@ import MeChangePhone from '../views/me/ChangePhone'
 import MeChangePassword from '../views/me/ChangePassword'
 import MeChangeEmail from '../views/me/ChangeEmail'
 import MeReceivedReview from '../views/me/ReceivedReview'
+import MeInviteUser from '../views/me/InviteUser'
 import Search from '../views/search'
 import AddWork from '../views/work/add'
 import AddWorkResult from '../views/work/Result'
@@ -209,6 +210,14 @@ export default new Router({
           components: {
             sidebar: MeSidebar,
             content: MeReceivedReview
+          }
+        },
+        {
+          path: 'review/invite',
+          name: 'inviteUser',
+          components: {
+            sidebar: MeSidebar,
+            content: MeInviteUser
           }
         }
       ]

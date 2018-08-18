@@ -203,7 +203,7 @@ export default {
 .tips-card {
   position: absolute;
   top: 0px;
-  left: 670px;
+  left: 660px;
   width: 250px;
   font-size: 14px;
   line-height: 1.8em;

@@ -6,7 +6,9 @@
     "Ta关注的人": "Following",
     "关注Ta的人": "Followers",
     "只看设计师": "Only designer",
-    "只看甲方": "Only party"
+    "只看甲方": "Only party",
+    "关注": "Following",
+    "粉丝": "Follower"
   }
 }
 </i18n>

@@ -26,6 +26,7 @@ export default {
     cancelBtn: 'Cancel',
     party: 'Party',
     designer: 'Designer',
+    delete: 'Delete',
     successfullyDeleted: 'Successfully deleted'
   },
   ordinalNum: ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'],

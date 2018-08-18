@@ -14,6 +14,7 @@ import MyBadgeStatus from './BadgeStatus.vue'
 import MyUpload from './Upload.vue'
 import MyMultiUpload from './MultiUpload.vue'
 import MyInviteAlert from './InviteAlert.vue'
+import MyEmptyPageTemplate from './EmptyPageTemplate.vue'
 const components = {
   MyDivider,
   MyLangSelect,
@@ -29,7 +30,8 @@ const components = {
   MyBadgeStatus,
   MyUpload,
   MyMultiUpload,
-  MyInviteAlert
+  MyInviteAlert,
+  MyEmptyPageTemplate
 }
 const install = function (Vue, opts = {}) {
   Object.keys(components).forEach(key => {

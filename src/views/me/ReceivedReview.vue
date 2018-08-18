@@ -1,8 +1,11 @@
 <i18n>
 {
   "en": {
-    "我收到的用户评价": "Received User Reviews",
-    "确认删除该评价？": "Is it confirmed to delete the review?"
+    "我收到的评价": "Received Reviews",
+    "确认删除该评价？": "Is it confirmed to delete the review?",
+    "您还未收到用户评价": "You have not received review yet",
+    "您可以邀请用户发表评价，这些评价将展示在您的个人主页上": "You can invite users to post reviews that will appear on your profile.",
+    "立即邀请": "Invite now"
   }
 }
 </i18n>
@@ -10,7 +13,7 @@
 <template>
   <div class="container">
     <h2
-      v-t="'我收到的用户评价'"
+      v-t="'我收到的评价'"
       class="mt0" />
     <my-loader
       v-if="loading || error"
@@ -18,7 +21,18 @@
       :error="error"
       :btn-text="$t('g.reload')"
       :on-reload="getReviews" />
-    <my-empty v-else-if="!reviews.length" />
+    <my-empty-page-template
+      v-else-if="!reviews.length"
+      :title="$t('您还未收到用户评价')">
+      <p class="f-16 black-65">
+        {{ $t('您可以邀请用户发表评价，这些评价将展示在您的个人主页上') }}
+        <router-link to="/me/review/invite">
+          <el-button
+            style="padding-bottom: 0; font-size: 16px"
+            type="text">{{ $t('立即邀请') }}</el-button>
+        </router-link>
+      </p>
+    </my-empty-page-template>
     <div
       v-else
       class="user-list">
@@ -80,7 +94,7 @@ export default {
         this.$set(this.deletings, id, true)
         deleteReviewById(id).then(() => {
           this.deletings[id] = false
-          this.reviews.splice(index, 1)
+          this.reviews = this.reviews.filter(v => v.id !== id)
           this.$message.success(this.$t('g.successfullyDeleted'))
         }).catch(() => {
           this.deletings[id] = false

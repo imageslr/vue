@@ -5,6 +5,7 @@
     "编辑个人资料": "Edit profile",
     "甲方评价": "Party Reviews",
     "设计师评价": "Designer Reviews",
+    "收到的评价": "Received Reviews",
     "个人动态": "Personal Activities",
     "已关注": "Following",
     "关注": "Follow",
@@ -50,7 +51,7 @@
         </el-button>
       </profile-card>
       <h2
-        v-t="$t((userInfo.type === 'party' ? '设计师评价' : '甲方评价'))"
+        v-t="'收到的评价'"
         class="title" />
       <div class="card review-card">
         <div
@@ -68,11 +69,11 @@
               <router-link
                 :to="'/profile?uid=' + review.reviewer.id"
                 class="f-14 bold">{{ review.reviewer.name }}</router-link>
-              <el-rate
+              <!-- <el-rate
                 v-model="review.rate"
                 :colors="['#00A0DC', '#00A0DC', '#00A0DC']"
                 class="review-item__user-rate"
-                disabled />
+                disabled /> -->
               <p
                 class="m0 f-12 black-45"
                 v-text="review.created_at" />
@@ -158,11 +159,11 @@
               <router-link
                 :to="'/profile?uid=' + review.reviewer.id"
                 class="f-14 bold">{{ review.reviewer.name }}</router-link>
-              <el-rate
+              <!-- <el-rate
                 v-model="review.rate"
                 :colors="['#00A0DC', '#00A0DC', '#00A0DC']"
                 class="review-item__user-rate"
-                disabled />
+                disabled /> -->
               <p
                 class="m0 f-12 black-45"
                 v-text="review.created_at" />
@@ -364,8 +365,8 @@ export default {
     display: flex;
     align-items: flex-start;
     &-avatar {
-      width: 56px;
-      height: 56px;
+      width: 36px;
+      height: 36px;
       margin-right: 8px;
     }
     &-rate /deep/ .el-rate__icon {

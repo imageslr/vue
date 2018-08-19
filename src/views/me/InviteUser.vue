@@ -42,12 +42,12 @@
           :key="user.id">
           <template slot="action">
             <el-button
-              v-if="user.invitation_status === 'inviting'"
+              v-if="user.review_status === 'inviting'"
               disabled
               plain
               size="mini">{{ $t('已邀请') }}</el-button>
             <el-button
-              v-else-if="user.invitation_status === 'reviewed'"
+              v-else-if="user.review_status === 'reviewed'"
               disabled
               plain
               size="mini">{{ $t('已评价') }}</el-button>
@@ -77,7 +77,7 @@
 
 <script>
 import UserListItem from '@/views/components/UserListItem'
-import { searchUsersToInvite } from '@/api/user'
+import { searchUsersToInviteReview } from '@/api/user'
 import { inviteUserByUID } from '@/api/review'
 export default {
   components: { UserListItem },
@@ -102,7 +102,7 @@ export default {
       this.loading = true
       this.error = false
       const { currentPage, keyword } = this
-      searchUsersToInvite(currentPage, keyword)
+      searchUsersToInviteReview(currentPage, keyword)
         .then(({ data: { data: users, meta: { pagination } } }) => {
           this.loading = false
           this.users = users
@@ -117,7 +117,7 @@ export default {
       this.$set(this.btnLoadings, index, true)
       const user = this.users[index]
       inviteUserByUID(user.id).then(() => {
-        user.invitation_status = 'inviting'
+        user.review_status = 'inviting'
         this.btnLoadings[index] = false
       }).catch(() => {
         this.btnLoadings[index] = false

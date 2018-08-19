@@ -95,7 +95,7 @@
           style="padding-bottom: 0"
           type="text">{{ $t('查看Ta的个人主页') }}</el-button>
       </router-link>
-      <router-link :to="`/review?uid=${data.user_id}`">
+      <router-link :to="`/review/post?uid=${data.user_id}`">
         <el-button
           style="padding-bottom: 0"
           type="text">{{ $t('发表评价') }}</el-button>

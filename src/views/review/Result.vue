@@ -1,9 +1,9 @@
 <i18n>
 {
   "en": {
-    "添加作品成功": "Successfully add work",
-    "继续添加作品": "Continue to add work",
-    "查看个人主页": "View home page"
+    "发表评价成功": "Successfully posted review",
+    "查看我发表的评价": "View my posted reviews",
+    "返回首页": "Return to feed page"
   }
 }
 </i18n>
@@ -13,16 +13,16 @@
     <div class="card result">
       <i class="el-icon-success result__icon" />
       <h1
-        v-t="'添加作品成功'"
+        v-t="'发表评价成功'"
         class="result__title" />
       <el-button
         class="block w-100"
         type="primary"
-        @click="$router.push(`/work/add`)">{{ $t('继续添加作品') }}</el-button>
+        @click="$router.push(`/me/review/posted`)">{{ $t('查看我发表的评价') }}</el-button>
       <el-button
         class="block w-100"
         style="margin: 16px 0 0;"
-        @click="$router.push(`/profile?uid=${$uid()}`)">{{ $t('查看个人主页') }}</el-button>
+        @click="$router.push(`/feed`)">{{ $t('返回首页') }}</el-button>
     </div>
   </div>
 </template>

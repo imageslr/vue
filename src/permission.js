@@ -53,6 +53,7 @@ router.beforeEach((to, from, next) => {
           next()
         } else {
           next({ path: '/404', replace: true })
+          NProgress.done() // need hack
         }
       }
     }

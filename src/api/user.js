@@ -70,9 +70,9 @@ export function searchUsers (page = 1, keyword = null, type = null) {
   })
 }
 
-// 搜索用户以邀请
-export function searchUsersToInvite (page = 1, keyword = null) {
+// 搜索用户以邀请评价
+export function searchUsersToInviteReview (page = 1, keyword = null) {
   return request.get('/users', {
-    params: { page, keyword, is_inviting: true }
+    params: { page, keyword, invite_to_review: true }
   })
 }

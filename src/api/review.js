@@ -1,9 +1,16 @@
 import request from '@/utils/request'
 
 // 获取收到的评价
-export function getReceivedReviewsByUID (uid, page = 1, per_page = 20) {
+export function getReceivedReviewsByUID (uid, page = 1) {
   return request.get(`/users/${uid}/reviews`, {
-    params: { page, per_page }
+    params: { page, include: 'reviewer' }
+  })
+}
+
+// 获取发表的评价
+export function getPostedReviewsByUID (uid, page = 1) {
+  return request.get(`/users/${uid}/reviews`, {
+    params: { page, type: 'posted', include: 'user' }
   })
 }
 
@@ -22,4 +29,9 @@ export function reviewUserByUID (uid, content) {
 // 删除一条评价
 export function deleteReviewById (id) {
   return request.delete(`/reviews/${id}`)
+}
+
+// 获取评价状态：是否评价了某位用户
+export function getReviewStatusByUID (uid) {
+  return request.get(`/user/reviews/status?uid=${uid}`)
 }

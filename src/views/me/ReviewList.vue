@@ -2,10 +2,14 @@
 {
   "en": {
     "我收到的评价": "Received Reviews",
+    "我发表的评价": "Posted Reviews",
     "确认删除该评价？": "Is it confirmed to delete the review?",
     "您还未收到用户评价": "You have not received review yet",
+    "您还未发表过评价": "You have not posted review yet",
     "您可以邀请用户发表评价，这些评价将展示在您的个人主页上": "You can invite users to post reviews that will appear on your profile.",
-    "立即邀请": "Invite now"
+    "其他用户可以邀请您评价，您的评价将展示在他们的个人主页上": "Other users can invite you to review and your reviews will appear on their profile",
+    "立即邀请": "Invite now",
+    "我的评价": "My review"
   }
 }
 </i18n>
@@ -13,7 +17,7 @@
 <template>
   <div class="container">
     <h2
-      v-t="'我收到的评价'"
+      v-t="type === 'received' ? '我收到的评价' : '我发表的评价'"
       class="mt0" />
     <my-loader
       v-if="loading || error"
@@ -23,8 +27,10 @@
       :on-reload="getReviews" />
     <my-empty-page-template
       v-else-if="!reviews.length"
-      :title="$t('您还未收到用户评价')">
-      <p class="f-16 black-65">
+      :title="$t(type === 'received' ? '您还未收到用户评价' : '您还未发表过评价')">
+      <p
+        v-if="type === 'received'"
+        class="f-16 black-65">
         {{ $t('您可以邀请用户发表评价，这些评价将展示在您的个人主页上') }}
         <router-link to="/me/review/invite">
           <el-button
@@ -32,23 +38,31 @@
             type="text">{{ $t('立即邀请') }}</el-button>
         </router-link>
       </p>
+      <p
+        v-t="'其他用户可以邀请您评价，您的评价将展示在他们的个人主页上'"
+        v-else
+        class="f-16 black-65" />
     </my-empty-page-template>
     <div
       v-else
       class="user-list">
       <user-list-item
-        v-for="(review, index) in reviews"
-        :user="review.reviewer"
+        v-for="review in reviews"
+        :user="type === 'received' ? review.reviewer : review.user"
         :key="review.id">
         <p
+          v-if="type === 'received'"
           slot="content"
           v-text="review.content" />
+        <p
+          v-else
+          slot="content">{{ $t('我的评价') }}：{{ review.content }}</p>
         <el-button
           slot="action"
           :loading="deletings[review.id]"
           type="text"
           size="small"
-          @click="onDelete(index)">
+          @click="onDelete(review.id)">
           {{ $t('g.delete') }}
         </el-button>
       </user-list-item>
@@ -65,7 +79,7 @@
 
 <script>
 import UserListItem from '@/views/components/UserListItem'
-import { getReceivedReviewsByUID, deleteReviewById } from '@/api/review'
+import { getReceivedReviewsByUID, getPostedReviewsByUID, deleteReviewById } from '@/api/review'
 export default {
   components: { UserListItem },
   data () {
@@ -78,18 +92,37 @@ export default {
       deletings: {}
     }
   },
+  computed: {
+    type () {
+      return this.$route.params.type
+    }
+  },
   created () {
     if (this.$route.query.p) this.currentPage = parseInt(this.$route.query.p)
     this.getReviews()
   },
   methods: {
-    onDelete (index) {
+    getReviews () {
+      this.loading = true
+      this.error = false
+      const { currentPage } = this
+      const fetch = this.type === 'received' ? getReceivedReviewsByUID : getPostedReviewsByUID
+      fetch(this.$uid(), currentPage)
+        .then(({ data: { data: reviews, meta: { pagination } } }) => {
+          this.loading = false
+          this.reviews = reviews
+          this.pageCount = pagination.total_pages
+        }).catch(() => {
+          this.loading = false
+          this.error = true
+        })
+    },
+    onDelete (id) {
       this.$confirm(this.$t('确认删除该评价？'), this.$t('g.notice'), {
         confirmButtonText: this.$t('g.confirmBtn'),
         cancelButtonText: this.$t('g.cancelBtn'),
         type: 'warning'
       }).then(() => {
-        const id = this.reviews[index].id
         if (this.deletings[id]) return
         this.$set(this.deletings, id, true)
         deleteReviewById(id).then(() => {
@@ -100,20 +133,6 @@ export default {
           this.deletings[id] = false
         })
       }).catch(() => {})
-    },
-    getReviews () {
-      this.loading = true
-      this.error = false
-      const { currentPage } = this
-      getReceivedReviewsByUID(this.$uid(), currentPage)
-        .then(({ data: { data: reviews, meta: { pagination } } }) => {
-          this.loading = false
-          this.reviews = reviews
-          this.pageCount = pagination.total_pages
-        }).catch(() => {
-          this.loading = false
-          this.error = true
-        })
     },
     onChangePage (page) {
       this.$router.push({

@@ -20,11 +20,8 @@
       <h1
         v-t="$t('publishSucceed')"
         class="result__title" />
-      <!-- <p
-        v-t="$t('description')"
-        class="result__description" /> -->
       <el-button
-        class="block w-100 shadow"
+        class="block w-100"
         type="primary"
         @click="$router.push(`/project/${$route.query.id}`)">{{ $t('viewDetail') }}</el-button>
     </div>

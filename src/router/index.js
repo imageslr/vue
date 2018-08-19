@@ -23,14 +23,16 @@ import MeAuth from '../views/me/Auth'
 import MeChangePhone from '../views/me/ChangePhone'
 import MeChangePassword from '../views/me/ChangePassword'
 import MeChangeEmail from '../views/me/ChangeEmail'
-import MeReceivedReview from '../views/me/ReceivedReview'
+import MeReviewList from '../views/me/ReviewList'
 import MeInviteUser from '../views/me/InviteUser'
 import Search from '../views/search'
-import AddWork from '../views/work/add'
+import AddWork from '../views/work/Add'
 import AddWorkResult from '../views/work/Result'
 import Square from '../views/square'
 import ThreadList from '../views/message'
 import Chat from '../views/message/Chat'
+import PostReview from '../views/review/Post'
+import PostReviewResult from '../views/review/Result'
 import Error404 from '../views/error/404'
 
 Vue.use(Router)
@@ -205,15 +207,20 @@ export default new Router({
           }
         },
         {
-          path: 'review/received',
-          name: 'receivedReview',
+          path: 'review',
           components: {
             sidebar: MeSidebar,
-            content: MeReceivedReview
-          }
+            content: MeReviewList
+          },
+          children: [
+            {
+              path: ':type',
+              name: 'reviewList'
+            }
+          ]
         },
         {
-          path: 'review/invite',
+          path: 'invite',
           name: 'inviteUser',
           components: {
             sidebar: MeSidebar,
@@ -282,6 +289,22 @@ export default new Router({
             roles: ['designer']
           },
           component: AddWorkResult
+        }
+      ]
+    },
+    {
+      path: '/review',
+      component: Layout,
+      children: [
+        {
+          path: 'post',
+          name: 'postReview',
+          component: PostReview
+        },
+        {
+          path: 'result',
+          name: 'postReviewResult',
+          component: PostReviewResult
         }
       ]
     },

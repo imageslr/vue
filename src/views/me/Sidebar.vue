@@ -34,7 +34,7 @@
       <template slot="title">{{ $t('评价管理') }}</template>
       <el-menu-item index="/me/review/received">{{ $t('我收到的评价') }}</el-menu-item>
       <el-menu-item index="/me/review/posted">{{ $t('我发表的评价') }}</el-menu-item>
-      <el-menu-item index="/me/review/invite">{{ $t('邀请用户评价') }}</el-menu-item>
+      <el-menu-item index="/me/invite">{{ $t('邀请用户评价') }}</el-menu-item>
     </el-submenu>
     <!-- <el-menu-item index="/me/reply">{{ $t('我发表的评论') }}</el-menu-item> -->
   </el-menu>

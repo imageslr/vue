@@ -37,6 +37,7 @@
             v-model="content"
             :placeholder="$t('placeholder')"
             :rows="7"
+            maxlength="300"
             type="textarea"/>
         </el-form-item>
         <el-form-item>

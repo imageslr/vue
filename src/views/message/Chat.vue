@@ -123,7 +123,7 @@ export default {
       this.sending = true
       this.$store.dispatch('postMessageByThreadId', { id, body }).then(() => {
         this.textarea = ''
-        this.$refs.input.blur()
+        // this.$refs.input.blur()
         this.sending = false
         this.scrollToBottom()
       }).catch(() => {

@@ -50,7 +50,7 @@
         </div>
         <div class="center mt1">
           <router-link
-            to="/signin"
+            to="/signin?type=party"
             class="mr1">
             <el-button plain>{{ $t('登录') }}</el-button>
           </router-link>
@@ -73,7 +73,7 @@
         </div>
         <div class="center mt1">
           <router-link
-            to="/signin"
+            to="/signin?type=designer"
             class="mr1">
             <el-button plain>{{ $t('登录') }}</el-button>
           </router-link>

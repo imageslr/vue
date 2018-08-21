@@ -128,7 +128,8 @@ export default {
   methods: {
     onSend () {
       this.loading = true
-      sendCode(this.phone, 'register').then(res => {
+      const { phone, type } = this.userInfo
+      sendCode(phone, type, 'register').then(res => {
         this.loading = false
         this.step = 'sended'
         this.$message.success(this.$t('success'))
@@ -140,7 +141,7 @@ export default {
       if (!this.code) return this.$message.error(this.$t('requireCode'))
       this.loading = true
       const { code, userInfo } = this
-      return this.$store.dispatch('SIGN_UP', {
+      return this.$store.dispatch('signUp', {
         ...userInfo,
         verification_code: code
       }).then(() => {

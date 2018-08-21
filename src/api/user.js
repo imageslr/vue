@@ -1,13 +1,17 @@
 import request from '@/utils/request'
 
 // 检测手机号是否已被注册
-export function checkPhoneAvailable (phone) {
-  return request.post(`/checkPhone/${phone}`)
+export function checkPhoneAvailable (phone, type) {
+  return request.post(`/users/check`, { phone, type })
 }
 
 // 发送验证码
-export function sendCode (phone, type) {
-  return request.post(`/verificationCode`, { phone, type })
+export function sendCode (phone, userType, actionType) {
+  return request.post(`/verificationCode`, {
+    phone,
+    user_type: userType,
+    action_type: actionType
+  })
 }
 
 // 注册
@@ -16,8 +20,8 @@ export function signUp (params) {
 }
 
 // 登录
-export function signIn (phone, password) {
-  return request.post(`/authorizations`, { phone, password })
+export function signIn (phone, password, type) {
+  return request.post(`/authorizations`, { phone, password, type })
 }
 
 // 根据token获取当前用户信息
@@ -39,8 +43,8 @@ export function changePhone (code, phone) {
 }
 
 // 重置密码
-export function resetPassword (code, phone, password) {
-  return request.patch(`/users/reset`, { code, phone, password })
+export function resetPassword (body) {
+  return request.patch(`/users/reset`, body)
 }
 
 // 发送激活邮件

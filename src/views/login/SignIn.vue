@@ -20,7 +20,10 @@
     "forgetPassword": "Forget password?",
     "thirdParty": "Third party",
     "signUpBtn": "Sign up",
-    "signInSuccess": "Sign in succeed"
+    "signInSuccess": "Sign in succeed",
+    "甲方": "party",
+    "设计师": "designer",
+    "请选择用户类型": "Please select user type"
   }
 }
 </i18n>
@@ -45,6 +48,12 @@
           :placeholder="$t('password')"
           type="password"
           @keyup.native.enter="onSubmit"/>
+      </el-form-item>
+      <el-form-item prop="type">
+        <el-radio-group v-model="form.type">
+          <el-radio label="party">{{ $t('甲方') }}</el-radio>
+          <el-radio label="designer">{{ $t('设计师') }}</el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -72,22 +81,26 @@ export default {
     return {
       form: {
         phone: '',
-        password: ''
+        password: '',
+        type: ''
       },
       rules: {
         phone: { required: true, pattern: phonePattern, message: this.$t('phoneMessage'), trigger: 'blur' },
-        password: { required: true, min: 6, max: 25, message: this.$t('passwordMessage'), trigger: 'blur' }
+        password: { required: true, min: 6, max: 25, message: this.$t('passwordMessage'), trigger: 'blur' },
+        type: { required: true, type: 'enum', enum: ['designer', 'party'], message: this.$t('请选择用户类型') }
       },
       signInBtnLoading: false
     }
+  },
+  created () {
+    this.form.type = this.$route.query.type || 'party'
   },
   methods: {
     onSubmit () {
       this.$refs.signInForm.validate((valid, resObj) => {
         if (valid) {
           this.signInBtnLoading = true
-          const { phone, password } = this.form
-          this.$store.dispatch('SIGN_IN', { phone, password }).then(() => {
+          this.$store.dispatch('signIn', this.form).then(() => {
             this.signInBtnLoading = false
             this.$message.success(this.$t('signInSuccess'))
             this.$router.push({ path: '/feed' })

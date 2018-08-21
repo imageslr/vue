@@ -138,7 +138,7 @@ export default {
           this.showErrMessage(resObj)
         } else {
           this.signUpBtnLoading = true
-          checkPhoneAvailable(this.form.phone).then(() => {
+          checkPhoneAvailable(this.form.phone, this.form.type).then(() => {
             this.signUpBtnLoading = false
             this.dialogVisible = true
             this.signUpBtnDisabled = true

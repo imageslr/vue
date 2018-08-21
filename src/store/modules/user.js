@@ -61,7 +61,7 @@ const user = {
 
   actions: {
     // 注册
-    SIGN_UP ({ commit }, userInfo) {
+    signUp ({ commit }, userInfo) {
       return signUp(userInfo).then(({ data }) => {
         setToken(data.meta.token)
         commit('SET_TOKEN', data.meta.token)
@@ -70,8 +70,8 @@ const user = {
     },
 
     // 登录认证
-    SIGN_IN ({ commit }, { phone, password }) {
-      return signIn(phone, password).then(({ data }) => {
+    signIn ({ commit }, { phone, password, type }) {
+      return signIn(phone, password, type).then(({ data }) => {
         setToken(data.meta.token)
         commit('SET_TOKEN', data.meta.token)
         commit('SET_USERINFO', data)

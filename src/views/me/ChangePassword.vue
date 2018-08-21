@@ -115,6 +115,7 @@ export default {
           changePassword(password, newPassword).then(() => {
             this.loading = false
             this.$message.success(this.$t('修改密码成功'))
+            this.$refs.form.resetFields()
           }).catch(() => {
             this.loading = false
           })

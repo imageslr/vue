@@ -37,7 +37,8 @@
       "phone": "Please enter a valid phone number",
       "password": "Password length is 6 to 25 characters",
       "type": "Please select your identity"
-    }
+    },
+    "同一个手机号可以注册两个不同身份的账号": "A same phone number can register two accounts with different user type"
   }
 }
 </i18n>
@@ -62,7 +63,11 @@
         <el-form-item
           :label="$t('phone')"
           prop="phone">
-          <el-input v-model="form.phone"/>
+          <el-tooltip
+            :content="$t('同一个手机号可以注册两个不同身份的账号')"
+            placement="right">
+            <el-input v-model="form.phone"/>
+          </el-tooltip>
         </el-form-item>
         <el-form-item
           :label="$t('password')"

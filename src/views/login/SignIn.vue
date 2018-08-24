@@ -3,7 +3,6 @@
   "zh": {
     "phone": "手机号",
     "password": "密码",
-    "signIn": "登录",
     "phoneMessage": "请输入合法手机号",
     "passwordMessage": "请输入密码，长度 6 到 25 个字符",
     "forgetPassword": "忘记密码？",
@@ -14,7 +13,7 @@
   "en": {
     "phone": "Phone Number",
     "password": "Password",
-    "signInBtn": "Sign in",
+    "登录": "Sign in",
     "phoneMessage": "Please enter a valid phone number",
     "passwordMessage": "Please enter password of which length is 6 to 25",
     "forgetPassword": "Forget password?",
@@ -59,7 +58,7 @@
         <el-button
           :loading="signInBtnLoading"
           type="primary"
-          @click="onSubmit">{{ $t('signIn') }}</el-button>
+          @click="onSubmit">{{ $t('登录') }}</el-button>
       </el-form-item>
       <el-form-item class="forget-password">
         <router-link to="/reset">{{ $t('forgetPassword') }}</router-link>

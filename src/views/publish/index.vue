@@ -37,6 +37,7 @@
     "在最专业、最国际化的建筑、规划、景观、室内设计平台遇见最专业的设计师": "Meet the most professional designers in the most professional and international architecture, planning, landscape, interior design platform",
     "给项目起一个标题吧": "Project title",
     "最多50字": "50 characters at most",
+    "最多200字": "200 characters at most",
     "项目的类型是？": "Project type",
     "项目的功能是？": "Project feature",
     "项目的面积有多大？": "Project area",
@@ -116,8 +117,8 @@
           prop="title">
           <el-input
             v-model="form.title"
-            :placeholder="$t('最多50字')"
-            maxlength="50"/>
+            :placeholder="$t('最多200字')"
+            maxlength="200"/>
         </el-form-item>
         <el-form-item
           :label="$t('项目的类型是？')"

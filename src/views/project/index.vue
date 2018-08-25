@@ -135,7 +135,11 @@
         <p v-text="project.application.remark" />
         <my-alert
           v-if="project.application.application_file_url"
-          class="mt-12"><a :href="project.application.application_file_url">{{ $t('下载附件') }}</a></my-alert>
+          class="mt-12">
+          <a
+            :href="project.application.application_file_url"
+            target="_blank">{{ $t('下载附件') }}</a>
+        </my-alert>
         <p class="m0 mt1 f-12 black-65">{{ $t('报名于') }}：{{ project.application.created_at }}</p>
       </div>
       <div
@@ -153,7 +157,11 @@
           v-text="project.description" />
         <my-alert
           v-if="project.project_file_url"
-          class="mt-12"><a :href="project.project_file_url">{{ $t('下载附件') }}</a></my-alert>
+          class="mt-12">
+          <a
+            :href="project.project_file_url"
+            target="_blank">{{ $t('下载附件') }}</a>
+        </my-alert>
         <h3 v-t="'项目的交付时间'" />
         <p v-text="project.delivery_time" />
         <h3 v-t="'希望用多长时间找设计师？'" />
@@ -166,7 +174,11 @@
           <p v-text="project.supplement_description" />
           <my-alert
             v-if="project.supplement_file_url"
-            class="mt-12"><a :href="project.supplement_file_url">{{ $t('下载附件') }}</a></my-alert>
+            class="mt-12">
+            <a
+              :href="project.supplement_file_url"
+              target="_blank">{{ $t('下载附件') }}</a>
+          </my-alert>
           <p class="m0 mt1 f-12 black-65">{{ $t('补充于') }}：{{ project.supplement_at }}</p>
         </template>
       </div>

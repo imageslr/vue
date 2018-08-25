@@ -54,7 +54,7 @@
       <el-form-item :label="$t('营业执照')" >
         <my-alert v-if="user.business_license_url" ><a
           :href="user.business_license_url"
-          :download="$t('营业执照')">{{ $t('已提交，点击下载文件') }}</a></my-alert>
+          target="_blank">{{ $t('已提交，点击下载文件') }}</a></my-alert>
         <my-upload
           v-else
           :button-text="$t('上传图片')"
@@ -75,7 +75,7 @@
       <el-form-item :label="$t('身份证照片')" >
         <my-alert v-if="user.id_card_url"><a
           :href="user.id_card_url"
-          :download="$t('身份证照片')">{{ $t('已提交，点击下载文件') }}</a></my-alert>
+          target="_blank">{{ $t('已提交，点击下载文件') }}</a></my-alert>
         <my-upload
           v-else
           :button-text="$t('上传图片')"

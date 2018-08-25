@@ -1,16 +1,36 @@
 <i18n>
 {
+  "zh": {
+    "status": {
+      "500": "已取消",
+      "600": "审核未通过",
+      "900": "审核中",
+      "1000": "报名中",
+      "1100": "工作中",
+      "1200": "已完成"
+    }
+  },
   "en": {
     "输入项目标题进行搜索": "Enter project title to search",
     "搜索项目": "Search projects",
     "所有项目": "All",
+    "审核中": "Reviewing",
     "报名中": "Applying",
     "工作中": "Working",
     "已完成": "Completed",
     "已取消": "Canceled",
+    "审核未通过": "Review Failed",
     "发布于": "Published at",
     "查看详情": "View detail",
-    "重新加载": "Reload"
+    "重新加载": "Reload",
+    "status": {
+      "500": "Canceled",
+      "600": "Review Failed",
+      "900": "Reviewing",
+      "1000": "Applying",
+      "1100": "Working",
+      "1200": "Completed"
+    }
   }
 }
 </i18n>
@@ -22,10 +42,16 @@
       mode="horizontal"
       @select="onNavigate">
       <el-menu-item index="all">{{ $t('所有项目') }}</el-menu-item>
+      <el-menu-item
+        v-if="$isParty()"
+        index="900">{{ $t('审核中') }}</el-menu-item>
       <el-menu-item index="1000">{{ $t('报名中') }}</el-menu-item>
       <el-menu-item index="1100">{{ $t('工作中') }}</el-menu-item>
       <el-menu-item index="1200">{{ $t('已完成') }}</el-menu-item>
       <el-menu-item index="500">{{ $t('已取消') }}</el-menu-item>
+      <el-menu-item
+        v-if="$isParty()"
+        index="600">{{ $t('审核未通过') }}</el-menu-item>
     </el-menu>
     <div class="container">
       <el-input
@@ -52,6 +78,7 @@
             :key="project.id"
             class="project-list-item">
             <div class="flex-auto">
+              <el-tag :type="project.status | statusToType">{{ $t(`status.${project.status}`) }}</el-tag>
               <router-link
                 :to="`/project/${project.id}`"
                 tag="p"
@@ -95,6 +122,19 @@ import {
   favoriteProjectById,
   unfavoriteProjectById } from '@/api/project'
 export default {
+  filters: {
+    statusToType (status) {
+      const t = {
+        500: 'info',
+        600: 'danger',
+        900: 'warning',
+        1000: null,
+        1100: null,
+        1200: 'info'
+      }
+      return t[status]
+    }
+  },
   data () {
     return {
       projects: [],

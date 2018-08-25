@@ -38,7 +38,7 @@
         <span
           v-t="reply.user.title"
           class="black-45" />
-        <template v-if="reply.reply_id">
+        <template v-if="reply.replyee">
           <span class="black-45"> {{ $t('reply') }}  </span>
           <router-link :to="'/profile?uid=' + reply.replyee.id">
             <span class="bold black">{{ reply.replyee.name }}</span>
@@ -138,7 +138,8 @@ export default {
       this.buttonLoading = true
       postReplyByActivityId(this.reply.activity_id, {
         content: this.content,
-        reply_id: this.reply.id
+        reply_id: this.reply.id,
+        replied_user_id: this.reply.user.id
       }).then(({ data }) => {
         Object.assign(this.$data, this.$options.data()) // 重置data
         this.$emit('post', data)

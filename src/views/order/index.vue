@@ -42,16 +42,14 @@
       mode="horizontal"
       @select="onNavigate">
       <el-menu-item index="all">{{ $t('所有项目') }}</el-menu-item>
-      <el-menu-item
-        v-if="$isParty()"
-        index="900">{{ $t('审核中') }}</el-menu-item>
+      <template v-if="$isParty()">
+        <el-menu-item index="900">{{ $t('审核中') }}</el-menu-item>
+        <el-menu-item index="600">{{ $t('审核未通过') }}</el-menu-item>
+      </template>
       <el-menu-item index="1000">{{ $t('报名中') }}</el-menu-item>
       <el-menu-item index="1100">{{ $t('工作中') }}</el-menu-item>
       <el-menu-item index="1200">{{ $t('已完成') }}</el-menu-item>
       <el-menu-item index="500">{{ $t('已取消') }}</el-menu-item>
-      <el-menu-item
-        v-if="$isParty()"
-        index="600">{{ $t('审核未通过') }}</el-menu-item>
     </el-menu>
     <div class="container">
       <el-input

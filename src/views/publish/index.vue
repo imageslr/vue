@@ -53,7 +53,7 @@
     "上传文件大小不能超过10MB！": "File max size is 10M",
     "正在上传附件，请稍后": "File uploading, please wait",
     "申请备注": "Application remark",
-    "项目发布前会核实身份证以及公司营业执照": "The identity card and company business license will be verified before the project is published.",
+    "项目发布前会核实您的身份证以及公司营业执照，通过审核后设计师才可以查看与报名此项目": "The identity card and company business license will be verified before the project is published. Designers can view and apply for the project after passing the review.",
     "其他": "Other",
     "请填写此项": "Please enter this field",
     "请选择此项": "Please select this field",
@@ -238,7 +238,7 @@
         </el-form-item>
       </el-form>
       <p
-        v-t="'项目发布前会核实身份证以及公司营业执照'"
+        v-t="'项目发布前会核实您的身份证以及公司营业执照，通过审核后设计师才可以查看与报名此项目'"
         class="m0 pb-24 center f-14 black-45" />
     </div>
     <el-button

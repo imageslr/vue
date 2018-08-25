@@ -2,6 +2,8 @@
 {
   "en": {
     "该项目已被甲方取消": "The project has been canceled",
+    "该项目正在审核中": "The project is reviewing",
+    "该项目未通过审核": "The project has not passed review",
     "收藏": "Favorite",
     "取消收藏": "Unfavorite",
     "我要报名": "Apply",
@@ -52,6 +54,16 @@
       <my-alert
         v-if="isCanceled"
         :title="$t('该项目已被甲方取消')"
+        type="warning"
+        class="mb2"/>
+      <my-alert
+        v-if="isReviewing"
+        :title="$t('该项目正在审核中')"
+        type="warning"
+        class="mb2"/>
+      <my-alert
+        v-if="isReviewFailed"
+        :title="$t('该项目未通过审核') + (project.review_message ? '：' + project.review_message : '')"
         type="warning"
         class="mb2"/>
       <div class="project-header__title-area">
@@ -319,6 +331,14 @@ export default {
     isCanceled () {
       return this.project.status == Project.STATUS_CANCELED
     },
+    // 项目是否正在审核中
+    isReviewing () {
+      return this.project.status == Project.STATUS_REVIEWING
+    },
+    // 项目是否未通过审核
+    isReviewFailed () {
+      return this.project.status == Project.STATUS_REVIEW_FAILED
+    },
     // 甲方：是否是项目的发布者
     isPublisher () {
       return this.project.user.id == this.$uid()
@@ -328,7 +348,9 @@ export default {
       const { project } = this
       const { user } = this.project
       return user.id == this.$uid() && // 是项目的发布者
-        project.status == Project.STATUS_TENDERING && // 招标状态
+        (project.status == Project.STATUS_TENDERING || // 招标状态
+         project.status == Project.STATUS_REVIEW_FAILED || // 审核未通过
+         project.status == Project.STATUS_REVIEWING) && // 审核中
         !project.supplement_at // 未补充
     },
     // 甲方：能否取消发布项目
@@ -336,7 +358,9 @@ export default {
       const { project } = this
       const { user } = this.project
       return user.id == this.$uid() && // 是项目的发布者
-        project.status == Project.STATUS_TENDERING // 招标状态
+        (project.status == Project.STATUS_TENDERING || // 招标状态
+         project.status == Project.STATUS_REVIEW_FAILED || // 审核未通过
+         project.status == Project.STATUS_REVIEWING) // 审核中
     },
     // 设计师：能否报名
     canApply () {
@@ -422,7 +446,7 @@ export default {
       })
     },
     /**
-     * 甲方相关操作：取消发布、补充项目
+     * 甲方相关操作：取消发布、补充项目、申请重新审核
      */
     onCancelPublish () {
       this.$confirm(this.$t('此操作将取消发布该项目并不可恢复，是否确认？'), this.$t('g.notice'), {

@@ -14,6 +14,11 @@ export function supplementProjectById (id, data) {
   return request.patch(`/projects/${id}`, data)
 }
 
+// 申请重新审核
+export function reReviewProjectById (id) {
+  return request.put(`/user/reviewing/projects/${id}`)
+}
+
 // 取消发布
 export function cancelProjectById (id) {
   return request.put(`/user/canceled/projects/${id}`)

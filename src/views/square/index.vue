@@ -5,8 +5,8 @@
   },
   "en": {
     "tip1": "Designer Square contains the trending activities of designers for nearly a month (according to the number of likes and comments) and their works.",
-    "设计师广场": "Designer Square",
-    "在这里，发现你喜爱的设计师": "Find your favorite designer here",
+    "设计师广场": "Designer Plaza",
+    "亚里士多德：人们为了生活来到这个城市，为了更好的生活而留在了这个城市。": "Aristotle: People came to this city for their lives and stayed in this city for a better life.",
     "热门动态": "Trending activities",
     "欣赏作品": "Appreciate works",
     "想要更精确地查找设计师？": "Want to find a designer more accurately?",
@@ -21,7 +21,7 @@
         v-t="'设计师广场'"
         class="banner__title" />
       <p
-        v-t="'在这里，发现你喜爱的设计师'"
+        v-t="'亚里士多德：人们为了生活来到这个城市，为了更好的生活而留在了这个城市。'"
         class="banner__sub" />
     </div>
     <div class="wrap-container">

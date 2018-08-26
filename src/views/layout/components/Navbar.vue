@@ -6,7 +6,9 @@
     "马上加入": "Sign up",
     "项目": "Project",
     "设计师": "Designer",
-    "甲方": "Party"
+    "甲方": "Party",
+    "业主入口": "Party entrance",
+    "设计师入口": "Designer entrance"
   }
 }
 </i18n>
@@ -19,15 +21,29 @@
     <icon
       name="app-logo"
       @click.native="$router.push('/')"/>
+    <div
+      v-if="isRoot"
+      :class="{links: !isSignIn}">
+      <router-link to="/signin?type=designer">
+        <el-button
+          class="line-btn ml-12"
+          plain>{{ $t('设计师入口') }}</el-button>
+      </router-link>
+      <router-link to="/signin?type=party">
+        <el-button
+          class="line-btn ml-24"
+          plain>{{ $t('业主入口') }}</el-button>
+      </router-link>
+    </div>
     <el-autocomplete
+      v-else
       v-model="keyword"
       :fetch-suggestions="onInputKeyword"
       :placeholder="$t('搜索项目、设计师')"
       class="search"
       popper-class="search-popover"
       select-when-unmatched
-      @select="onSelectItem"
-    >
+      @select="onSelectItem">
       <template slot-scope="{ item }">
         <span class="search__value">{{ item.value }}</span>
         <el-tag type="info">{{ item.label }}↵ </el-tag>
@@ -37,7 +53,7 @@
       v-if="isSignIn"
       class="links"/>
     <div
-      v-else
+      v-else-if="!isRoot"
       class="links">
       <router-link to="/signin">
         <el-button
@@ -46,7 +62,7 @@
       </router-link>
       <router-link to="/signup">
         <el-button
-          class="signup-btn"
+          class="line-btn signup-btn"
           plain>{{ $t('马上加入') }}</el-button>
       </router-link>
     </div>
@@ -64,6 +80,9 @@ export default {
     }
   },
   computed: {
+    isRoot () {
+      return this.$route.path === '/'
+    },
     isSignIn () {
       return this.$store.getters.isSignIn
     }
@@ -128,13 +147,15 @@ export default {
     }
     .signup-btn {
       margin-left: 24px;
-      background: none;
-      color: #fff;
-      &:hover,
-      &:focus,
-      &:active {
-        border-color: #aaa;
-      }
+    }
+  }
+  .line-btn {
+    background: none;
+    color: #fff;
+    &:hover,
+    &:focus,
+    &:active {
+      border-color: #aaa;
     }
   }
 }

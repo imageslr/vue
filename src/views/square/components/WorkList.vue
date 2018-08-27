@@ -246,14 +246,6 @@ export default {
     }
   }
 }
-.preview-dialog {
-  .el-carousel__item {
-    text-align: center;
-    img {
-      height: 100%;
-    }
-  }
-}
 .no-more {
   margin: 16px 0 0;
   text-align: center;

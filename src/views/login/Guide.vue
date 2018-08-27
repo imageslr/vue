@@ -2,7 +2,12 @@
 {
   "en": {
     "平台入驻设计师": "Designers in our platform",
-    "查看主页": "View Profile"
+    "查看主页": "View Profile",
+    "设计师作品": "Designer works",
+    "业主发布的项目": "Party projects",
+    "设计费": "Design fees",
+    "进行中": "Processing",
+    "已完成": "Completed"
   }
 }
 </i18n>
@@ -36,21 +41,75 @@
         </ul>
       </el-scrollbar>
     </el-card>
+    <el-card
+      :header="$t('设计师作品')"
+      shadow="hover"
+      class="mt-24">
+      <el-scrollbar>
+        <ul class="list-reset work-list">
+          <work-item
+            v-for="work in works"
+            :key="work.id"
+            :work="work"
+            class="work-list-item" />
+        </ul>
+      </el-scrollbar>
+    </el-card>
+    <el-card
+      :header="$t('业主发布的项目')"
+      shadow="hover"
+      class="mt-24">
+      <ul class="project-list">
+        <li
+          v-for="project in projects"
+          :key="project.id"
+          class="project-list-item">
+          <el-tag v-if="isProcessing(project)">{{ $t('进行中') }}</el-tag>
+          <el-tag
+            v-else
+            type="info">{{ $t('已完成') }}</el-tag>
+          <router-link
+            :to="`/project/${project.id}`"
+            class="project-list-item__title"
+            v-text="project.title" />
+          <span
+            class="black-65 bold"
+            v-text="$t('设计费') + '：' + project.payment"/>
+        </li>
+      </ul>
+    </el-card>
   </div>
 </template>
 
 <script>
-import { getIndexDesigners } from '@/api/index'
+import WorkItem from '@/views/components/WorkItem'
+import { getDesigners, getWorks, getProjects } from '@/api/index'
+import { Project } from '@/services/constants'
 export default {
+  components: { WorkItem },
   data () {
     return {
-      designers: []
+      designers: [],
+      works: [],
+      projects: []
     }
   },
   created () {
-    getIndexDesigners().then(({ data: { data } }) => {
+    getDesigners().then(({ data: { data } }) => {
       this.designers = data
     })
+    getWorks().then(({ data: { data } }) => {
+      this.works = data
+    })
+    getProjects().then(({ data: { data } }) => {
+      this.projects = data
+    })
+  },
+  methods: {
+    isProcessing (project) {
+      // eslint-disable-next-line
+      return project.status == Project.STATUS_TENDERING || project.status == Project.STATUS_WORKING
+    }
   }
 }
 </script>
@@ -73,6 +132,33 @@ export default {
     &__avatar {
       width: 54px;
       height: 54px;
+    }
+  }
+}
+.work-list {
+  white-space: nowrap;
+  margin: 0;
+  &-item {
+    display: inline-block;
+    width: 700px;
+    margin-right: 16px;
+    &:last-child {
+      margin-right: 0;
+    }
+    /deep/ p {
+      white-space: normal;
+    }
+  }
+}
+.project-list {
+  margin: 0;
+  list-style-type: circle;
+  &-item {
+    margin-bottom: 8px;
+    &__title {
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
     }
   }
 }

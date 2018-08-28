@@ -6,7 +6,6 @@
     "马上加入": "Sign up",
     "项目": "Project",
     "设计师": "Designer",
-    "甲方": "Party",
     "业主入口": "Party entrance",
     "设计师入口": "Designer entrance"
   }
@@ -99,10 +98,6 @@ export default {
           value: keyword,
           type: 'designer',
           label: this.$t('设计师')
-        }, {
-          value: keyword,
-          type: 'party',
-          label: this.$t('甲方')
         }])
       }
     },

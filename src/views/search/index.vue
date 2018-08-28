@@ -2,8 +2,7 @@
 {
   "en": {
     "项目": "Projects",
-    "设计师": "Designers",
-    "甲方": "Party"
+    "设计师": "Designers"
   }
 }
 </i18n>
@@ -16,10 +15,9 @@
       @select="onNavigate">
       <el-menu-item index="project">{{ $t('项目') }}</el-menu-item>
       <el-menu-item index="designer">{{ $t('设计师') }}</el-menu-item>
-      <el-menu-item index="party">{{ $t('甲方') }}</el-menu-item>
     </el-menu>
     <project-list v-if="searchType === 'project'" />
-    <user-list v-if="searchType === 'designer' || searchType == 'party'" />
+    <user-list v-if="searchType === 'designer'" />
   </div>
 </template>
 

@@ -43,7 +43,9 @@
     "我的报名信息": "My application",
     "报名于": "Applied at",
     "查看备注": "View remark",
-    "备注": "Remark"
+    "备注": "Remark",
+    "点击查看项目信息": "View project info",
+    "收起": "Collapse"
   }
 }
 </i18n>
@@ -144,43 +146,55 @@
       </div>
       <div
         v-loading="loading"
-        class="card project-info">
-        <h3 v-t="'项目的类型是？'" />
-        <p>{{ project.types.join('/') }}</p>
-        <h3 v-t="'项目的功能是？'" />
-        <p>{{ project.features.join('/') }}</p>
-        <h3 v-t="'项目的面积有多大？'" />
-        <p v-text="project.area" />
-        <h3 v-t="'项目的其他描述和需求'" />
-        <p
-          class="pre-wrap"
-          v-text="project.description" />
-        <my-alert
-          v-if="project.project_file_url"
-          class="mt-12">
-          <a
-            :href="project.project_file_url"
-            target="_blank">{{ $t('下载附件') }}</a>
-        </my-alert>
-        <h3 v-t="'项目的交付时间'" />
-        <p v-text="project.delivery_time" />
-        <h3 v-t="'希望用多长时间找设计师？'" />
-        <p v-text="project.find_time" />
-        <h3 v-t="'希望付给设计师的费用是多少？'" />
-        <p v-text="project.payment" />
-        <template
-          v-if="project.supplement_at">
-          <h3 v-t="'项目补充'" />
-          <p v-text="project.supplement_description" />
-          <my-alert
-            v-if="project.supplement_file_url"
-            class="mt-12">
-            <a
-              :href="project.supplement_file_url"
-              target="_blank">{{ $t('下载附件') }}</a>
-          </my-alert>
-          <p class="m0 mt1 f-12 black-65">{{ $t('补充于') }}：{{ project.supplement_at }}</p>
+        class="card">
+        <template v-if="showInfo">
+          <el-button
+            type="text"
+            style="position:absolute;right:24px;top:16px;"
+            @click="showInfo = false">{{ $t('收起') }}</el-button>
+          <div class="project-info">
+            <h3 v-t="'项目的类型是？'" />
+            <p>{{ project.types.join('/') }}</p>
+            <h3 v-t="'项目的功能是？'" />
+            <p>{{ project.features.join('/') }}</p>
+            <h3 v-t="'项目的面积有多大？'" />
+            <p v-text="project.area" />
+            <h3 v-t="'项目的其他描述和需求'" />
+            <p
+              class="pre-wrap"
+              v-text="project.description" />
+            <my-alert
+              v-if="project.project_file_url"
+              class="mt-12">
+              <a
+                :href="project.project_file_url"
+                target="_blank">{{ $t('下载附件') }}</a>
+            </my-alert>
+            <h3 v-t="'项目的交付时间'" />
+            <p v-text="project.delivery_time" />
+            <h3 v-t="'希望用多长时间找设计师？'" />
+            <p v-text="project.find_time" />
+            <h3 v-t="'希望付给设计师的费用是多少？'" />
+            <p v-text="project.payment" />
+            <template
+              v-if="project.supplement_at">
+              <h3 v-t="'项目补充'" />
+              <p v-text="project.supplement_description" />
+              <my-alert
+                v-if="project.supplement_file_url"
+                class="mt-12">
+                <a
+                  :href="project.supplement_file_url"
+                  target="_blank">{{ $t('下载附件') }}</a>
+              </my-alert>
+              <p class="m0 mt1 f-12 black-65">{{ $t('补充于') }}：{{ project.supplement_at }}</p>
+            </template>
+          </div>
         </template>
+        <el-button
+          v-else
+          type="text"
+          @click="showInfo = true">{{ $t('点击查看项目信息') }}</el-button>
       </div>
       <div
         v-loading="applicationLoading"
@@ -320,7 +334,8 @@ export default {
       applicationDialog: { // 报名详情Dialog
         remark: '', // 备注信息
         visible: false
-      }
+      },
+      showInfo: false // 是否显示项目信息
     }
   },
   computed: {
@@ -591,6 +606,8 @@ export default {
     &:last-child {
       margin-bottom: 0;
     }
+  }
+  .project-info {
     h3 {
       margin-top: 32px;
       &:first-child {

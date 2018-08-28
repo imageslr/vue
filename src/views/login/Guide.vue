@@ -83,27 +83,15 @@
 
 <script>
 import WorkItem from '@/views/components/WorkItem'
-import { getDesigners, getWorks, getProjects } from '@/api/index'
 import { Project } from '@/services/constants'
+import { mapGetters } from 'vuex'
 export default {
   components: { WorkItem },
-  data () {
-    return {
-      designers: [],
-      works: [],
-      projects: []
-    }
-  },
+  computed: mapGetters(['works', 'designers', 'projects']),
   created () {
-    getDesigners().then(({ data: { data } }) => {
-      this.designers = data
-    })
-    getWorks().then(({ data: { data } }) => {
-      this.works = data
-    })
-    getProjects().then(({ data: { data } }) => {
-      this.projects = data
-    })
+    this.$store.dispatch('getIndexWorks')
+    this.$store.dispatch('getIndexProjects')
+    this.$store.dispatch('getIndexDesigners')
   },
   methods: {
     isProcessing (project) {

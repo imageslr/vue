@@ -9,6 +9,9 @@ const getters = {
   notifications: state => state.notification.notifications,
   threads: state => state.message.threads,
   messages: state => state.message.messages,
-  participant: state => state.message.participant
+  participant: state => state.message.participant,
+  designers: state => state.index.designers,
+  works: state => state.index.works,
+  projects: state => state.index.projects
 }
 export default getters

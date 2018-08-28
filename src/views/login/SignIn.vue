@@ -102,7 +102,9 @@ export default {
           this.$store.dispatch('signIn', this.form).then(() => {
             this.signInBtnLoading = false
             this.$message.success(this.$t('signInSuccess'))
-            this.$router.push({ path: '/feed' })
+            this.$router.replace({
+              path: this.$route.query.returnUrl || '/feed' // 判断是否需要返回到进入登录页之前的页面
+            })
           }).catch(() => {
             this.signInBtnLoading = false
           })

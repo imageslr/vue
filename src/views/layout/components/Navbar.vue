@@ -127,6 +127,7 @@ export default {
   align-items: center;
   height: 52px;
   padding: 0 calc((100% - 1000px) / 2);
+  border-bottom: none;
   .fa-icon {
     width: 34px;
     height: 34px;

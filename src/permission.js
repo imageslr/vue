@@ -61,13 +61,19 @@ router.beforeEach((to, from, next) => {
     // 没有登录
     if (grayList.indexOf(to.path) !== -1 && !to.query.uid) {
       // 在免登录灰名单，query中没有uid时要求登录
-      next({ path: '/signin', replace: true })
+      next({
+        path: '/signin',
+        query: { returnUrl: to.fullPath } // 设置returnUrl参数，登录成功后跳转
+      })
       NProgress.done() // hack
     } else if (whiteList.indexOf(to.path) !== -1) {
       // 在免登录白名单，直接进入
       next()
     } else {
-      next({ path: '/signin', replace: true })
+      next({
+        path: '/signin',
+        query: { returnUrl: to.fullPath } // 设置returnUrl参数，登录成功后跳转
+      })
       NProgress.done() // 如果当前页面就是signin，那跳转到其他页面再next到signin时不会触发afterEach钩子
     }
   }

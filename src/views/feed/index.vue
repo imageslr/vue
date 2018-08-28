@@ -4,8 +4,8 @@
     "nomore": "已看完所有动态，前往{0}发现更多精彩内容"
   },
   "en": {
-    "发布项目": "Publish project",
-    "已发布的项目": "Published projects",
+    "我要发布项目": "Publish project",
+    "我已发布项目": "Published projects",
     "收藏的设计师": "Following designers",
     "设计师广场": "Designer square",
     "搜索项目": "Search projects",
@@ -22,7 +22,9 @@
     <profile-card :user-info="userInfo"/>
     <main
       class="main">
-      <publish-card @published="onPublished"/>
+      <publish-card
+        v-if="$isDesigner()"
+        @published="onPublished"/>
       <recommend-card/>
       <activity-list
         ref="activityList"
@@ -42,10 +44,10 @@
         <template v-if="$isParty()">
           <router-link
             class="action-area-item"
-            to="publish">{{ $t('发布项目') }}</router-link>
+            to="publish">{{ $t('我要发布项目') }}</router-link>
           <router-link
             class="action-area-item"
-            to="order">{{ $t('已发布的项目') }}</router-link>
+            to="order">{{ $t('我已发布项目') }}</router-link>
           <router-link
             class="action-area-item"
             to="/follow?userType=designer">{{ $t('收藏的设计师') }}</router-link>
@@ -77,7 +79,7 @@
 </template>
 
 <script>
-import ProfileCard from '@/views/components/ProfileCard'
+import ProfileCard from './components/ProfileCard'
 import ActivityList from '@/views/components/ActivityList'
 import PublishCard from './components/PublishCard'
 import RecommendCard from './components/RecommendCard'

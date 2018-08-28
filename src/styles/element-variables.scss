@@ -44,3 +44,8 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
 .el-step__description.is-success {
   color: rgba($color: #000000, $alpha: 0.85);
 }
+
+.el-carousel__indicators {
+  width: 100%;
+  text-align: center;
+}

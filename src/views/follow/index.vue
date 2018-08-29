@@ -20,7 +20,9 @@
         mode="horizontal"
         @select="onSelectMenuItem">
         <el-menu-item index="following">{{ isCurrentUser ? $t('我关注的人') : $t('Ta关注的人') }}</el-menu-item>
-        <el-menu-item index="follower">{{ isCurrentUser ? $t('关注我的人') : $t('关注Ta的人') }}</el-menu-item>
+        <el-menu-item
+          v-if="$isDesigner()"
+          index="follower">{{ isCurrentUser ? $t('关注我的人') : $t('关注Ta的人') }}</el-menu-item>
       </el-menu>
       <my-loader
         v-if="loading || error"

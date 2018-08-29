@@ -5,8 +5,6 @@
     "关注我的人": "Followers",
     "Ta关注的人": "Following",
     "关注Ta的人": "Followers",
-    "只看设计师": "Only designer",
-    "只看甲方": "Only party",
     "关注": "Following",
     "粉丝": "Follower"
   }
@@ -24,24 +22,6 @@
         <el-menu-item index="following">{{ isCurrentUser ? $t('我关注的人') : $t('Ta关注的人') }}</el-menu-item>
         <el-menu-item index="follower">{{ isCurrentUser ? $t('关注我的人') : $t('关注Ta的人') }}</el-menu-item>
       </el-menu>
-      <div class="p2">
-        <el-button
-          :type="userType === 'designer' ? 'primary' : 'default'"
-          size="small"
-          plain
-          round
-          @click="onSelectUserType('designer')">
-          {{ $t('只看设计师') }}
-        </el-button>
-        <el-button
-          :type="userType === 'party' ? 'primary' : 'default'"
-          size="small"
-          plain
-          round
-          @click="onSelectUserType('party')">
-          {{ $t('只看甲方') }}
-        </el-button>
-      </div>
       <my-loader
         v-if="loading || error"
         :loading="loading"
@@ -119,10 +99,6 @@ export default {
     pageType () {
       return this.$route.query.type || 'following'
     },
-    // 用户类型
-    userType () {
-      return this.$route.query.userType
-    },
     // 当前页面的用户id，默认是当前登录用户的id
     pageUID () {
       return this.$route.query.uid || this.$store.getters.uid
@@ -140,9 +116,9 @@ export default {
     getUsers () {
       this.loading = true
       this.error = false
-      const { currentPage, pageUID, pageType, userType } = this
+      const { currentPage, pageUID, pageType } = this
       const fetch = pageType === 'following' ? getFollowingUsersByUID : getFollowersByUID
-      fetch(pageUID, currentPage, userType).then(({
+      fetch(pageUID, currentPage).then(({
         data: { data: users, meta: { pagination } }
       }) => {
         this.loading = false
@@ -174,22 +150,11 @@ export default {
         }
       })
     },
-    onSelectUserType (userType) {
-      this.$router.push({
-        path: this.$route.path,
-        query: {
-          type: this.pageType,
-          userType: userType === this.userType ? null : userType, // 如果已经被选中，再次点击就取消选择
-          uid: this.pageUID
-        }
-      })
-    },
     onChangePage (page) {
       this.$router.push({
         path: this.$route.path,
         query: {
           type: this.pageType,
-          userType: this.userType,
           uid: this.pageUID,
           p: page
         }

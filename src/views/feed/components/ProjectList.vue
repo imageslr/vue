@@ -50,7 +50,7 @@
               class="f-14 black-65" />
             <div class="list">
               <router-link
-                v-for="user in project.applicants"
+                v-for="{ user } in project.applications"
                 :to="'/profile?uid=' + user.id"
                 :key="user.id"
                 tag="div"
@@ -63,7 +63,7 @@
                   v-text="user.name"/>
               </router-link>
               <router-link
-                v-if="project.application_count > project.applicants.length"
+                v-if="project.application_count > project.applications.length"
                 :to="`/project/${project.id}`"
                 tag="div"
                 class="list-more">

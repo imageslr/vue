@@ -413,11 +413,6 @@ export default {
       return this.$isParty() ? 'project_file' : 'application_file'
     }
   },
-  watch: {
-    project () {
-      if (this.isPublisher) this.getApplications()
-    }
-  },
   created () {
     this.getProject()
   },
@@ -427,6 +422,7 @@ export default {
       getProjectById(this.id).then(({ data }) => {
         this.loading = false
         this.project = data
+        this.applicationList = data.applications
       }).catch(() => {
         this.loading = false
       })

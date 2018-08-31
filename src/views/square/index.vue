@@ -6,7 +6,7 @@
   "en": {
     "tip1": "Designer Square contains the trending activities of designers for nearly a month (according to the number of likes and comments) and their works.",
     "设计师广场": "Designer Plaza",
-    "亚里士多德：人们为了生活来到这个城市，为了更好的生活而留在了这个城市。": "Aristotle: People came to this city for their lives and stayed in this city for a better life.",
+    "亚里士多德": "Aristotle",
     "热门动态": "Trending activities",
     "欣赏作品": "Appreciate works",
     "想要更精确地查找设计师？": "Want to find a designer more accurately?",
@@ -20,9 +20,13 @@
       <h1
         v-t="'设计师广场'"
         class="banner__title" />
-      <p
-        v-t="'亚里士多德：人们为了生活来到这个城市，为了更好的生活而留在了这个城市。'"
-        class="banner__sub" />
+      <div class="banner__sub">
+        <p v-text="'人们为了生活来到城市，为了更好的生活而留在城市。'" />
+        <p v-text="'Men come to city to live, they stay in the city to live well.'" />
+        <p
+          class="right-align"
+          v-text="'——' + $t('亚里士多德')" />
+      </div>
     </div>
     <div class="wrap-container">
       <div class="main-container">
@@ -89,18 +93,22 @@ export default {
 <style lang="scss" scoped>
 .banner {
   padding: 40px 0;
-  text-align: center;
   line-height: 1.5;
   &__title {
     margin: 0;
     font-size: 40px;
     font-weight: 300;
+    text-align: center;
     color: rgba(0, 0, 0, 0.85);
   }
   &__sub {
-    margin: 0 0 10px;
+    margin: 0 auto 10px;
+    width: 430px;
     font-size: 16px;
     color: rgba(0, 0, 0, 0.65);
+    > p {
+      margin: 0;
+    }
   }
 }
 .wrap-container {

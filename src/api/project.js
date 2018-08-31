@@ -69,8 +69,13 @@ export function cancelApplyProjectById (id) {
 }
 
 // 获取项目列表
-export function getProjectsOfCurrentUser (page, params) {
+export function getProjectsOfCurrentUser (page = 1, params = {}) {
   return request.get(`/user/projects?page=${page}`, { params })
+}
+
+// 获取进行中的项目
+export function getProcessingProjectsOfCurrentUser (page = 1, params = {}) {
+  return request.get(`/user/processing/projects?page=${page}`, { params })
 }
 
 // 获取当前用户收藏的项目

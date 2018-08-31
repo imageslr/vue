@@ -22,6 +22,7 @@
     <profile-card :user-info="userInfo"/>
     <main
       class="main">
+      <project-list v-if="$isParty()" />
       <publish-card
         v-if="$isDesigner()"
         @published="onPublished"/>
@@ -80,6 +81,7 @@
 
 <script>
 import ProfileCard from './components/ProfileCard'
+import ProjectList from './components/ProjectList'
 import ActivityList from '@/views/components/ActivityList'
 import PublishCard from './components/PublishCard'
 import RecommendCard from './components/RecommendCard'
@@ -88,6 +90,7 @@ import { getFollowingActivities } from '@/api/activity'
 export default {
   components: {
     ProfileCard,
+    ProjectList,
     PublishCard,
     ActivityList,
     AppFooter,

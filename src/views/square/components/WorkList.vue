@@ -92,6 +92,12 @@
               v-text="work.description" />
           </div>
         </div>
+        <div class="work-card__action-btn">
+          <el-button
+            :class="{'is-liked': work.liked}"
+            type="text"
+            @click="onToggleLike(index)">{{ likeCountStr(work.like_count) }}</el-button>
+        </div>
       </div>
     </transition-group>
     <my-loader
@@ -108,7 +114,7 @@
 </template>
 
 <script>
-import { getWorks, deleteWorkById } from '@/api/work'
+import { getWorks, deleteWorkById, likeWorkById, unlikeWorkById } from '@/api/work'
 import { splitNumber } from '@/utils'
 export default {
   data () {
@@ -127,6 +133,18 @@ export default {
     }
   },
   methods: {
+    likeCountStr (count) {
+      return count ? `${this.$t('g.like')} (${count})` : this.$t('g.like')
+    },
+    onToggleLike (index) {
+      const work = this.works[index]
+      const liked = work.liked
+      const fn = liked ? unlikeWorkById : likeWorkById
+      fn(work.id).then(({ data: { like_count } }) => {
+        work.liked = !liked
+        work.like_count = like_count
+      })
+    },
     onReachBottom () {
       this.loading = true
       return getWorks(this.currentPage + 1).then(({ data }) => {
@@ -195,7 +213,7 @@ export default {
 
 <style lang="scss" scoped>
 .work-card {
-  padding: 16px;
+  padding: 16px 16px 0;
   margin-bottom: 16px;
   box-shadow: none;
   border: 1px solid rgba($color: #000000, $alpha: 0.1);
@@ -243,6 +261,15 @@ export default {
         word-wrap: break-word;
         color: rgba(0, 0, 0, 0.85);
       }
+    }
+  }
+  &__action-btn .el-button {
+    color: rgba(0, 0, 0, 0.65);
+    &.is-liked {
+      color: #0077b5;
+    }
+    &:hover {
+      color: #3392c4;
     }
   }
 }

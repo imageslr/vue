@@ -37,12 +37,20 @@
           v-text="work.description" />
       </div>
     </div>
+    <my-divider/>
+    <div class="work-card__action-btn">
+      <el-button
+        :class="{'is-liked': work.liked}"
+        type="text"
+        @click="onToggleLike">{{ likeStr }}</el-button>
+    </div>
     <my-multi-preview ref="preview"/>
   </div>
 </template>
 
 <script>
 import { splitNumber } from '@/utils'
+import { likeWorkById, unlikeWorkById } from '@/api/work'
 export default {
   props: {
     work: {
@@ -55,7 +63,21 @@ export default {
       }
     }
   },
+  computed: {
+    likeCountStr () {
+      const count = this.work.like_count
+      return count ? `${this.$t('g.like')} (${this.activity.like_count})` : this.$t('g.like')
+    }
+  },
   methods: {
+    onToggleLike () {
+      const liked = this.work.liked
+      const fn = liked ? unlikeWorkById : likeWorkById
+      fn(this.work.id).then(({ data: { like_count } }) => {
+        this.work.liked = !liked
+        this.work.like_count = like_count
+      })
+    },
     onPreview (urls, index) {
       this.$refs.preview.open(urls, index)
     },
@@ -111,6 +133,15 @@ export default {
         word-wrap: break-word;
         color: rgba(0, 0, 0, 0.85);
       }
+    }
+  }
+  &__action-btn .el-button {
+    color: rgba(0, 0, 0, 0.65);
+    &.is-liked {
+      color: #0077b5;
+    }
+    &:hover {
+      color: #3392c4;
     }
   }
 }

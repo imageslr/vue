@@ -87,11 +87,9 @@
 </template>
 
 <script>
-import WorkItem from '@/views/components/WorkItem'
 import { Project } from '@/services/constants'
 import { mapGetters } from 'vuex'
 export default {
-  components: { WorkItem },
   computed: mapGetters(['works', 'designers', 'projects']),
   created () {
     this.$store.dispatch('getIndexWorks')

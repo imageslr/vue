@@ -53,6 +53,11 @@
           <p
             class="work-card__info-description"
             v-text="work.description" />
+          <el-button
+            :class="{'is-liked': work.liked}"
+            type="text"
+            class="work-card__info-like-btn"
+            @click="onToggleLike(index)">{{ likeCountStr(work.like_count) }}</el-button>
         </div>
       </div>
     </transition-group>
@@ -70,7 +75,7 @@
 </template>
 
 <script>
-import { getWorksByUID, deleteWorkById } from '@/api/work'
+import { getWorksByUID, deleteWorkById, likeWorkById, unlikeWorkById } from '@/api/work'
 export default {
   data () {
     return {
@@ -93,6 +98,18 @@ export default {
     }
   },
   methods: {
+    likeCountStr (count) {
+      return count ? `${this.$t('g.like')} (${count})` : this.$t('g.like')
+    },
+    onToggleLike (index) {
+      const work = this.works[index]
+      const liked = work.liked
+      const fn = liked ? unlikeWorkById : likeWorkById
+      fn(work.id).then(({ data: { like_count } }) => {
+        work.liked = !liked
+        work.like_count = like_count
+      })
+    },
     onReachBottom () {
       this.loading = true
       return getWorksByUID(this.pageUID, this.currentPage + 1).then(({ data }) => {
@@ -130,10 +147,10 @@ export default {
 
 <style lang="scss" scoped>
 .work-card {
-  display: flex;
-  align-items: center;
   position: relative;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
   &__dropdown {
     position: absolute;
     right: 12px;
@@ -167,6 +184,15 @@ export default {
       white-space: pre-wrap;
       word-wrap: break-word;
       color: rgba(0, 0, 0, 0.85);
+    }
+    &-like-btn {
+      color: rgba(0, 0, 0, 0.65);
+      &.is-liked {
+        color: #0077b5;
+      }
+      &:hover {
+        color: #3392c4;
+      }
     }
   }
 }

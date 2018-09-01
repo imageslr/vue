@@ -16,3 +16,11 @@ export function deleteWorkById (id) {
 export function getWorks (page = 1) {
   return request.get(`/works?page=${page}`)
 }
+
+export function likeWorkById (id) {
+  return request.post(`/works/${id}/likes`)
+}
+
+export function unlikeWorkById (id) {
+  return request.delete(`/works/${id}/likes`)
+}

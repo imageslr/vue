@@ -177,6 +177,9 @@ export default new Router({
         {
           path: 'auth',
           name: 'authentication',
+          meta: {
+            roles: ['designer']
+          },
           components: {
             sidebar: MeSidebar,
             content: MeAuth

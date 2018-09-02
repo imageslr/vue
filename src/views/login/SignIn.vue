@@ -45,8 +45,14 @@
         <el-input
           v-model="form.password"
           :placeholder="$t('password')"
-          type="password"
-          @keyup.native.enter="onSubmit"/>
+          :type="passwordType"
+          @keyup.native.enter="onSubmit">
+          <i
+            slot="suffix"
+            class="el-input__icon el-icon-view"
+            style="cursor: pointer;"
+            @click="onTogglePasswordType"/>
+        </el-input>
       </el-form-item>
       <el-form-item prop="type">
         <el-radio-group v-model="form.type">
@@ -88,13 +94,18 @@ export default {
         password: { required: true, min: 6, max: 25, message: this.$t('passwordMessage'), trigger: 'blur' },
         type: { required: true, type: 'enum', enum: ['designer', 'party'], message: this.$t('请选择用户类型') }
       },
-      signInBtnLoading: false
+      signInBtnLoading: false,
+      passwordType: 'password' // text
     }
   },
   created () {
     this.form.type = this.$route.query.type || 'party'
   },
   methods: {
+    onTogglePasswordType () {
+      if (this.passwordType === 'password') this.passwordType = 'text'
+      else this.passwordType = 'password'
+    },
     onSubmit () {
       this.$refs.signInForm.validate((valid, resObj) => {
         if (valid) {

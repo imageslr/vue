@@ -11,6 +11,10 @@
     "简介": "Introduction",
     "手机号": "Phone",
     "邮箱": "Email",
+    "银行卡号": "Bank Card Number",
+    "开户行": "Bank Name",
+    "开户名": "Account Name",
+    "请准确填写银行卡相关信息，以保证顺利接收设计费": "Please fill in the relevant information of the bank card accurately to ensure the smooth reception of design fees.",
     "还未绑定邮箱": "Have not bound email yet",
     "应用修改": "Update",
     "修改成功": "Successful Operation",
@@ -90,6 +94,24 @@
           :value="$store.getters.userInfo.phone"
           disabled/>
       </el-form-item>
+      <el-form-item :label="$t('银行卡号')" >
+        <el-input
+          v-model="form.bank_card_number"
+          maxlength="100"/>
+        <el-card class="tips-card">
+          <span v-t="'请准确填写银行卡相关信息，以保证顺利接收设计费'" />
+        </el-card>
+      </el-form-item>
+      <el-form-item :label="$t('开户行')" >
+        <el-input
+          v-model="form.bank_name"
+          maxlength="100"/>
+      </el-form-item>
+      <el-form-item :label="$t('开户名')" >
+        <el-input
+          v-model="form.account_name"
+          maxlength="100"/>
+      </el-form-item>
       <el-form-item>
         <el-button
           :loading="loading"
@@ -110,10 +132,16 @@ export default {
         name: '',
         title: '',
         introduction: '',
-        avatar_id: null
+        // avatar_id: null, 这个属性一开始是没有的，只有上传了图片才有
+        account_name: '',
+        bank_name: '',
+        bank_card_number: ''
       },
       rules: {
-        name: { required: true, pattern: namePattern, min: 1, max: 50, message: this.$t('请输入你的真实姓名') }
+        name: [
+          { required: true, message: this.$t('请输入你的真实姓名') },
+          { pattern: namePattern, min: 1, max: 50, message: this.$t('中文名或英文名，2~50个字符') }
+        ]
       },
       loading: false, // 是否正在提交表单中
       avatarUploading: false,
@@ -123,9 +151,13 @@ export default {
   created () {
     const user = this.$store.getters.userInfo
     this.form = {
+      ...this.form,
       name: user.name,
       title: user.title,
-      introduction: user.introduction
+      introduction: user.introduction,
+      account_name: user.account_name,
+      bank_name: user.bank_name,
+      bank_card_number: user.bank_card_number
     }
     this.avatarUrl = user.avatar_url
   },

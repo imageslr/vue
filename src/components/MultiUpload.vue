@@ -18,6 +18,7 @@
       :on-remove="onRemove"
       :on-exceed="onExceed"
       :http-request="onUpload"
+      :file-list="fileList"
       action=""
       multiple
       list-type="picture-card"
@@ -48,18 +49,42 @@ export default {
     limit: {
       type: Number,
       default: 9
+    },
+    // 初始时的图片链接数组
+    imageUrls: {
+      type: Array,
+      default () {
+        return []
+      }
     }
   },
   data () {
     return {
-      // {uid: 文件id, id: 数据库id, source: 上传句柄, uploading: boolean}
+      // {uid: 文件id, id: 数据库id, url: 返回的url, source: 上传句柄, uploading: boolean}
       //  在数组中的顺序就是选择时的顺序
       uploadList: [],
       preview: {
         visible: false,
         src: ''
-      }
+      },
+      fileList: [] // 初始时展示的图片列表
     }
+  },
+  created () {
+    let increment = 0
+    this.fileList = this.imageUrls.map(v => {
+      return {
+        name: 'uploaded',
+        uid: Date.now() + increment++, // 自定义uid
+        url: v
+      }
+    })
+    this.uploadList = this.imageUrls.map((v, index) => {
+      return {
+        uid: this.fileList[index].uid, // 用uid标识文件
+        url: v
+      }
+    })
   },
   methods: {
     // 获取所有图片的id数组，如果有图片正在上传中则返回false
@@ -71,6 +96,19 @@ export default {
           return false
         } else {
           res.push(v.id)
+        }
+      }
+      return res
+    },
+    // 获取所有图片的url数组，如果有图片正在上传中则返回false
+    getImageUrls () {
+      let res = []
+      for (let i = 0; i < this.uploadList.length; i++) {
+        let v = this.uploadList[i]
+        if (v.uploading) {
+          return false
+        } else {
+          res.push(v.url)
         }
       }
       return res
@@ -90,6 +128,7 @@ export default {
         source,
         uid,
         id: null,
+        url: '',
         uploading: true
       })
 
@@ -101,6 +140,7 @@ export default {
           this.uploadList.some(v => {
             if (v.uid === fileRaw.uid) {
               v.id = data.id
+              v.url = data.path
               v.uploading = false
               return true
             }
@@ -117,7 +157,7 @@ export default {
         })
     },
     // 从列表里删除；如果是正在上传中，取消上传
-    onRemove (file) {
+    onRemove (file, fileList) {
       this.uploadList = this.uploadList.filter(v => {
         if (file.uid === v.uid) {
           if (v.source) v.source.cancel()

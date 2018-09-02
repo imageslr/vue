@@ -61,7 +61,7 @@
         prop="password">
         <el-input
           v-model="form.password"
-          type="password"/>
+          type="text"/>
       </el-form-item>
       <el-form-item>
         <el-button

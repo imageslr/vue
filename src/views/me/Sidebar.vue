@@ -25,7 +25,9 @@
     <el-submenu index="me">
       <template slot="title">{{ $t('个人信息管理') }}</template>
       <el-menu-item index="/me">{{ $t('编辑个人资料') }}</el-menu-item>
-      <el-menu-item index="/me/auth">{{ $t('上传认证信息') }}</el-menu-item>
+      <el-menu-item
+        v-if="$isDesigner()"
+        index="/me/auth">{{ $t('上传认证信息') }}</el-menu-item>
       <el-menu-item index="/me/phone">{{ $t('绑定手机号') }}</el-menu-item>
       <el-menu-item index="/me/email">{{ $t('绑定邮箱') }}</el-menu-item>
       <el-menu-item index="/me/password">{{ $t('修改密码') }}</el-menu-item>

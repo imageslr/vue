@@ -22,6 +22,7 @@ export default {
     nomore: 'No more data',
     reload: 'Reload',
     notice: 'Notice',
+    submitBtn: 'Submit',
     confirmBtn: 'Confirm',
     cancelBtn: 'Cancel',
     party: 'Party',

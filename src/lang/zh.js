@@ -22,6 +22,7 @@ export default {
     nomore: '没有更多数据了',
     reload: '重新加载',
     notice: '提示',
+    submitBtn: '提 交',
     confirmBtn: '确 定',
     cancelBtn: '取 消',
     party: '甲方',

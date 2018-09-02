@@ -45,7 +45,6 @@
           :key="reply.id"
           :reply="reply"
           :activity="activity"
-          @post="onPostInItem"
           @delete="onDelete(index)" />
         <el-pagination
           :current-page.sync="currentPage"
@@ -120,9 +119,6 @@ export default {
       }).catch(() => {
         this.listLoading = false
       })
-    },
-    onPostInItem (reply) {
-      this.replies.unshift(reply)
     },
     onDelete (index) {
       this.replies.splice(index, 1)

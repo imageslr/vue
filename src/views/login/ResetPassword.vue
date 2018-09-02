@@ -5,7 +5,7 @@
   },
   "en": {
     "重置密码": "Reset Password",
-    "手机号": "Phone number",
+    "手机号 / 邮箱": "Phone Number / Email",
     "用户类型": "User type",
     "设计师": "Designer",
     "甲方": "Party",
@@ -13,7 +13,7 @@
     "验证码": "Verification code",
     "新密码": "New password",
     "确 定": "Submit",
-    "请输入合法手机号": "Please enter a valid phone number",
+    "请输入合法手机号或邮箱": "Please enter a valid phone number or email",
     "请输入6位验证码": "Please enter 6 characters verification code",
     "请输入原密码": "Please enter the original password",
     "密码长度为 6 到 25 个字符": "Password length is 6 to 25 characters",
@@ -41,9 +41,9 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item
-        :label="$t('手机号')"
-        prop="phone">
-        <el-input v-model="form.phone">
+        :label="$t('手机号 / 邮箱')"
+        prop="identifier">
+        <el-input v-model="form.identifier">
           <el-button
             slot="append"
             :loading="sending"
@@ -74,19 +74,28 @@
 </template>
 
 <script>
-import { phonePattern, validatePhone } from '@/utils/validate'
-import { sendCode, resetPassword } from '@/api/user'
+import { validateEmail, validatePhone } from '@/utils/validate'
+import { sendCode, sendEmailCode, resetPassword } from '@/api/user'
 export default {
   data () {
     return {
       form: {
         code: '',
-        phone: '',
+        identifier: '',
         password: '',
         type: null
       },
       rules: {
-        phone: { required: true, pattern: phonePattern, message: this.$t('请输入合法手机号'), trigger: 'blur' },
+        identifier: {
+          validator: (rule, value, callback) => {
+            if (!validatePhone(value) && !validateEmail(value)) {
+              callback(this.$t('请输入合法手机号或邮箱'))
+            } else {
+              callback()
+            }
+          },
+          trigger: 'blur'
+        },
         code: { required: true, len: 6, message: this.$t('请输入6位验证码'), trigger: 'blur' },
         password: [
           { required: true, trigger: 'blur', message: this.$t('请输入新密码') },
@@ -112,25 +121,39 @@ export default {
   },
   methods: {
     onSend () {
-      if (validatePhone(this.form.phone)) {
+      this.$refs.form.validateField('identifier', (message) => {
+        if (message) return
+        if (!this.form.type) return this.$message.warning(this.$t('请选择用户类型'))
+
         this.sending = true
-        const { phone, type } = this.form
-        sendCode(phone, type, 'resetPassword').then(() => {
+        const { identifier, type } = this.form
+        const sendFn = validatePhone(identifier)
+          ? () => sendCode(identifier, type, 'resetPassword')
+          : () => sendEmailCode(identifier, 'resetPassword')
+
+        sendFn().then(() => {
           this.sending = false
           this.count = 60
           this.countDown()
         }).catch(() => {
           this.sending = false
         })
-      } else {
-        this.$message.warning(this.$t('请输入合法手机号'))
-      }
+      })
     },
     onSubmit () {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.loading = true
-          resetPassword(this.form).then(() => {
+
+          const { code, identifier, password, type } = this.form
+          let form = { code, password, type }
+          if (validatePhone(identifier)) {
+            form.phone = identifier
+          } else {
+            form.email = identifier
+          }
+
+          resetPassword(form).then(() => {
             this.loading = false
             this.$message.success(this.$t('重置密码成功'))
             this.$router.push({

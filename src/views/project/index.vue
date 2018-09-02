@@ -35,9 +35,7 @@
     "补充内容不能为空":"Supplement description cannot be empty",
     "下载附件": "Download file",
     "上传附件": "Upload file",
-    "只能上传一个文件，最大不得超过10M": "Allow upload only one file of which size is less than 10MB",
     "只能上传一个文件": "Allow upload only one file",
-    "上传文件大小不能超过10MB！": "File max size is 10MB",
     "正在上传附件，请稍后": "File uploading, please wait",
     "简单说点什么，让业主更快了解你（200字以内）": "Say something so that the party can know you quickly (200 characters at most)",
     "我的报名信息": "My application",
@@ -272,6 +270,7 @@
         <my-upload
           ref="upload"
           :type="uploadFileType"
+          :max-size="50"
           @start="onUploadStart"
           @success="onUploadSuccess"
           @error="onUploadError"
@@ -335,7 +334,7 @@ export default {
         remark: '', // 备注信息
         visible: false
       },
-      showInfo: false // 是否显示项目信息
+      showInfo: this.$isDesigner() // 是否显示项目信息
     }
   },
   computed: {

@@ -71,8 +71,8 @@ const user = {
     },
 
     // 登录认证
-    signIn ({ commit }, { phone, password, type }) {
-      return signIn(phone, password, type).then(({ data }) => {
+    signIn ({ commit }, { identifier, password, type }) {
+      return signIn(identifier, password, type).then(({ data }) => {
         setToken(data.meta.token)
         commit('SET_TOKEN', data.meta.token)
         commit('SET_USERINFO', data)

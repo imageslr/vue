@@ -28,8 +28,8 @@ export function signUp (params) {
 }
 
 // 登录
-export function signIn (phone, password, type) {
-  return request.post(`/authorizations`, { phone, password, type })
+export function signIn (identifier, password, type) {
+  return request.post(`/authorizations`, { identifier, password, type })
 }
 
 // 根据token获取当前用户信息

@@ -21,6 +21,7 @@
     "请输入密码": "Please enter a password",
     "密码长度为 6 到 25 个字符": "Password length is 6 to 25 characters",
     "注册成功": "Successfully sign up",
+    "已有账号登录": "Sign in",
     "countdown": "Resend verification code ({count})"
   }
 }
@@ -77,13 +78,17 @@
           :loading="loading"
           type="primary"
           @click="onSubmit">{{ $t('确 定') }}</el-button>
+        <router-link
+          to="/signin"
+          class="center"
+          style="display:block;">{{ $t('已有账号登录') }}</router-link>
       </el-form-item>
     </el-form>
   </section>
 </template>
 
 <script>
-import { emailPattern, namePattern, validateEmail } from '@/utils/validate'
+import { namePattern, validateEmail } from '@/utils/validate'
 import { sendEmailCode } from '@/api/user'
 export default {
   data () {
@@ -98,7 +103,7 @@ export default {
       rules: {
         type: { required: true, message: this.$t('请选择用户类型') },
         name: { required: true, pattern: namePattern, min: 1, max: 50, message: this.$t('请输入真实姓名（中文名或英文名，2~50个字符）') },
-        email: { required: true, pattern: emailPattern, message: this.$t('请输入合法邮箱'), trigger: 'blur' },
+        email: { required: true, type: 'email', message: this.$t('请输入合法邮箱'), trigger: 'blur' },
         verification_code: { required: true, len: 6, message: this.$t('请输入6位验证码'), trigger: 'blur' },
         password: [
           { required: true, trigger: 'blur', message: this.$t('请输入密码') },
@@ -168,7 +173,7 @@ export default {
 <style lang="scss" scoped>
 .container {
   width: 400px;
-  padding: 30px;
+  padding: 30px 30px 0;
   margin: 24px auto 0;
   background: #ffffff;
   border: 1px solid #d0d3d6;

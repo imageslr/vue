@@ -1,17 +1,28 @@
 <i18n>
 {
+  "zh": {
+    "phone": "手机号",
+    "password": "密码",
+    "phoneMessage": "请输入合法手机号",
+    "passwordMessage": "请输入密码，长度 6 到 25 个字符",
+    "forgetPassword": "忘记密码？",
+    "thirdParty": "其他登录方式",
+    "signUp": "立即注册",
+    "signInSuccess": "登录成功"
+  },
   "en": {
-    "手机号 / 邮箱": "Phone Number / Email",
-    "密码": "Password",
-    "请输入合法手机号或邮箱": "Please enter a valid phone number or email",
-    "请输入密码，长度 6 到 25 个字符": "Please enter password of which length is 6 to 25",
-    "忘记密码？": "Forget password?",
-    "立即注册": "Sign up",
-    "登录成功": "Sign in succeed",
+    "phone": "Phone Number",
+    "password": "Password",
+    "登录": "Sign in",
+    "phoneMessage": "Please enter a valid phone number",
+    "passwordMessage": "Please enter password of which length is 6 to 25",
+    "forgetPassword": "Forget password?",
+    "thirdParty": "Third party",
+    "signUpBtn": "Sign up",
+    "signInSuccess": "Sign in succeed",
     "甲方": "party",
     "设计师": "designer",
-    "请选择用户类型": "Please select user type",
-    "登录": "Sign in"
+    "请选择用户类型": "Please select user type"
   }
 }
 </i18n>
@@ -24,16 +35,16 @@
       :rules="rules"
       :model="form"
       size="small">
-      <el-form-item prop="identifier">
+      <el-form-item prop="phone">
         <el-input
-          v-model="form.identifier"
-          :placeholder="$t('手机号 / 邮箱')"
+          v-model="form.phone"
+          :placeholder="$t('phone')"
           @keyup.native.enter="onSubmit"/>
       </el-form-item>
       <el-form-item prop="password">
         <el-input
           v-model="form.password"
-          :placeholder="$t('密码')"
+          :placeholder="$t('password')"
           :type="passwordType"
           @keyup.native.enter="onSubmit">
           <i
@@ -55,38 +66,32 @@
           type="primary"
           @click="onSubmit">{{ $t('登录') }}</el-button>
       </el-form-item>
+      <el-form-item class="forget-password">
+        <router-link to="/reset">{{ $t('forgetPassword') }}</router-link>
+      </el-form-item>
       <div class="extra-action">
-        <router-link to="/reset">{{ $t('忘记密码？') }}</router-link>
-        <router-link to="signup">{{ $t('立即注册') }}</router-link>
+        <third-party form-type="signIn"/>
+        <router-link to="signup">{{ $t('signUp') }}</router-link>
       </div>
     </el-form>
   </section>
 </template>
 
 <script>
-import { validatePhone, validateEmail } from '@/utils/validate'
+import { phonePattern } from '@/utils/validate'
 import ThirdParty from './components/ThirdParty'
 export default {
   components: { ThirdParty },
   data () {
     return {
       form: {
-        identifier: '',
+        phone: '',
         password: '',
         type: ''
       },
       rules: {
-        identifier: {
-          validator: (rule, value, callback) => {
-            if (!validatePhone(value) && !validateEmail(value)) {
-              callback(this.$t('请输入合法手机号或邮箱'))
-            } else {
-              callback()
-            }
-          },
-          trigger: 'blur'
-        },
-        password: { required: true, min: 6, max: 25, message: this.$t('请输入密码，长度 6 到 25 个字符'), trigger: 'blur' },
+        phone: { required: true, pattern: phonePattern, message: this.$t('phoneMessage'), trigger: 'blur' },
+        password: { required: true, min: 6, max: 25, message: this.$t('passwordMessage'), trigger: 'blur' },
         type: { required: true, type: 'enum', enum: ['designer', 'party'], message: this.$t('请选择用户类型') }
       },
       signInBtnLoading: false,
@@ -107,7 +112,7 @@ export default {
           this.signInBtnLoading = true
           this.$store.dispatch('signIn', this.form).then(() => {
             this.signInBtnLoading = false
-            this.$message.success(this.$t('登录成功'))
+            this.$message.success(this.$t('signInSuccess'))
             this.$router.replace({
               path: this.$route.query.returnUrl || '/feed' // 判断是否需要返回到进入登录页之前的页面
             })
@@ -147,6 +152,13 @@ h1 {
 }
 .el-button {
   width: 100%;
+}
+.forget-password {
+  margin: 0;
+  text-align: center;
+  /deep/ .el-form-item__content {
+    line-height: 14px;
+  }
 }
 .extra-action {
   display: flex;

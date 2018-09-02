@@ -15,13 +15,14 @@ function hasPermission (userType, permissionRoles) {
 const whiteList = [
   '/',
   '/signup',
+  '/signup/email',
   '/signin',
   '/profile',
   '/search',
   '/square',
   '/reset'
 ] // 免登录白名单
-const grayList = ['/profile'] // 免登陆灰名单：白名单的子集，如果query里没有uid参数，则必须登录
+const grayList = [] // 免登陆灰名单：白名单的子集，如果query里没有uid参数，则必须登录
 
 // 路由前权限判断
 router.beforeEach((to, from, next) => {

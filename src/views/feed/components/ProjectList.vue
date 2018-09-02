@@ -25,7 +25,7 @@
           style="padding: 0;">{{ $t('查看全部') }}</el-button>
       </router-link>
     </h2>
-    <el-scrollbar>
+    <el-scrollbar v-if="projects.length">
       <ul class="list-reset project-list">
         <li
           v-for="project in projects"
@@ -74,6 +74,7 @@
         </li>
       </ul>
     </el-scrollbar>
+    <my-empty v-else />
   </div>
 </template>
 

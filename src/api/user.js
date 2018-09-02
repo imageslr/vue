@@ -14,6 +14,14 @@ export function sendCode (phone, userType, actionType) {
   })
 }
 
+// 通过邮箱发送验证码
+export function sendEmailCode (email, actionType) {
+  return request.post(`/verificationCode`, {
+    email,
+    action_type: actionType
+  })
+}
+
 // 注册
 export function signUp (params) {
   return request.post(`/users`, params)

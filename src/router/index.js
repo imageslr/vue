@@ -4,6 +4,7 @@ import Layout from '../views/layout/Layout'
 import SidebarLayout from '../views/layout/SidebarLayout'
 import Guide from '../views/login/Guide'
 import SignUp from '../views/login/SignUp'
+import EmailRegister from '../views/login/EmailRegister'
 import SignIn from '../views/login/SignIn'
 import ResetPassword from '../views/login/ResetPassword'
 import Feed from '../views/feed'
@@ -43,6 +44,17 @@ export default new Router({
       path: '/signup',
       component: SignUp,
       name: 'signup'
+    },
+    {
+      path: '/signup/email',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'emailRegister',
+          component: EmailRegister
+        }
+      ]
     },
     {
       path: '/',

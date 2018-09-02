@@ -38,7 +38,8 @@
       "password": "Password length is 6 to 25 characters",
       "type": "Please select your identity"
     },
-    "同一个手机号可以注册两个不同身份的账号": "A same phone number can register two accounts with different user type"
+    "同一个手机号可以注册两个不同身份的账号": "A same phone number can register two accounts with different user type",
+    "使用邮箱注册": "Sign up with email"
   }
 }
 </i18n>
@@ -91,7 +92,8 @@
         </el-form-item>
         <p class="term">{{ $t('term') }}</p>
         <div class="extra-action">
-          <third-party form-type="signUp"/>
+          <!-- <third-party form-type="signUp"/> -->
+          <router-link to="/signup/email">{{ $t('使用邮箱注册') }}</router-link>
           <router-link to="signin">{{ $t('loginBtn') }}</router-link>
         </div>
       </el-form>

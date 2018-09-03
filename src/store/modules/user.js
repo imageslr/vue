@@ -21,7 +21,8 @@ const UserModel = {
   follower_count: 0,
   following_count: 0,
   notification_count: 0,
-  unread_message_count: 0
+  unread_message_count: 0,
+  views: 0
 }
 
 const user = {

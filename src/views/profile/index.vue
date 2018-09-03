@@ -11,6 +11,7 @@
     "关注": "Follow",
     "联系": "Contact",
     "分享": "Share",
+    "浏览量": "Views",
     "复制链接": "Copy the link",
     "暂未收到评价": "No received reviews",
     "查看所有评价": "View all reviews",
@@ -49,6 +50,7 @@
           {{ $t('分享') }}
           <i class="el-icon-share" />
         </el-button>
+        <p class="f-12 m0 black-45">{{ $t('浏览量') }}：{{ userInfo.views }}</p>
       </profile-card>
       <h2
         v-t="'收到的评价'"

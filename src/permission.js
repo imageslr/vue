@@ -17,7 +17,7 @@ const whiteList = [
   '/signup',
   '/signup/email',
   '/signin',
-  '/profile',
+  // '/profile',
   '/search',
   '/square',
   '/reset'

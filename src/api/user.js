@@ -62,7 +62,7 @@ export function sendActiveMail () {
 
 // 获取用户信息
 export function getUserInfoByUID (uid) {
-  return request.get(`/users/${uid}`)
+  return request.get(`/users/${uid}?record=1`)
 }
 
 // 更新当前用户信息

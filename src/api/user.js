@@ -76,9 +76,14 @@ export function getRecommendedDesigners () {
 }
 
 // 搜索用户
-export function searchUsers (page = 1, keyword = null, type = null) {
+export function searchUsers (
+  page = 1,
+  keyword = null,
+  type = null,
+  otherParams = {}
+) {
   return request.get('/users', {
-    params: { page, type, keyword }
+    params: { page, type, keyword, ...otherParams }
   })
 }
 

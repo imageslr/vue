@@ -9,6 +9,7 @@
     "姓名": "Name",
     "职位/公司": "Title/Company",
     "简介": "Introduction",
+    "专业领域": "Professional Fields",
     "手机号": "Phone",
     "邮箱": "Email",
     "银行卡号": "Bank Card Number",
@@ -24,7 +25,13 @@
     "请输入你的真实姓名": "Please enter your real name (between 2 to 50 characters)",
     "上传文件大小不能超过2MB！": "File max size is 2 MB",
     "正在上传附件，请稍后": "File uploading, please wait",
-    "tips": "If you represent a company, you can enter your company name in Name or Title field, and enter your company introduction in Introduction field."
+    "tips": "If you represent a company, you can enter your company name in Name or Title field, and enter your company introduction in Introduction field.",
+    "建筑设计": "Architectural Design",
+    "室内设计": "Interior Design",
+    "景观设计": "Landscape Design",
+    "城市设计": "Urban Design",
+    "城市规划": "Urban Planning",
+    "概念规划": "Concept Planning"
   }
 }
 </i18n>
@@ -82,6 +89,14 @@
           resize="none"
           maxlength="200"/>
       </el-form-item>
+      <el-form-item :label="$t('专业领域')">
+        <el-checkbox-group v-model="form.professional_fields">
+          <el-checkbox
+            v-for="field in fields"
+            :key="field"
+            :label="$t(`${field}`)"/>
+        </el-checkbox-group>
+      </el-form-item>
       <el-form-item :label="$t('邮箱')" >
         <el-input
           :value="$store.getters.userInfo.email || $t('还未绑定邮箱')"
@@ -128,11 +143,13 @@ import { upload } from '@/api/upload'
 export default {
   data () {
     return {
+      fields: ['建筑设计', '室内设计', '景观设计', '城市设计', '城市规划', '概念规划'],
       form: {
         name: '',
         title: '',
         introduction: '',
         // avatar_id: null, 这个属性一开始是没有的，只有上传了图片才有
+        professional_fields: [],
         account_name: '',
         bank_name: '',
         bank_card_number: ''
@@ -150,15 +167,9 @@ export default {
   },
   created () {
     const user = this.$store.getters.userInfo
-    this.form = {
-      ...this.form,
-      name: user.name,
-      title: user.title,
-      introduction: user.introduction,
-      account_name: user.account_name,
-      bank_name: user.bank_name,
-      bank_card_number: user.bank_card_number
-    }
+    Object.keys(this.form).forEach(key => {
+      this.form[key] = user[key]
+    })
     this.avatarUrl = user.avatar_url
   },
   methods: {

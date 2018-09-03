@@ -2,6 +2,7 @@
 {
   "en": {
     "输入设计师姓名进行搜索": "Enter keyword to search",
+    "专业领域": "Professional fields",
     "搜索": "Search",
     "关注": "Follow",
     "取消关注": "Unfollow",
@@ -14,16 +15,33 @@
 
 <template>
   <div class="container">
-    <el-input
-      v-model="keyword"
-      :placeholder="$t('输入关键字进行搜索')"
+    <el-form
       size="small"
-      @keyup.native.enter="onSearch">
-      <el-button
-        slot="append"
-        type="primary"
-        @click="onSearch">{{ $t('搜索') }}</el-button>
-    </el-input>
+      inline>
+      <el-form-item>
+        <el-input
+          v-model="keyword"
+          :placeholder="$t('输入关键字进行搜索')"
+          @keyup.native.enter="onSearch"/>
+      </el-form-item>
+      <el-form-item>
+        <el-select
+          v-model="selectedFields"
+          :placeholder="$t('专业领域')"
+          multiple>
+          <el-option
+            v-for="field in fields"
+            :key="field"
+            :label="field"
+            :value="field"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          type="primary"
+          @click="onSearch">{{ $t('搜索') }}</el-button>
+      </el-form-item>
+    </el-form>
     <my-loader
       v-if="loading || error"
       :loading="loading"
@@ -54,6 +72,14 @@
             </p>
             <p v-text="user.title" />
             <p v-text="user.introduction" />
+            <div class="mt1">
+              <el-tag
+                v-for="field in user.professional_fields"
+                :key="field"
+                size="mini"
+                type="info"
+                class="mr1">{{ field }}</el-tag>
+            </div>
           </div>
           <template v-if="user.id != $uid()">
             <el-button
@@ -93,8 +119,23 @@ import { searchUsers } from '@/api/user'
 export default {
   data () {
     return {
+      fields: [
+        '建筑设计',
+        '室内设计',
+        '景观设计',
+        '城市设计',
+        '城市规划',
+        '概念规划',
+        'Architectural Design',
+        'Interior Design',
+        'Landscape Design',
+        'Urban Design',
+        'Urban Planning',
+        'Concept Planning'
+      ],
       users: [],
       keyword: '',
+      selectedFields: [],
       pageCount: 1,
       currentPage: 1,
       loading: false,
@@ -110,14 +151,18 @@ export default {
   created () {
     if (this.$route.query.p) this.currentPage = parseInt(this.$route.query.p)
     if (this.$route.query.keyword) this.keyword = this.$route.query.keyword
+    if (this.$route.query.fields) {
+      if (Array.isArray(this.$route.query.fields)) this.selectedFields = this.$route.query.fields
+      else this.selectedFields = [this.$route.query.fields]
+    }
     this.getUsers()
   },
   methods: {
     getUsers () {
       this.loading = true
       this.error = false
-      const { currentPage, keyword, userType } = this
-      searchUsers(currentPage, keyword, userType)
+      const { currentPage, keyword, userType, selectedFields } = this
+      searchUsers(currentPage, keyword, userType, { professional_fields: selectedFields })
         .then(({ data: { data: users, meta: { pagination } } }) => {
           this.loading = false
           this.users = users
@@ -144,7 +189,8 @@ export default {
         path: this.$route.path,
         query: {
           type: this.userType,
-          keyword: this.keyword
+          keyword: this.keyword,
+          fields: this.selectedFields
         }
       })
     },
@@ -154,6 +200,7 @@ export default {
         query: {
           type: this.userType,
           keyword: this.$route.query.keyword,
+          fields: this.selectedFields,
           p: page
         }
       })
@@ -167,7 +214,7 @@ export default {
   padding: 24px 32px;
   background-color: #fff;
   .el-input {
-    width: 350px;
+    width: 200px;
   }
   .user-list {
     &-item {

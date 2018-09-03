@@ -9,6 +9,7 @@ const UserModel = {
   avatar_url: '',
   title: '',
   introduction: '',
+  professional_fields: [],
   phone: '',
   email: '',
   email_activated: false,

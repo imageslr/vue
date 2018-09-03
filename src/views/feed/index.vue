@@ -22,7 +22,7 @@
     <profile-card :user-info="userInfo"/>
     <main
       class="main">
-      <project-list v-if="$isParty()" />
+      <project-list />
       <publish-card
         v-if="$isDesigner()"
         @published="onPublished"/>

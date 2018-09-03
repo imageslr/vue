@@ -1,12 +1,17 @@
 <i18n>
 {
+  "zh": {
+    "description": "这些是你还未参与的项目，快看看有没有你感兴趣的吧~"
+  },
   "en": {
     "我的项目": "My projects",
+    "推荐项目": "Recommended projects",
     "收藏人数": "Favorite count",
     "报名人数": "Application count",
     "发布于": "Published at",
     "暂无设计师报名": "No designer applies",
-    "查看全部": "View all"
+    "查看全部": "View all",
+    "description": "These projects are which you have not participated. Check to see which you are interested in."
   }
 }
 </i18n>
@@ -15,7 +20,9 @@
   <div
     v-loading="loading"
     class="card p2">
-    <h2 class="m0 flex items-center">
+    <h2
+      v-if="$isParty()"
+      class="m0 flex items-center">
       <span class="flex-auto f-15 bold">{{ $t('我的项目') }}</span>
       <router-link
         :to="'/order'"
@@ -25,6 +32,17 @@
           style="padding: 0;">{{ $t('查看全部') }}</el-button>
       </router-link>
     </h2>
+    <el-tooltip
+      v-else
+      :content="$t('description')"
+      effect="dark"
+      placement="right">
+      <h2
+        class="m0 f-15 inline-block">
+        <span v-t="'推荐项目'" />
+        <i class="el-icon-info" />
+      </h2>
+    </el-tooltip>
     <el-scrollbar v-if="projects.length">
       <ul class="list-reset project-list">
         <li
@@ -40,7 +58,9 @@
           </div>
           <p class="f-14 black-65 mb1">{{ $t('发布于') }}：{{ project.created_at }}</p>
           <p class="f-14 black-65 mt0 mb1">{{ $t('收藏人数') }}：{{ project.favorite_count }} | {{ $t('报名人数') }}：{{ project.application_count }}</p>
-          <div class="avatar-list">
+          <div
+            v-if="$isParty()"
+            class="avatar-list">
             <div
               class="title"
               v-text="$t('报名人员') + '：'" />
@@ -80,7 +100,7 @@
 
 <script>
 import StatusTag from '@/views/components/StatusTag'
-import { getProcessingProjectsOfCurrentUser } from '@/api/project'
+import { getProcessingProjectsOfCurrentUser, getRecommendProjectsOfCurrentUser } from '@/api/project'
 export default {
   components: { StatusTag },
   data () {
@@ -94,7 +114,8 @@ export default {
   },
   methods: {
     getProjects () {
-      getProcessingProjectsOfCurrentUser().then(({ data: { data: projects } }) => {
+      const fn = this.$isParty() ? getProcessingProjectsOfCurrentUser : getRecommendProjectsOfCurrentUser
+      fn().then(({ data: { data: projects } }) => {
         this.projects = projects
         this.loading = false
       }).catch(() => {

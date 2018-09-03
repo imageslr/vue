@@ -83,6 +83,10 @@ export function getFavoriteProjectsOfCurrentUser (page, params) {
   return request.get(`/user/favoriting/projects?page=${page}`, { params })
 }
 
+// 获取推荐给当前用户的项目
+export function getRecommendProjectsOfCurrentUser (page = 1) {
+  return request.get(`/user/recommended/projects?page=${page}`)
+}
 // 搜索项目
 export function searchProjects (page = 1, keyword = null, status = null) {
   return request.get('/projects', {

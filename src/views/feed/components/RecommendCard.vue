@@ -1,8 +1,16 @@
+<i18n>
+{
+  "en": {
+    "推荐设计师": "Recommended designers"
+  }
+}
+</i18n>
+
 <template>
   <div
     v-if="designers.length"
     class="card p2">
-    <h2 class="m0 f-15 bold">{{ $t('g.recommendation') }}</h2>
+    <h2 class="m0 f-15">{{ $t('推荐设计师') }}</h2>
     <el-scrollbar>
       <transition-group
         tag="ul"

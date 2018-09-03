@@ -40,8 +40,8 @@
           <span class="bold black">{{ reply.user.name }}</span>
         </router-link>
         <span
-          v-t="reply.user.title"
-          class="black-45" />
+          class="black-45"
+          v-text="reply.user.title" />
         <template v-if="reply.reply_id">
           <span class="black-45"> {{ $t('reply') }}  </span>
           <router-link :to="'/profile?uid=' + reply.replyee.id">
@@ -50,8 +50,8 @@
         </template>
       </p>
       <p
-        v-t="reply.created_at"
-        class="m0 f-12 black-45" />
+        class="m0 f-12 black-45"
+        v-text="reply.created_at" />
       <p class="reply-list-item__content-text">{{ reply.content }}</p>
       <template v-if="showInput">
         <el-input
@@ -170,7 +170,7 @@ export default {
         data: { data, meta: { pagination } }
       }) => {
         this.listLoading = false
-        this.replies = this.replies.concat(data)
+        this.mergeReplies(data)
         this.reply.reply_count = pagination.total
         this.currentPage++
       }).catch(() => {
@@ -194,10 +194,12 @@ export default {
           this.$emit('post', data)
         } else {
           // 如果当前评论是一级评论，将新评论添加到它收到的评论列表中
-          this.buttonLoading = false
           this.content = ''
-          this.replies.unshift(data)
           this.reply.reply_count++
+          this.mergeReplies(data, true)
+
+          this.buttonLoading = false
+          this.showInput = false
         }
       }).catch(() => {
         this.buttonLoading = false
@@ -217,12 +219,36 @@ export default {
       }).catch(() => {})
     },
     onPostInList (reply) {
-      this.replies.unshift(reply)
+      this.mergeReplies(reply, true)
       this.reply.reply_count++
     },
     onDeleteInList (index) {
       this.replies.splice(index, 1)
       this.reply.reply_count--
+    },
+    /**
+     * 将回复添加到数组当中，防止id重复
+     * @param replies Array|Object
+     * @param unshift Boolean
+     */
+    mergeReplies (replies, unshift = false) {
+      if (Array.isArray(replies)) {
+        replies = [ ...replies ] // 复制一下
+      } else {
+        replies = [ replies ]
+      }
+      if (unshift) {
+        // 尽管merge方法本身就会修改原数组，但是必须要重新赋值一个新数组，否则vue不会检测到数组长度变化
+        replies = this.filterReplies(replies)
+        this.replies = [ ...replies, ...this.replies ]
+      } else {
+        replies = this.filterReplies(replies)
+        this.replies = [ ...this.replies, ...replies ]
+      }
+    },
+    // 过滤掉id重复的回复
+    filterReplies (replies) {
+      return replies.filter(v => !this.replies.some(vv => vv.id === v.id))
     }
   }
 }

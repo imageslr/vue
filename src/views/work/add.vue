@@ -2,6 +2,7 @@
 {
   "en": {
     "添加作品": "Add your work",
+    "编辑作品": "Edit work",
     "分享你的设计心得，展示你的专业能力": "Share your design experience and showcase your professional skills",
     "标题": "Title",
     "最多200字": "200 characters at most",
@@ -23,13 +24,14 @@
     <div class="card form-card">
       <div class="border-bottom center p-24">
         <h1
-          v-t="'添加作品'"
+          v-t="editing ? '编辑作品' : '添加作品'"
           class="m0 color-primary"/>
         <p
           v-t="'分享你的设计心得，展示你的专业能力'"
           class="m0 pt1 black-65 f-13"/>
       </div>
       <el-form
+        v-loading="loading"
         ref="form"
         :model="form"
         :rules="rules"
@@ -55,10 +57,11 @@
         </el-form-item>
         <el-form-item
           :label="$t('相关照片')"
-          prop="photo_ids">
+          prop="photo_urls">
           <my-multi-upload
             ref="upload"
             :limit="20"
+            :image-urls="form.photo_urls"
             type="work_photo" />
         </el-form-item>
         <el-form-item
@@ -80,23 +83,48 @@
 </template>
 
 <script>
-import { addWork } from '@/api/work'
+import { getWorkById, addWork, updateWorkById } from '@/api/work'
 export default {
   data () {
     return {
       form: {
         title: '',
         description: '',
-        photo_ids: null,
+        photo_urls: [],
         visible_range: 'public'
       },
       rules: {
         title: { required: true, message: this.$t('请填写此项') },
         description: { required: true, message: this.$t('请填写此项'), whitespace: true },
-        photo_ids: { required: true, message: this.$t('请填写此项') },
-        visible_range: { required: true, message: this.$t('请填写此项') }
+        photo_urls: { type: 'array', required: true, message: this.$t('请填写此项') },
+        visible_range: { required: true, mes9sage: this.$t('请填写此项') }
       },
-      submitting: false
+      submitting: false,
+      loading: false
+    }
+  },
+  computed: {
+    editing () {
+      return this.$route.path !== '/work/add'
+    },
+    id () {
+      return this.$route.params.id
+    }
+  },
+  created () {
+    if (this.editing) {
+      this.loading = true
+      getWorkById(this.id).then(({ data }) => {
+        this.loading = false
+        this.form = {
+          title: data.title,
+          description: data.description,
+          photo_urls: data.photo_urls,
+          visible_range: data.visible_range
+        }
+      }).catch(() => {
+        this.loading = false
+      })
     }
   },
   beforeDestroy () {
@@ -105,18 +133,28 @@ export default {
   methods: {
     onSubmit () {
       let { form } = this
-      form.photo_ids = this.$refs.upload.getImageIds()
-      if (form.photo_ids === false) {
+      let photo_urls = this.$refs.upload.getImageUrls()
+      if (photo_urls === false) {
         return this.$message.warning(this.$t('图片正在上传中，请稍候'))
       }
+      this.form.photo_urls = photo_urls
       this.$refs.form.validate().then(() => {
         this.submitting = true
-        addWork(this.form).then(() => {
-          this.submitting = true
-          this.$router.push('/work/result')
-        }).catch(() => {
-          this.submitting = false
-        })
+        if (this.editing) {
+          updateWorkById(this.id, this.form).then(() => {
+            this.submitting = false
+            this.$router.push('/work/result?edit=1')
+          }).catch(() => {
+            this.submitting = false
+          })
+        } else {
+          addWork(this.form).then(() => {
+            this.submitting = false
+            this.$router.push('/work/result')
+          }).catch(() => {
+            this.submitting = false
+          })
+        }
       }).catch(() => {})
     }
   }

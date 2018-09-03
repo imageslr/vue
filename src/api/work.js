@@ -4,6 +4,14 @@ export function addWork (body) {
   return request.post('/works', body)
 }
 
+export function updateWorkById (id, body) {
+  return request.patch(`/works/${id}`, body)
+}
+
+export function getWorkById (id) {
+  return request.get(`/works/${id}`)
+}
+
 export function getWorksByUID (uid, page = 1) {
   return request.get(`/users/${uid}/works?page=${page}`)
 }

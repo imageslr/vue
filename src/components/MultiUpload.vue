@@ -63,28 +63,20 @@ export default {
       // {uid: 文件id, id: 数据库id, url: 返回的url, source: 上传句柄, uploading: boolean}
       //  在数组中的顺序就是选择时的顺序
       uploadList: [],
+      fileList: [], // 图片列表，仅用于展示。当前组件中的所有图片信息在uploadList里
       preview: {
         visible: false,
         src: ''
-      },
-      fileList: [] // 初始时展示的图片列表
+      }
+    }
+  },
+  watch: {
+    imageUrls () {
+      this.resetLists()
     }
   },
   created () {
-    let increment = 0
-    this.fileList = this.imageUrls.map(v => {
-      return {
-        name: 'uploaded',
-        uid: Date.now() + increment++, // 自定义uid
-        url: v
-      }
-    })
-    this.uploadList = this.imageUrls.map((v, index) => {
-      return {
-        uid: this.fileList[index].uid, // 用uid标识文件
-        url: v
-      }
-    })
+    this.resetLists()
   },
   methods: {
     // 获取所有图片的id数组，如果有图片正在上传中则返回false
@@ -157,7 +149,7 @@ export default {
         })
     },
     // 从列表里删除；如果是正在上传中，取消上传
-    onRemove (file, fileList) {
+    onRemove (file) {
       this.uploadList = this.uploadList.filter(v => {
         if (file.uid === v.uid) {
           if (v.source) v.source.cancel()
@@ -172,6 +164,22 @@ export default {
     onPreview (image) {
       this.preview.visible = true
       this.preview.src = image.url
+    },
+    resetLists () {
+      let increment = 0
+      this.fileList = this.imageUrls.map(v => {
+        return {
+          name: 'uploaded',
+          uid: Date.now() + increment++, // 自定义uid
+          url: v
+        }
+      })
+      this.uploadList = this.imageUrls.map((v, index) => {
+        return {
+          uid: this.fileList[index].uid, // 用uid标识文件
+          url: v
+        }
+      })
     }
   }
 }

@@ -2,6 +2,7 @@
 {
   "en": {
     "加载更多": "Load more",
+    "编辑": "Edit",
     "删除": "Delete",
     "确认删除该作品？": "Is it confirmed to delete the work?"
   }
@@ -23,14 +24,14 @@
         <el-dropdown
           v-if="isCurrentUser"
           class="work-card__dropdown"
-          trigger="click"
-          @command="onDelete">
+          trigger="click">
           <el-button
             type="text"
             icon="el-icon-arrow-down"/>
           <el-dropdown-menu
             slot="dropdown">
-            <el-dropdown-item :command="index">{{ $t('删除') }}</el-dropdown-item>
+            <el-dropdown-item @click.native="onEdit(index)">{{ $t('编辑') }}</el-dropdown-item>
+            <el-dropdown-item @click.native="onDelete(index)">{{ $t('删除') }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-carousel
@@ -128,6 +129,10 @@ export default {
     },
     onPreview (urls, index) {
       this.$refs.preview.open(urls, index)
+    },
+    onEdit (index) {
+      const { id } = this.works[index]
+      this.$router.push(`/work/${id}/edit`)
     },
     onDelete (index) {
       this.$confirm(this.$t('确认删除该作品？'), this.$t('g.notice'), {

@@ -298,6 +298,14 @@ export default new Router({
           component: AddWork
         },
         {
+          path: ':id/edit',
+          name: 'editWork',
+          meta: {
+            roles: ['designer']
+          },
+          component: AddWork
+        },
+        {
           path: 'result',
           name: 'addWorkResult',
           meta: {

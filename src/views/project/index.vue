@@ -11,7 +11,7 @@
     "报名成功": "Successfully apply",
     "取消报名": "Cancel apply",
     "此操作将取消报名该项目，是否确认？": "This operation will cancel the application for the project. Is it confirmed?",
-    "补充项目": "Supplement the project",
+    "修改项目": "Edit the project",
     "取消发布": "Cancel publish",
     "此操作将取消发布该项目并不可恢复，是否确认？": "This operation will unpublish the project and is not recoverable. Is it confirmed?",
     "取消成功": "Successfully canceled",
@@ -20,19 +20,15 @@
     "设计师报名中": "Designers applying",
     "设计师工作中": "Designers working",
     "项目已完成": "Project is complete",
-    "项目的类型是？": "Project type",
-    "项目的功能是？": "Project feature",
-    "项目的面积有多大？": "Project area",
-    "项目的其他描述和需求": "Project description",
+    "项目的类型是？": "Project types",
+    "项目的功能是？": "Project features",
+    "项目描述": "Project description",
+    "项目关键字": "Project keywords",
+    "项目设计深度要求": "Design depth",
     "项目的交付时间": "Delivery time",
     "希望用多长时间找设计师？": "How long do you want to find a designer?",
     "希望付给设计师的费用是多少？": "How much would you want to pay for the designer?",
-    "项目补充": "Project supplement",
-    "补充于": "Supplement at",
-    "补充成功": "Successful operation",
     "报名列表": "Application list",
-    "请输入项目的补充内容，比如如项目面积、项目风格、希望设计师做到哪种程度等等": "Please enter the supplement description",
-    "补充内容不能为空":"Supplement description cannot be empty",
     "下载附件": "Download file",
     "上传附件": "Upload file",
     "只能上传一个文件": "Allow upload only one file",
@@ -95,10 +91,10 @@
         </template>
         <template v-if="$isParty()">
           <el-button
-            v-if="supplementable"
+            v-if="editable"
             size="mini"
-            @click="dialogVisible = true"
-          >{{ $t('补充项目') }}</el-button>
+            @click="onEdit"
+          >{{ $t('修改项目') }}</el-button>
           <el-button
             v-if="cancelable"
             size="mini"
@@ -155,9 +151,13 @@
             <p>{{ project.types.join('/') }}</p>
             <h3 v-t="'项目的功能是？'" />
             <p>{{ project.features.join('/') }}</p>
-            <h3 v-t="'项目的面积有多大？'" />
-            <p v-text="project.area" />
-            <h3 v-t="'项目的其他描述和需求'" />
+            <h3 v-t="'项目关键字'" />
+            <el-tag
+              v-for="keyword in project.keywords"
+              :key="keyword"
+              type="info"
+              class="mr1">{{ keyword }}</el-tag>
+            <h3 v-t="'项目描述'" />
             <p
               class="pre-wrap"
               v-text="project.description" />
@@ -168,25 +168,14 @@
                 :href="project.project_file_url"
                 target="_blank">{{ $t('下载附件') }}</a>
             </my-alert>
+            <h3 v-t="'项目设计深度要求'" />
+            <p v-text="project.depth" />
             <h3 v-t="'项目的交付时间'" />
             <p v-text="project.delivery_time" />
             <h3 v-t="'希望用多长时间找设计师？'" />
             <p v-text="project.find_time" />
             <h3 v-t="'希望付给设计师的费用是多少？'" />
             <p v-text="project.payment" />
-            <template
-              v-if="project.supplement_at">
-              <h3 v-t="'项目补充'" />
-              <p v-text="project.supplement_description" />
-              <my-alert
-                v-if="project.supplement_file_url"
-                class="mt-12">
-                <a
-                  :href="project.supplement_file_url"
-                  target="_blank">{{ $t('下载附件') }}</a>
-              </my-alert>
-              <p class="m0 mt1 f-12 black-65">{{ $t('补充于') }}：{{ project.supplement_at }}</p>
-            </template>
           </div>
         </template>
         <el-button
@@ -369,15 +358,14 @@ export default {
     isPublisher () {
       return this.project.user.id == this.$uid()
     },
-    // 甲方：能否补充项目
-    supplementable () {
+    // 甲方：能否编辑项目
+    editable () {
       const { project } = this
       const { user } = this.project
       return user.id == this.$uid() && // 是项目的发布者
         (project.status == Project.STATUS_TENDERING || // 招标状态
          project.status == Project.STATUS_REVIEW_FAILED || // 审核未通过
-         project.status == Project.STATUS_REVIEWING) && // 审核中
-        !project.supplement_at // 未补充
+         project.status == Project.STATUS_REVIEWING) // 审核中
     },
     // 甲方：能否取消发布项目
     cancelable () {
@@ -468,7 +456,7 @@ export default {
       })
     },
     /**
-     * 甲方相关操作：取消发布、补充项目、申请重新审核
+     * 甲方相关操作：取消发布、编辑项目、申请重新审核
      */
     onCancelPublish () {
       this.$confirm(this.$t('此操作将取消发布该项目并不可恢复，是否确认？'), this.$t('g.notice'), {
@@ -485,6 +473,9 @@ export default {
           })
         })
       }).catch(() => {})
+    },
+    onEdit () {
+      this.$router.push(`/project/${this.id}/edit`)
     },
     /**
      * 查看报名详情

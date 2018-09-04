@@ -132,7 +132,6 @@ export default {
   },
   methods: {
     onSubmit () {
-      let { form } = this
       let photo_urls = this.$refs.upload.getImageUrls()
       if (photo_urls === false) {
         return this.$message.warning(this.$t('图片正在上传中，请稍候'))

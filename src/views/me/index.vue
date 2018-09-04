@@ -89,7 +89,9 @@
           resize="none"
           maxlength="200"/>
       </el-form-item>
-      <el-form-item :label="$t('专业领域')">
+      <el-form-item
+        v-if="$isDesigner()"
+        :label="$t('专业领域')">
         <el-checkbox-group v-model="form.professional_fields">
           <el-checkbox
             v-for="field in fields"
@@ -109,24 +111,26 @@
           :value="$store.getters.userInfo.phone"
           disabled/>
       </el-form-item>
-      <el-form-item :label="$t('银行卡号')" >
-        <el-input
-          v-model="form.bank_card_number"
-          maxlength="100"/>
-        <el-card class="tips-card">
-          <span v-t="'请准确填写银行卡相关信息，以保证顺利接收设计费'" />
-        </el-card>
-      </el-form-item>
-      <el-form-item :label="$t('开户行')" >
-        <el-input
-          v-model="form.bank_name"
-          maxlength="100"/>
-      </el-form-item>
-      <el-form-item :label="$t('开户名')" >
-        <el-input
-          v-model="form.account_name"
-          maxlength="100"/>
-      </el-form-item>
+      <template v-if="$isDesigner()">
+        <el-form-item :label="$t('银行卡号')" >
+          <el-input
+            v-model="form.bank_card_number"
+            maxlength="100"/>
+          <el-card class="tips-card">
+            <span v-t="'请准确填写银行卡相关信息，以保证顺利接收设计费'" />
+          </el-card>
+        </el-form-item>
+        <el-form-item :label="$t('开户行')" >
+          <el-input
+            v-model="form.bank_name"
+            maxlength="100"/>
+        </el-form-item>
+        <el-form-item :label="$t('开户名')" >
+          <el-input
+            v-model="form.account_name"
+            maxlength="100"/>
+        </el-form-item>
+      </template>
       <el-form-item>
         <el-button
           :loading="loading"
@@ -149,6 +153,8 @@ export default {
         title: '',
         introduction: '',
         // avatar_id: null, 这个属性一开始是没有的，只有上传了图片才有
+
+        // 这四个只有设计师有
         professional_fields: [],
         account_name: '',
         bank_name: '',

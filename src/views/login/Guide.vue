@@ -15,7 +15,6 @@
 <template>
   <div>
     <el-carousel
-      :autoplay="false"
       trigger="click"
       height="500px">
       <el-carousel-item

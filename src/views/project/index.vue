@@ -250,16 +250,16 @@
       </div>
       <el-dialog
         :visible.sync="dialogVisible"
-        :title="dialogText.title">
+        :title="$t('报名项目')">
         <el-input
-          v-model="dialogForm.textarea"
+          v-model="applicationForm.remark"
           :rows="5"
-          :placeholder="dialogText.placeholder"
+          :placeholder="$t('简单说点什么，让业主更快了解你（200字以内）')"
           type="textarea"/>
         <my-upload
           ref="upload"
-          :type="uploadFileType"
           :max-size="50"
+          type="application_file"
           @start="onUploadStart"
           @success="onUploadSuccess"
           @error="onUploadError"
@@ -289,7 +289,6 @@ import { Project } from '@/services/constants'
 import {
   getProjectById,
   cancelProjectById,
-  supplementProjectById,
   favoriteProjectById,
   unfavoriteProjectById,
   applyProjectById,
@@ -312,13 +311,18 @@ export default {
       pageCount: 1, // 报名列表总页数
       loading: false, // 是否正在获取项目详情
       applicationLoading: false, // 是否正在获取报名信息
+
+      /**
+       * 报名表单 Dialog
+       */
       dialogVisible: false,
       dialogUploading: false, // 是否正在上传文件
       dialogButtonLoading: false, // 是否正在上传表单数据
-      dialogForm: {
-        textarea: '',
-        file_id: null
+      applicationForm: { // 报名表单
+        remark: '',
+        application_file_id: null
       },
+
       applicationDialog: { // 报名详情Dialog
         remark: '', // 备注信息
         visible: false
@@ -385,19 +389,6 @@ export default {
     canCancelApply () {
       const { project } = this
       return project.status == Project.STATUS_TENDERING && project.applying
-    },
-    // Dialog的文字内容，不同身份的用户看到的文字与可选的操作是不一样的
-    dialogText () {
-      return {
-        title: this.$isParty() ? this.$t('补充项目') : this.$t('报名项目'),
-        placeholder: this.$isParty()
-          ? this.$t('请输入项目的补充内容，比如如项目面积、项目风格、希望设计师做到哪种程度等等')
-          : this.$t('简单说点什么，让业主更快了解你（200字以内）')
-      }
-    },
-    // 上传的文件类别
-    uploadFileType () {
-      return this.$isParty() ? 'project_file' : 'application_file'
     }
   },
   created () {
@@ -488,49 +479,25 @@ export default {
       window.open(application.application_file_url)
     },
     /**
-     * Dialog操作：设计师报名项目、甲方补充项目
+     * Dialog操作：设计师报名项目
      */
     onDialogCancel () {
       this.$refs.upload.cancel()
       this.dialogVisible = false
     },
     onDialogConfirm () {
-      // 设计师报名的时候可以什么都不填，甲方必须填写补充内容
-      if (this.$isParty() && !this.dialogForm.textarea.length) {
-        this.$message.error(this.$t('补充内容不能为空'))
-        return false
-      }
       if (this.dialogUploading) {
         this.$message.warning(this.$t('正在上传附件，请稍后'))
         return false
       }
 
       this.dialogButtonLoading = true
-      const handler = this.$isParty() ? supplementProjectById : applyProjectById
-      const { textarea, file_id } = this.dialogForm
-      let form
-      if (this.$isParty()) {
-        form = {
-          supplement_description: textarea,
-          supplement_file_id: file_id
-        }
-      } else {
-        form = {
-          remark: textarea,
-          application_file_id: file_id
-        }
-      }
-      handler(this.project.id, form).then(({ data }) => {
+      applyProjectById(this.project.id, this.applicationForm).then(({ data }) => {
         this.dialogButtonLoading = false
         this.dialogVisible = false
-        if (this.$isParty()) {
-          this.$message.success(this.$t('补充成功'))
-          this.project = data
-        } else {
-          this.$message.success(this.$t('报名成功'))
-          this.project.applying = true
-          this.project.application = data
-        }
+        this.$message.success(this.$t('报名成功'))
+        this.project.applying = true
+        this.project.application = data
       }).catch(() => {
         this.dialogButtonLoading = false
       })
@@ -540,13 +507,13 @@ export default {
     },
     onUploadSuccess (data) {
       this.dialogUploading = false
-      this.dialogForm.file_id = data.id
+      this.applicationForm.application_file_id = data.id
     },
     onUploadError () {
       this.dialogUploading = false
     },
     onUploadRemove () {
-      this.dialogForm.file_id = null
+      this.applicationForm.application_file_id = null
     }
   }
 }

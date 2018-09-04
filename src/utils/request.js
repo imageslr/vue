@@ -12,7 +12,7 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
-    config.headers['Accept-Language'] = i18n.locale // 国际化，后端根据语言要求返回对应错误信息
+    config.headers['Accept-Language'] = getLocale() // 国际化，后端根据语言要求返回对应错误信息
     if (store.getters.token) {
       config.headers['Authorization'] = `Bearer ${store.getters.token}` // 让每个请求携带token
     }
@@ -96,6 +96,10 @@ function getErrMsg (key) {
     }
   }
   return ERR_MESSAGES[i18n.locale][key]
+}
+
+function getLocale () {
+  return i18n.locale === 'zh' ? 'zh-CN' : i18n.locale // 将zh换成标准语言编码以适配后台服务器
 }
 
 export default service

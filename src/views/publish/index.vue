@@ -427,6 +427,17 @@ export default {
       uploading: false
     }
   },
+  computed: {
+    language () {
+      return this.$store.getters.language
+    }
+  },
+  watch: {
+    language () {
+      this.form.types = []
+      this.form.features = []
+    }
+  },
   methods: {
     onUploadStart () {
       this.uploading = true

@@ -165,6 +165,16 @@ export default {
       avatarUrl: ''
     }
   },
+  computed: {
+    language () {
+      return this.$store.getters.language
+    }
+  },
+  watch: {
+    language () {
+      this.form.professional_fields = []
+    }
+  },
   created () {
     const user = this.$store.getters.userInfo
     Object.keys(this.form).forEach(key => {

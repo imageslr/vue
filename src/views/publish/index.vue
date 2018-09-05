@@ -78,6 +78,7 @@
     "请选择此项": "Please select this field",
     "输入框不能为空": "Please enter the input field",
     "最多可以添加10个关键字": "Can only add 10 keywords",
+    "不能有相同的关键字": "Each keyword must be distinct",
     "提交项目信息": "Publish the project",
     "types":  {
       "conceptPlanning": "Concept Planning",
@@ -284,12 +285,14 @@
               v-for="mode in $t('designModes')"
               :key="mode.value"
               :label="mode.value">
-              {{ mode.label }}
               <el-tooltip
                 :content="mode.description"
                 effect="dark"
-                placement="top">
-                <i class="el-icon-info" />
+                placement="right">
+                <span>
+                  {{ mode.label }}
+                  <i class="el-icon-info" />
+                </span>
               </el-tooltip>
             </el-radio>
           </el-radio-group>
@@ -409,12 +412,21 @@ export default {
         title: { required: true, message: this.$t('请填写此项') },
         types: { required: true, validator: getCheckBoxValidator('types') },
         features: { required: true, validator: getCheckBoxValidator('features') },
-        keywords: {
+        keywords: [{
           type: 'array',
           max: 10,
           message: this.$t('最多可以添加10个关键字'),
           defaultField: { required: true, type: 'string', max: 50, message: this.$t('输入框不能为空') }
-        },
+        }, {
+          validator: (rule, value, callback) => {
+            const s = new Set(value)
+            if (s.size !== value.length) {
+              callback(new Error(this.$t('不能有相同的关键字')))
+            } else {
+              callback()
+            }
+          }
+        }],
         depth: { required: true, message: this.$t('请选择此项') },
         description: { required: true, message: this.$t('请填写此项'), whitespace: true },
         delivery_time: { required: true, validator: getRadioValidator('delivery_time') },
@@ -436,6 +448,9 @@ export default {
     language () {
       this.form.types = []
       this.form.features = []
+    },
+    'form.keywords' () {
+      this.$refs.form.validateField('keywords')
     }
   },
   methods: {

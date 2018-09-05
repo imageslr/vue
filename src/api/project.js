@@ -89,9 +89,9 @@ export function getRecommendProjectsOfCurrentUser (page = 1) {
 }
 
 // 搜索项目
-export function searchProjects (page = 1, keyword = null, status = null) {
+export function searchProjects (page = 1, params = {}) {
   return request.get('/projects', {
-    params: { page, keyword, status }
+    params: { page, ...params }
   })
 }
 

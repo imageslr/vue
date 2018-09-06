@@ -87,6 +87,13 @@ export function searchUsers (
   })
 }
 
+// 搜索设计师
+export function searchDesigners (keyword = null, page = 1, otherParams = {}) {
+  return request.get('/users', {
+    params: { page, keyword, ...otherParams, type: 'designer' }
+  })
+}
+
 // 搜索用户以邀请评价
 export function searchUsersToInviteReview (page = 1, keyword = null) {
   return request.get('/users', {

@@ -87,7 +87,6 @@
               :loading="followLoadings[index]"
               plain
               size="mini"
-              class="list-item__action"
               @click="onToggleFollow(index)">{{ $t('取消关注') }}</el-button>
             <el-button
               v-else
@@ -95,7 +94,6 @@
               plain
               type="primary"
               size="mini"
-              class="list-item__action"
               @click="onToggleFollow(index)">{{ $t('关注') }}</el-button>
           </template>
         </div>

@@ -11,6 +11,7 @@ export default {
     following: 'Following',
     cancelFollow: 'Cancel follow',
     follower: 'Follower',
+    fans: 'Follower',
     like: 'Like',
     comment: 'Comment',
     publish: 'Publish',

@@ -70,6 +70,7 @@
     "向管理员留言，说明一些重要信息": "Leave a message to the administrator explaining some important information",
     "项目通过审核后设计师才可以查看与报名此项目": "After the project is approved, the designer can view and register this project.",
     "其他": "Other",
+    "提交项目信息": "Publish the project",
     "只能上传一个文件，最大不得超过50MB": "Allow upload only one file of which size is less than 50MB",
     "只能上传一个文件": "Allow upload only one file",
     "上传文件大小不能超过50MB！": "File max size is 50MB",
@@ -79,7 +80,8 @@
     "输入框不能为空": "Please enter the input field",
     "最多可以添加10个关键字": "Can only add 10 keywords",
     "不能有相同的关键字": "Each keyword must be distinct",
-    "提交项目信息": "Publish the project",
+    "您的招标模式为“邀请设计师”，您必须邀请至少一名设计师参与项目": "Your bidding mode is \"Invite Designers\". You have to invite at least one designer to participate the project.",
+    "您的招标模式为“指定设计师”，您必须邀请至少一名设计师参与项目": "Your bidding mode is \"Specify Designers\". You have to invite at least one designer to participate the project.",
     "types":  {
       "conceptPlanning": "Concept Planning",
       "cityDesign": "City Design",
@@ -288,7 +290,7 @@
               <el-tooltip
                 :content="mode.description"
                 effect="dark"
-                placement="right">
+                placement="top-start">
                 <span>
                   {{ mode.label }}
                   <i class="el-icon-info" />
@@ -311,6 +313,10 @@
         v-t="'项目通过审核后设计师才可以查看与报名此项目'"
         class="m0 pb-24 center f-14 black-45" />
     </div>
+    <invite-card
+      v-if="needInvite"
+      ref="inviteCard"
+      class="mt-24"/>
     <el-button
       :loading="publishing"
       class="block w-100 shadow mt-24"
@@ -321,7 +327,9 @@
 
 <script>
 import { publishProject } from '@/api/project'
+import InviteCard from '@/views/components/InviteCard'
 export default {
+  components: { InviteCard },
   data () {
     const getCheckBoxValidator = (field) => {
       return (rule, value, callback) => {
@@ -442,9 +450,13 @@ export default {
   computed: {
     language () {
       return this.$store.getters.language
+    },
+    needInvite () {
+      return this.form.mode === 'invite' || this.form.mode === 'specify'
     }
   },
   watch: {
+    // 语言更改时清空多选框
     language () {
       this.form.types = []
       this.form.features = []
@@ -454,23 +466,20 @@ export default {
     }
   },
   methods: {
-    onUploadStart () {
-      this.uploading = true
-    },
-    onUploadSuccess (data) {
-      this.uploading = false
-      this.form.project_file_url = data.path
-    },
-    onUploadError () {
-      this.uploading = false
-    },
-    onUploadRemove () {
-      this.form.project_file_url = null
-    },
     onSubmit () {
       if (this.uploading) {
         return this.$message.warning(this.$t('正在上传附件，请稍后'))
       }
+
+      if (this.needInvite && !this.$refs.inviteCard.invitedDesigners.length) {
+        if (this.form.mode === 'invite') {
+          this.$message.warning(this.$t('您的招标模式为“邀请设计师”，您必须邀请至少一名设计师参与项目'))
+        }
+        if (this.form.mode === 'specify') {
+          this.$message.warning(this.$t('您的招标模式为“指定设计师”，您必须邀请至少一名设计师参与项目'))
+        }
+      }
+
       this.$refs.form.validate(valid => {
         if (valid) {
           this.publishing = true
@@ -485,11 +494,17 @@ export default {
     },
     getFormData () {
       let form = this.$_.cloneDeep(this.form)
+
+      // 为多选或单选添加“其他”项
       const formOthers = this.formOthers
       formOthers.types.checked && form.types.push(formOthers.types.input)
       formOthers.features.checked && form.features.push(formOthers.features.input)
       form.delivery_time === 'other' && (form.delivery_time = formOthers.delivery_time.input)
       form.find_time === 'other' && (form.find_time = formOthers.find_time.input)
+
+      // 如果需要邀请用户，添加受邀用户id数组
+      if (this.needInvite) form.invited_user_ids = this.$refs.inviteCard.invitedDesigners.map(v => v.id)
+
       return form
     },
     addKeyword () {
@@ -497,6 +512,19 @@ export default {
     },
     removeKeyword (index) {
       this.form.keywords.splice(index, 1)
+    },
+    onUploadStart () {
+      this.uploading = true
+    },
+    onUploadSuccess (data) {
+      this.uploading = false
+      this.form.project_file_url = data.path
+    },
+    onUploadError () {
+      this.uploading = false
+    },
+    onUploadRemove () {
+      this.form.project_file_url = null
     }
   }
 }

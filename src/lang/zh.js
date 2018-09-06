@@ -11,6 +11,7 @@ export default {
     following: '关注',
     cancelFollow: '取消关注',
     follower: '关注者',
+    fans: '粉丝',
     like: '赞',
     comment: '评论',
     publish: '发 布',

@@ -30,6 +30,8 @@ a {
   }
 }
 
+/* UI相关 */
+
 .main-container {
   position: relative;
   width: 1000px;
@@ -58,4 +60,26 @@ a {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.85);
   line-height: 22px;
+}
+
+.user-list-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px;
+  font-size: 14px;
+  &__avatar {
+    width: 48px;
+    height: 48px;
+    margin-right: 24px;
+  }
+  &__info {
+    flex: 1;
+    overflow: hidden;
+    margin-right: 24px;
+    p {
+      margin: 4px 0 0;
+      color: rgba(0, 0, 0, 0.45);
+      font-size: 12px;
+    }
+  }
 }

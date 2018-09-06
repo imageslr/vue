@@ -10,6 +10,7 @@ import ResetPassword from '../views/login/ResetPassword'
 import Feed from '../views/feed'
 import Activity from '../views/activity'
 import Publish from '../views/publish'
+import EditProject from '../views/project/Edit'
 import PublishResult from '../views/publish/Result'
 import Follow from '../views/follow'
 import Profile from '../views/profile'
@@ -149,6 +150,11 @@ export default new Router({
           path: ':id',
           name: 'project',
           component: Project
+        },
+        {
+          path: ':id/edit',
+          name: 'editProject',
+          component: EditProject
         }
       ]
     },

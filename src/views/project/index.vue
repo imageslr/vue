@@ -11,7 +11,7 @@
     "报名成功": "Successfully apply",
     "取消报名": "Cancel apply",
     "此操作将取消报名该项目，是否确认？": "This operation will cancel the application for the project. Is it confirmed?",
-    "修改项目": "Edit the project",
+    "编辑项目": "Edit the project",
     "取消发布": "Cancel publish",
     "此操作将取消发布该项目并不可恢复，是否确认？": "This operation will unpublish the project and is not recoverable. Is it confirmed?",
     "取消成功": "Successfully canceled",
@@ -94,7 +94,7 @@
             v-if="editable"
             size="mini"
             @click="onEdit"
-          >{{ $t('修改项目') }}</el-button>
+          >{{ $t('编辑项目') }}</el-button>
           <el-button
             v-if="cancelable"
             size="mini"

@@ -10,7 +10,7 @@ export function getProjectById (id) {
 }
 
 // 补充项目
-export function supplementProjectById (id, data) {
+export function updateProjectById (id, data) {
   return request.patch(`/projects/${id}`, data)
 }
 

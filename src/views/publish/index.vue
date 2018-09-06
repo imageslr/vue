@@ -82,6 +82,8 @@
     "不能有相同的关键字": "Each keyword must be distinct",
     "您的招标模式为“邀请设计师”，您必须邀请至少一名设计师参与项目": "Your bidding mode is \"Invite Designers\". You have to invite at least one designer to participate the project.",
     "您的招标模式为“指定设计师”，您必须邀请至少一名设计师参与项目": "Your bidding mode is \"Specify Designers\". You have to invite at least one designer to participate the project.",
+    "错误": "Error",
+    "请您按照规定格式填写所有必填表单项": "Please fill in all required form items in the prescribed format",
     "types":  {
       "conceptPlanning": "Concept Planning",
       "cityDesign": "City Design",
@@ -318,18 +320,18 @@
       ref="inviteCard"
       class="mt-24"/>
     <el-button
-      :loading="publishing"
       class="block w-100 shadow mt-24"
       type="primary"
       @click="onSubmit">{{ $t('提交项目信息') }}</el-button>
+    <preview-dialog ref="previewDialog" />
   </div>
 </template>
 
 <script>
-import { publishProject } from '@/api/project'
 import InviteCard from '@/views/components/InviteCard'
+import PreviewDialog from './components/PreviewDialog'
 export default {
-  components: { InviteCard },
+  components: { InviteCard, PreviewDialog },
   data () {
     const getCheckBoxValidator = (field) => {
       return (rule, value, callback) => {
@@ -443,7 +445,6 @@ export default {
         mode: { required: true, message: this.$t('请选择此项') }
 
       },
-      publishing: false,
       uploading: false
     }
   },
@@ -471,24 +472,27 @@ export default {
         return this.$message.warning(this.$t('正在上传附件，请稍后'))
       }
 
-      if (this.needInvite && !this.$refs.inviteCard.invitedDesigners.length) {
-        if (this.form.mode === 'invite') {
-          this.$message.warning(this.$t('您的招标模式为“邀请设计师”，您必须邀请至少一名设计师参与项目'))
-        }
-        if (this.form.mode === 'specify') {
-          this.$message.warning(this.$t('您的招标模式为“指定设计师”，您必须邀请至少一名设计师参与项目'))
-        }
-      }
-
       this.$refs.form.validate(valid => {
-        if (valid) {
-          this.publishing = true
-          publishProject(this.getFormData()).then(({ data: { id } }) => {
-            this.publishing = false
-            this.$router.replace(`/publish/result?id=${id}`)
-          }).catch(() => {
-            this.publishing = false
+        if (this.needInvite && !this.$refs.inviteCard.invitedDesigners.length) {
+          if (this.form.mode === 'invite') {
+            this.$message.warning(this.$t('您的招标模式为“邀请设计师”，您必须邀请至少一名设计师参与项目'))
+          }
+          if (this.form.mode === 'specify') {
+            this.$message.warning(this.$t('您的招标模式为“指定设计师”，您必须邀请至少一名设计师参与项目'))
+          }
+        }
+
+        if (!valid) {
+          this.$notify.error({
+            title: this.$t('错误'),
+            message: this.$t('请您按照规定格式填写所有必填表单项')
           })
+        } else {
+          if (this.needInvite) {
+            this.$refs.previewDialog.show(this.getFormData(), this.$refs.inviteCard.invitedDesigners)
+          } else {
+            this.$refs.previewDialog.show(this.getFormData())
+          }
         }
       })
     },

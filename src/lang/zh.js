@@ -7,8 +7,8 @@ export default {
   },
   // global
   g: {
-    follow: '关注',
-    following: '关注',
+    follow: '关注', // 动词
+    following: '关注', // 名词，指的是“关注者”
     cancelFollow: '取消关注',
     follower: '关注者',
     fans: '粉丝',

@@ -179,12 +179,14 @@
           type="text"
           @click="showInfo = true">{{ $t('点击查看项目信息') }}</el-button>
       </div>
-      <application-list
-        v-if="isPublisher && project.mode === 'free'"
-        :project="project" />
-      <invitation-list
-        v-if="isPublisher && project.mode !== 'free'"
-        :project="project" />
+      <template v-if="isPublisher">
+        <application-list
+          v-if="project.mode === 'free'"
+          :project="project" />
+        <invitation-list
+          v-else
+          :project="project" />
+      </template>
       <el-dialog
         :visible.sync="dialogVisible"
         :title="$t('报名项目')">

@@ -169,8 +169,13 @@ export default {
         return this.$message.warning(this.$t('您必须同意平台协议，才能发布项目'))
       }
 
+      let { form } = this
+      if (this.form.mode !== 'free') {
+        form = { ...form, invited_designer_ids: this.invitedDesigners.map(v => v.id) }
+      }
+
       this.publishing = true
-      publishProject(this.form).then(({ data: { id } }) => {
+      publishProject(form).then(({ data: { id } }) => {
         this.publishing = false
         this.$router.push(`/publish/result?id=${id}`)
       }).catch(() => {

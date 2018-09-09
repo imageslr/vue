@@ -59,7 +59,7 @@
     "您的招标模式为“指定设计师”，您必须邀请至少一名设计师参与项目": "Your bidding mode is \"Specify Designers\". You have to invite at least one designer to participate the project.",
     "错误": "Error",
     "请您按照规定格式填写所有必填表单项": "Please fill in all required form items in the prescribed format",
-    "编辑项目成功": "Successfully edit the project",
+    "修改项目信息成功": "Successfully update the project information",
     "types":  ["Concept Planning", "City Design", "Architectural Design", "Landscape Design", "Interior Design"],
     "features":["Residence", "Business", "Office", "Public Space", "School", "Retail", "Restaurant", "Hotel", "Club", "Garden Square"],
     "deliveryTimes": ["After one month", "After three month", "After six month"],
@@ -95,7 +95,7 @@
           class="m0 color-primary"/>
         <p
           v-t="'完善详实的项目信息，是精准匹配设计师、得到理想成果的必要条件。'"
-          class="m0 p0 black-45 f-12" />
+          class="m0 pt1 black-45 f-12" />
       </div>
       <el-form
         ref="form"
@@ -169,15 +169,6 @@
             :rows="7"
             :placeholder="$t('比如项目的面积、施工预算、动工时间、您倾向的风格和色彩等等')"
             type="textarea"/>
-          <my-alert v-if="form.project_file_url"><a
-            :href="form.project_file_url"
-            target="_blank">{{ $t('已上传，点击下载文件') }}</a>
-            <el-button
-              type="text"
-              @click="form.project_file_url = null">
-              {{ $t('删除') }}
-            </el-button>
-          </my-alert>
           <my-upload
             ref="upload"
             :max-size="50"
@@ -186,6 +177,15 @@
             @success="onUploadSuccess"
             @error="onUploadError"
             @remove="onUploadRemove"/>
+          <my-alert
+            v-if="form.project_file_url"
+            class="mt-12"><a
+              :href="form.project_file_url"
+              target="_blank">{{ $t('已上传，点击下载文件') }}</a>
+            <a
+              class="ml1"
+              @click="form.project_file_url = null">{{ $t('删除') }}</a>
+          </my-alert>
         </el-form-item>
         <el-form-item
           :label="$t('项目设计深度要求')"
@@ -285,7 +285,7 @@
       :loading="submitting"
       class="block w-100 shadow mt-24"
       type="primary"
-      @click="onSubmit">{{ $t('编辑项目信息') }}</el-button>
+      @click="onSubmit">{{ $t('g.submitBtn') }}</el-button>
       <!-- <preview-dialog
       ref="previewDialog"
       action-type="edit" /> -->
@@ -438,13 +438,25 @@ export default {
           // this.$refs.previewDialog.show(this.getFormData())
           this.submitting = true
           updateProjectById(this.id, this.getFormData()).then(() => {
-            this.$message.success(this.$t('编辑项目成功'))
+            this.$message.success(this.$t('修改项目信息成功'))
             this.$router.push(`/project/${this.id}`)
           }).catch(() => {
             this.submitting = false
           })
         }
       })
+    },
+    getFormData () {
+      let form = this.$_.cloneDeep(this.form)
+
+      // 为多选或单选添加“其他”项
+      const formOthers = this.formOthers
+      formOthers.types.checked && form.types.push(formOthers.types.input)
+      formOthers.features.checked && form.features.push(formOthers.features.input)
+      form.delivery_time === 'other' && (form.delivery_time = formOthers.delivery_time.input)
+      form.find_time === 'other' && (form.find_time = formOthers.find_time.input)
+
+      return form
     },
     /**
      * 使用项目信息初始化form，主要是设置单选框和多选框的“其他”的值
@@ -502,18 +514,6 @@ export default {
       setRadioValue('delivery_time')
       setRadioValue('find_time')
     },
-    getFormData () {
-      let form = this.$_.cloneDeep(this.form)
-
-      // 为多选或单选添加“其他”项
-      const formOthers = this.formOthers
-      formOthers.types.checked && form.types.push(formOthers.types.input)
-      formOthers.features.checked && form.features.push(formOthers.features.input)
-      form.delivery_time === 'other' && (form.delivery_time = formOthers.delivery_time.input)
-      form.find_time === 'other' && (form.find_time = formOthers.find_time.input)
-
-      return form
-    },
     addKeyword () {
       this.form.keywords.push('')
     },
@@ -544,7 +544,7 @@ export default {
   left: 50%;
   margin-left: -400px;
   padding-top: 32px;
-  &__uploader {
+  & .upload {
     margin-top: 12px;
     width: 500px;
   }
@@ -581,6 +581,9 @@ export default {
       width: 300px;
       margin-right: 8px;
     }
+  }
+  .alert > a {
+    line-height: 20px;
   }
 }
 </style>

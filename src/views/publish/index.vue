@@ -541,7 +541,7 @@ export default {
   left: 50%;
   margin-left: -400px;
   padding-top: 32px;
-  &__uploader {
+  & .upload {
     margin-top: 12px;
     width: 500px;
   }

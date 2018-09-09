@@ -1,11 +1,21 @@
 <i18n>
 {
+  "zh": {
+    "status": {
+      "0": "未查看",
+      "1": "接受",
+      "2": "拒绝"
+    }
+  },
   "en": {
-    "报名列表": "Application list",
-    "下载附件": "Download file",
-    "报名于": "Applied at",
-    "查看备注": "View remark",
-    "备注": "Remark"
+    "邀请列表": "Invitation list",
+    "邀请于": "Invited at",
+    "状态": "Status",
+    "status": {
+      "0": "Not viewd",
+      "1": "Accepted",
+      "2": "Declined"
+    }
   }
 }
 </i18n>
@@ -15,7 +25,7 @@
     v-loading="loading"
     class="card">
     <h3
-      v-t="'报名列表'"
+      v-t="'邀请列表'"
       class="mt0 mb2" />
     <my-empty v-if="!applications.length" />
     <div
@@ -45,7 +55,7 @@
         </div>
         <div class="black-45 f-14">
           <div
-            v-t="'报名于'"
+            v-t="'邀请于'"
             class="m0 mb-4" />
           <div
             class="m0"
@@ -53,16 +63,13 @@
         </div>
         <div class="list-item__action">
           <el-button
-            :disabled="!application.remark"
-            type="text"
-            @click="onViewDetail(application)">
-            {{ $t('查看备注') }}
+            type="text">
+            {{ $t('一个操作') }}
           </el-button>
           <el-button
-            :disabled="!application.application_file_url"
-            type="text"
-            @click="onDownloadApplicationFile(application)" >
-            {{ $t('下载附件') }}
+            disabled
+            type="text" >
+            {{ $t('又一个操作') }}
           </el-button>
         </div>
       </div>
@@ -72,63 +79,47 @@
         background
         layout="prev, pager, next"
         class="mt2 center"
-        @current-change="getApplications"/>
+        @current-change="getInvitations"/>
     </div>
-    <el-dialog
-      :visible.sync="dialog.visible"
-      :title="$t('备注')">
-      <p v-text="dialog.remark" />
-    </el-dialog>
   </div>
 </template>
 
 <script>
 /* eslint eqeqeq: "off" */
-import { getApplicationsByProjectId } from '@/api/project'
+import { getInvitationsByProjectId } from '@/api/project'
 export default {
   props: {
     // 项目详情
     project: {
       type: Object,
       validator (value) {
-        return Array.isArray(value.applications)
+        return Array.isArray(value.invitations)
       },
       required: true
     }
   },
   data () {
     return {
-      applications: [], // 报名列表
-      currentPage: 1, // 报名列表当前页
-      pageCount: 1, // 报名列表总页数
-      loading: false, // 是否正在获取报名信息
-      dialog: { // 报名详情Dialog
-        remark: '', // 备注信息
-        visible: false
-      }
+      invitations: [],
+      currentPage: 1,
+      pageCount: 1,
+      loading: false
     }
   },
   created () {
-    this.applications = this.project.applications
+    this.invitations = this.project.invitations
   },
   methods: {
-    getApplications (page = 1) {
+    getInvitations (page = 1) {
       this.loading = true
-      getApplicationsByProjectId(this.project.id, page)
+      getInvitationsByProjectId(this.project.id, page)
         .then(({ data: { data, meta: { pagination } } }) => {
           this.loading = false
-          this.applications = data
+          this.invitations = data
           this.pageCount = pagination.total_pages
         }).catch(() => {
           this.loading = false
         })
-    },
-    onViewDetail (application) {
-      this.dialog.visible = true
-      this.dialog.remark = application.remark
-    },
-    onDownloadApplicationFile (application) {
-      window.open(application.application_file_url)
     }
   }
 }

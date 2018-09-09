@@ -38,16 +38,6 @@ export function recall (reqId, uid) {
   })
 }
 
-// 获取一个项目邀请的设计师
-export function getInvitedDesignersByReqId (id, start = 0) {
-  return request.get(`/projects/${id}/designers/invited?start=${start}`)
-}
-
-// 获取一个项目报名的设计师
-export function getApplyDesignersByReqId (id, start = 0) {
-  return request.get(`/projects/${id}/designers/apply?start=${start}`)
-}
-
 // 收藏项目
 export function favoriteProjectById (id) {
   return request.put(`/user/favoriting/projects/${id}`)
@@ -98,4 +88,9 @@ export function searchProjects (page = 1, params = {}) {
 // 获取一个项目的报名列表
 export function getApplicationsByProjectId (id, page = 1) {
   return request.get(`/projects/${id}/applications?page=${page}`)
+}
+
+// 获取一个项目的邀请列表
+export function getInvitationsByProjectId (id, page = 1) {
+  return request.get(`/projects/${id}/invitations?page=${page}`)
 }

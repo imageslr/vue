@@ -22,7 +22,7 @@
     :limit="1"
     :accept="accept"
     action=""
-    class="form__uploader mt-12">
+    class="upload">
     <el-button
       :loading="uploading"
       :disabled="!!fileData">{{ buttonText }}</el-button>

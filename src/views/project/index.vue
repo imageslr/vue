@@ -28,16 +28,12 @@
     "项目的交付时间": "Delivery time",
     "希望用多长时间找设计师？": "How long do you want to find a designer?",
     "希望付给设计师的费用是多少？": "How much would you want to pay for the designer?",
-    "报名列表": "Application list",
     "下载附件": "Download file",
     "上传附件": "Upload file",
     "只能上传一个文件": "Allow upload only one file",
     "正在上传附件，请稍后": "File uploading, please wait",
     "简单说点什么，让业主更快了解你（200字以内）": "Say something so that the party can know you quickly (200 characters at most)",
     "我的报名信息": "My application",
-    "报名于": "Applied at",
-    "查看备注": "View remark",
-    "备注": "Remark",
     "点击查看项目信息": "View project info",
     "收起": "Collapse"
   }
@@ -183,71 +179,12 @@
           type="text"
           @click="showInfo = true">{{ $t('点击查看项目信息') }}</el-button>
       </div>
-      <div
-        v-loading="applicationLoading"
-        v-if="isPublisher"
-        class="card">
-        <h3
-          v-t="'报名列表'"
-          class="mt0 mb2" />
-        <my-empty v-if="!applicationList.length" />
-        <div
-          v-else
-          class="application-list">
-          <div
-            v-for="application in applicationList"
-            :key="application.id"
-            class="application-list-item">
-            <router-link :to="'/profile?uid=' + application.user.id">
-              <my-avatar
-                :avatar-url="application.user.avatar_url"
-                class="application-list-item__avatar"/>
-            </router-link>
-            <div class="application-list-item__info">
-              <router-link
-                :to="'/profile?uid=' + application.user.id"
-                class="bold black-85">{{ application.user.name }}</router-link>
-              <p>
-                <span class="color-primary">{{ $t('关注') }}</span>
-                <span v-text="application.user.following_count" />
-                <span class="color-primary">{{ $t('粉丝') }}</span>
-                <span v-text="application.user.follower_count" />
-              </p>
-              <p v-text="application.user.title" />
-              <p v-text="application.user.introduction" />
-            </div>
-            <div class="black-45 f-14">
-              <div
-                v-t="'报名于'"
-                class="m0 mb-4" />
-              <div
-                class="m0"
-                v-text="application.created_at" />
-            </div>
-            <div class="application-list-item__action">
-              <el-button
-                :disabled="!application.remark"
-                type="text"
-                @click="onViewDetail(application)">
-                {{ $t('查看备注') }}
-              </el-button>
-              <el-button
-                :disabled="!application.application_file_url"
-                type="text"
-                @click="onDownloadApplicationFile(application)" >
-                {{ $t('下载附件') }}
-              </el-button>
-            </div>
-          </div>
-          <el-pagination
-            :current-page.sync="currentPage"
-            :page-count="pageCount"
-            background
-            layout="prev, pager, next"
-            class="mt2 center"
-            @current-change="getApplications"/>
-        </div>
-      </div>
+      <application-list
+        v-if="isPublisher && project.mode === 'free'"
+        :project="project" />
+      <invitation-list
+        v-if="isPublisher && project.mode !== 'free'"
+        :project="project" />
       <el-dialog
         :visible.sync="dialogVisible"
         :title="$t('报名项目')">
@@ -260,6 +197,7 @@
           ref="upload"
           :max-size="50"
           type="application_file"
+          class="mt-12"
           @start="onUploadStart"
           @success="onUploadSuccess"
           @error="onUploadError"
@@ -274,11 +212,6 @@
             @click="onDialogConfirm">{{ $t('g.confirmBtn') }}</el-button>
         </span>
       </el-dialog>
-      <el-dialog
-        :visible.sync="applicationDialog.visible"
-        :title="$t('备注')">
-        <p v-text="applicationDialog.remark" />
-      </el-dialog>
     </div>
   </div>
 </template>
@@ -292,9 +225,11 @@ import {
   favoriteProjectById,
   unfavoriteProjectById,
   applyProjectById,
-  cancelApplyProjectById,
-  getApplicationsByProjectId } from '@/api/project'
+  cancelApplyProjectById } from '@/api/project'
+import ApplicationList from './components/ApplicationList'
+import InvitationList from './components/InvitationList'
 export default {
+  components: { ApplicationList, InvitationList },
   data () {
     return {
       project: {
@@ -304,13 +239,11 @@ export default {
         features: [],
         favorite_count: 0,
         user: {},
-        application: {}
+        application: {},
+        applications: [],
+        invitations: []
       },
-      applicationList: [], // 报名列表
-      currentPage: 1, // 报名列表当前页
-      pageCount: 1, // 报名列表总页数
       loading: false, // 是否正在获取项目详情
-      applicationLoading: false, // 是否正在获取报名信息
 
       /**
        * 报名表单 Dialog
@@ -323,10 +256,6 @@ export default {
         application_file_id: null
       },
 
-      applicationDialog: { // 报名详情Dialog
-        remark: '', // 备注信息
-        visible: false
-      },
       showInfo: this.$isDesigner() // 是否显示项目信息
     }
   },
@@ -400,21 +329,9 @@ export default {
       getProjectById(this.id).then(({ data }) => {
         this.loading = false
         this.project = data
-        this.applicationList = data.applications
       }).catch(() => {
         this.loading = false
       })
-    },
-    getApplications (page = 1) {
-      this.applicationLoading = true
-      getApplicationsByProjectId(this.id, page)
-        .then(({ data: { data, meta: { pagination } } }) => {
-          this.applicationLoading = false
-          this.applicationList = data
-          this.pageCount = pagination.total_pages
-        }).catch(() => {
-          this.applicationLoading = false
-        })
     },
     /**
      * 设计师相关操作：报名、取消报名、收藏、取消收藏
@@ -467,16 +384,6 @@ export default {
     },
     onEdit () {
       this.$router.push(`/project/${this.id}/edit`)
-    },
-    /**
-     * 查看报名详情
-     */
-    onViewDetail (application) {
-      this.applicationDialog.visible = true
-      this.applicationDialog.remark = application.remark
-    },
-    onDownloadApplicationFile (application) {
-      window.open(application.application_file_url)
     },
     /**
      * Dialog操作：设计师报名项目
@@ -572,37 +479,7 @@ export default {
       line-height: 1.81em;
     }
   }
-  .application-list {
-    &-item {
-      display: flex;
-      align-items: flex-start;
-      padding: 16px;
-      font-size: 14px;
-      &__avatar {
-        width: 48px;
-        height: 48px;
-        margin-right: 24px;
-      }
-      &__info {
-        flex: 1;
-        overflow: hidden;
-        margin-right: 24px;
-        p {
-          margin: 4px 0 0;
-          color: rgba(0, 0, 0, 0.45);
-          font-size: 12px;
-        }
-      }
-      &__action {
-        margin-left: 100px;
-        .el-button {
-          padding: 0;
-        }
-      }
-    }
-  }
 }
-
 .alert {
   font-size: 14px;
 }

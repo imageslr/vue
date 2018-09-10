@@ -36,6 +36,7 @@ import Chat from '../views/message/Chat'
 import PostReview from '../views/review/Post'
 import PostReviewResult from '../views/review/Result'
 import Error404 from '../views/error/404'
+import Error403 from '../views/error/403'
 
 Vue.use(Router)
 
@@ -95,6 +96,11 @@ export default new Router({
           path: '404',
           name: '404',
           component: Error404
+        },
+        {
+          path: '403',
+          name: '403',
+          component: Error403
         }
       ]
     },

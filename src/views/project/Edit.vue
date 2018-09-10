@@ -415,10 +415,14 @@ export default {
   },
   created () {
     getProjectById(this.id).then(({ data }) => {
+      if (data.user.id != this.$uid()) { // eslint-disable-line eqeqeq
+        this.$router.replace('/403')
+      }
+
       this.loading = false
       this.project = data
       this.setFormData() // 初始化Form的各个值
-    }).catch(() => {
+    }).catch(({ statusCode }) => {
       this.loading = false
     })
   },

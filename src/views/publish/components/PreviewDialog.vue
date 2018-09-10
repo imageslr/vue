@@ -44,7 +44,7 @@
     :title="$t('确认并提交')"
     :close-on-click-modal="false"
     :visible.sync="visible"
-    class="preview-dialog">
+    class="project-preview-dialog">
     <el-steps
       :active="step"
       simple
@@ -187,7 +187,7 @@ export default {
 </script>
 
 <style lang="scss">
-.preview-dialog {
+.project-preview-dialog {
   .el-dialog__header {
     border: 1px solid rgba(0, 0, 0, 0.15);
   }

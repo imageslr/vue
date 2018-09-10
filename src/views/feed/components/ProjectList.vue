@@ -1,17 +1,30 @@
 <i18n>
 {
   "zh": {
-    "description": "这些是你还未参与的项目，快看看有没有你感兴趣的吧~"
+    "description": "这些是你还未参与的项目，快看看有没有你感兴趣的吧~",
+    "modes": {
+      "free": "自由式",
+      "invite": "邀请式",
+      "specify": "指定式"
+    }
   },
   "en": {
     "我的项目": "My projects",
     "推荐项目": "Recommended projects",
     "收藏人数": "Favorite count",
     "报名人数": "Application count",
+    "邀请人数": "Invitation count",
+    "报名人员": "Applied designers",
+    "邀请人员": "Invited designers",
     "发布于": "Published at",
-    "暂无设计师报名": "No designer applies",
+    "暂无设计师参与": "No designer participates",
     "查看全部": "View all",
-    "description": "These projects are which you have not participated. Check to see which you are interested in."
+    "description": "These projects are which you have not participated. Check to see which you are interested in.",
+    "modes": {
+      "free": "Free mode",
+      "invite": "Invite mode",
+      "specify": "Specify mode"
+    }
   }
 }
 </i18n>
@@ -52,43 +65,52 @@
           <div
             class="ellipsis-1">
             <status-tag :status="project.status" />
+            <el-tag>{{ $t(`modes.${project.mode}`) }}</el-tag>
             <router-link
               :to="`project/${project.id}`"
               v-text="project.title" />
           </div>
           <p class="f-14 black-65 mb1">{{ $t('发布于') }}：{{ project.created_at }}</p>
-          <p class="f-14 black-65 mt0 mb1">{{ $t('收藏人数') }}：{{ project.favorite_count }} | {{ $t('报名人数') }}：{{ project.application_count }}</p>
+          <p class="f-14 black-65 mt0 mb1">
+            {{ $t('收藏人数') }}：{{ project.favorite_count }}
+            <template v-if="project.mode === 'free'"> | {{ $t('报名人数') }}：{{ project.application_count }}</template>
+            <template v-else> | {{ $t('邀请人数') }}：{{ project.invitation_count }}</template>
+          </p>
           <div
             v-if="$isParty()"
             class="avatar-list">
             <div
               class="title"
-              v-text="$t('报名人员') + '：'" />
+              v-text="$t(project.mode === 'free' ? '报名人员' : '邀请人员') + '：'" />
             <div
-              v-t="'暂无设计师报名'"
-              v-if="!project.application_count"
+              v-t="'暂无设计师参与'"
+              v-if="project.mode === 'free' ? !project.application_count : !project.invitation_count"
               class="f-14 black-65" />
             <div class="list">
-              <router-link
-                v-for="{ user } in project.applications"
-                :to="'/profile?uid=' + user.id"
-                :key="user.id"
-                tag="div"
-                class="list-item">
-                <my-avatar
-                  :avatar-url="user.avatar_url"
-                  class="list-item__avatar" />
-                <div
-                  class="list-item__name ellipsis-1"
-                  v-text="user.name"/>
-              </router-link>
-              <router-link
-                v-if="project.application_count > project.applications.length"
-                :to="`/project/${project.id}`"
-                tag="div"
-                class="list-more">
-                <i class="el-icon-more"/>
-              </router-link>
+              <template>
+                <router-link
+                  v-for="{ user } in (project.mode === 'free' ? project.applications : project.invitations)"
+                  :to="'/profile?uid=' + user.id"
+                  :key="user.id"
+                  tag="div"
+                  class="list-item">
+                  <my-avatar
+                    :avatar-url="user.avatar_url"
+                    class="list-item__avatar" />
+                  <div
+                    class="list-item__name ellipsis-1"
+                    v-text="user.name"/>
+                </router-link>
+                <router-link
+                  v-if="project.mode === 'free' ?
+                    project.application_count > project.applications.length :
+                  project.invitation_count > project.invitations.length"
+                  :to="`/project/${project.id}`"
+                  tag="div"
+                  class="list-more">
+                  <i class="el-icon-more"/>
+                </router-link>
+              </template>
             </div>
           </div>
         </li>

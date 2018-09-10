@@ -39,23 +39,23 @@
         v-for="invitation in invitations"
         :key="invitation.id"
         class="list-item">
-        <router-link :to="'/profile?uid=' + invitation.invited_user.id">
+        <router-link :to="'/profile?uid=' + invitation.user.id">
           <my-avatar
-            :avatar-url="invitation.invited_user.avatar_url"
+            :avatar-url="invitation.user.avatar_url"
             class="list-item__avatar"/>
         </router-link>
         <div class="list-item__info">
           <router-link
-            :to="'/profile?uid=' + invitation.invited_user.id"
-            class="bold black-85">{{ invitation.invited_user.name }}</router-link>
+            :to="'/profile?uid=' + invitation.user.id"
+            class="bold black-85">{{ invitation.user.name }}</router-link>
           <p>
             <span class="color-primary">{{ $t('g.following') }}</span>
-            <span v-text="invitation.invited_user.following_count" />
+            <span v-text="invitation.user.following_count" />
             <span class="color-primary">{{ $t('g.fans') }}</span>
-            <span v-text="invitation.invited_user.follower_count" />
+            <span v-text="invitation.user.follower_count" />
           </p>
-          <p v-text="invitation.invited_user.title" />
-          <p v-text="invitation.invited_user.introduction" />
+          <p v-text="invitation.user.title" />
+          <p v-text="invitation.user.introduction" />
         </div>
         <div class="black-45 f-14">
           <div

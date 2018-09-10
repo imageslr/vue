@@ -1,13 +1,27 @@
 <i18n>
 {
+  "zh": {
+    "declined": "您已拒绝邀请。拒绝原因: {refusalCause}"
+  },
   "en": {
+    "declined": "You have declined the project. Refusal cause: {refusalCause}",
     "该项目已被甲方取消": "The project has been canceled",
     "该项目正在审核中": "The project is reviewing",
     "该项目未通过审核": "The project has not passed review",
+    "该项目模式为自由式，所有设计师都可以报名参与": "The project mode is Free. Every designers can apply and participate.",
+    "该项目模式为邀请设计师，只对邀请的设计师可见": "The project mode is Invite, and is visible only to invited designers.",
+    "该项目模式为指定设计师，只对指定的设计师可见": "The project mode is Specify, and is visible only to specified designers.",
     "收藏": "Favorite",
     "取消收藏": "Unfavorite",
     "我要报名": "Apply",
     "报名项目": "Apply the project",
+    "接受邀请": "Accept invitation",
+    "拒绝邀请": "Decline invitation",
+    "已接受邀请": "Has accepted invitation",
+    "已拒绝邀请": "Has declined invitation",
+    "您确定接受甲方邀请，参与该项目吗？": "Are you sure to accept the invitation from the party and to participate in the project?",
+    "您确定拒绝甲方邀请吗？这个操作将无法撤销": "Are you sure you reject the invitation from the party? This operation cannot undo",
+    "请填写拒绝原因，最多300字": "Please enter the refusal reason, up to 300 characters",
     "报名成功": "Successfully apply",
     "取消报名": "Cancel apply",
     "此操作将取消报名该项目，是否确认？": "This operation will cancel the application for the project. Is it confirmed?",
@@ -58,6 +72,22 @@
         :title="$t('该项目未通过审核') + (project.review_message ? '：' + project.review_message : '')"
         type="warning"
         class="mb2"/>
+      <my-alert
+        v-if="project.mode === 'free'"
+        :title="$t('该项目模式为自由式，所有设计师都可以报名参与')"
+        class="mb2"/>
+      <my-alert
+        v-if="project.mode === 'invite'"
+        :title="$t('该项目模式为邀请设计师，只对邀请的设计师可见')"
+        class="mb2"/>
+      <my-alert
+        v-if="project.mode === 'specify'"
+        :title="$t('该项目模式为指定设计师，只对指定的设计师可见')"
+        class="mb2"/>
+      <my-alert
+        v-if="$isDesigner() && isDeclined"
+        :title="$t('declined', { refusalCause: project.invitation.refusal_cause })"
+        class="mb2"/>
       <div class="project-header__title-area">
         <h1 class="project-header__title">{{ project.title }}</h1>
         <template v-if="$isDesigner()">
@@ -73,17 +103,38 @@
             size="mini"
             @click="onFavorite"
           >{{ $t('收藏') }} ({{ project.favorite_count }})</el-button>
-          <el-button
-            v-if="canCancelApply"
-            size="mini"
-            @click="onCancelApply"
-          >{{ $t('取消报名') }}</el-button>
-          <el-button
-            v-if="canApply"
-            type="primary"
-            size="mini"
-            @click="dialogVisible = true"
-          >{{ $t('我要报名') }}</el-button>
+          <template v-if="appliable">
+            <el-button
+              v-if="canCancelApply"
+              size="mini"
+              @click="onCancelApply"
+            >{{ $t('取消报名') }}</el-button>
+            <el-button
+              v-if="canApply"
+              type="primary"
+              size="mini"
+              @click="dialogVisible = true"
+            >{{ $t('我要报名') }}</el-button>
+          </template>
+          <template v-if="invitable">
+            <el-button
+              v-if="isAccepted || isDeclined"
+              size="mini"
+              disabled
+            >{{ $t(isAccepted ? '已接受邀请' : '已拒绝邀请') }}</el-button>
+            <template v-else>
+              <el-button
+                type="success"
+                size="mini"
+                @click="onAcceptInvitation"
+              >{{ $t('接受邀请') }}</el-button>
+              <el-button
+                type="danger"
+                size="mini"
+                @click="onDeclineInvitation"
+              >{{ $t('拒绝邀请') }}</el-button>
+            </template>
+          </template>
         </template>
         <template v-if="$isParty()">
           <el-button
@@ -227,7 +278,9 @@ import {
   favoriteProjectById,
   unfavoriteProjectById,
   applyProjectById,
-  cancelApplyProjectById } from '@/api/project'
+  cancelApplyProjectById,
+  acceptInvitationByProjectId,
+  declineInvitationByProjectId } from '@/api/project'
 import ApplicationList from './components/ApplicationList'
 import InvitationList from './components/InvitationList'
 export default {
@@ -243,7 +296,11 @@ export default {
         user: {},
         application: {},
         applications: [],
-        invitations: []
+        invitations: [],
+        invitation: { // 当前设计师收到的邀请
+          status: null,
+          refusal_cause: ''
+        }
       },
       loading: false, // 是否正在获取项目详情
 
@@ -289,6 +346,14 @@ export default {
     isReviewFailed () {
       return this.project.status == Project.STATUS_REVIEW_FAILED
     },
+    // 项目是否允许报名
+    appliable () {
+      return this.project.mode === 'free'
+    },
+    // 项目是否允许邀请
+    invitable () {
+      return this.project.mode === 'invite' || this.project.mode === 'specify'
+    },
     // 甲方：是否是项目的发布者
     isPublisher () {
       return this.project.user.id == this.$uid()
@@ -313,13 +378,25 @@ export default {
     },
     // 设计师：能否报名
     canApply () {
-      const { project } = this
-      return project.status == Project.STATUS_TENDERING && !project.applying
+      const { project, appliable } = this
+      return appliable && // 模式为自由报名
+          project.status == Project.STATUS_TENDERING && // 招标中
+          !project.applying // 没有报名
     },
     // 设计师：能否取消报名
     canCancelApply () {
       const { project } = this
       return project.status == Project.STATUS_TENDERING && project.applying
+    },
+    // 设计师：是否已经接受邀请
+    isAccepted () {
+      const { project, invitable } = this
+      return invitable && project.invitation.status === 1
+    },
+    // 设计师：是否已经拒绝邀请
+    isDeclined () {
+      const { project, invitable } = this
+      return invitable && project.invitation.status === 2
     }
   },
   created () {
@@ -336,7 +413,7 @@ export default {
       })
     },
     /**
-     * 设计师相关操作：报名、取消报名、收藏、取消收藏
+     * 设计师相关操作：报名、取消报名；收藏、取消收藏；接受、拒绝邀请
      */
     onCancelApply () {
       this.$confirm(this.$t('此操作将取消报名该项目，是否确认？'), this.$t('g.notice'), {
@@ -364,6 +441,38 @@ export default {
         this.project.favoriting = false
         this.project.favorite_count--
       })
+    },
+    onAcceptInvitation () {
+      this.$confirm(this.$t('您确定接受甲方邀请，参与该项目吗？'), this.$t('g.notice'), {
+        confirmButtonText: this.$t('g.confirmBtn'),
+        cancelButtonText: this.$t('g.cancelBtn'),
+        type: 'warning'
+      }).then(() => {
+        acceptInvitationByProjectId(this.project.id).then((data) => {
+          this.project.invitation = data
+          this.$message({
+            type: 'success',
+            message: this.$t('已接受邀请')
+          })
+        })
+      }).catch(() => {})
+    },
+    onDeclineInvitation () {
+      this.$prompt(this.$t('您确定拒绝甲方邀请吗？这个操作将无法撤销'), this.$t('g.notice'), {
+        confirmButtonText: this.$t('g.confirmBtn'),
+        cancelButtonText: this.$t('g.cancelBtn'),
+        inputPattern: /^(?=.*?\S)[\s\S]{0,300}$/,
+        inputPlaceholder: this.$t('请填写拒绝原因，最多300字'),
+        inputErrorMessage: this.$t('请填写拒绝原因，最多300字')
+      }).then(({ value }) => {
+        declineInvitationByProjectId(this.project.id, value).then(({ data }) => {
+          this.project.invitation = data
+          this.$message({
+            type: 'success',
+            message: this.$t('已拒绝邀请')
+          })
+        })
+      }).catch(() => {})
     },
     /**
      * 甲方相关操作：取消发布、编辑项目、申请重新审核

@@ -58,6 +58,16 @@ export function cancelApplyProjectById (id) {
   return request.delete(`/user/applying/projects/${id}`)
 }
 
+// 接受邀请
+export function acceptInvitationByProjectId (id) {
+  return request.put(`/projects/${id}/accepted/invitations`)
+}
+
+// 拒绝邀请
+export function declineInvitationByProjectId (id, refusal_cause) {
+  return request.put(`/projects/${id}/declined/invitations`, { refusal_cause })
+}
+
 // 获取项目列表
 export function getProjectsOfCurrentUser (page = 1, params = {}) {
   return request.get(`/user/projects?page=${page}`, { params })

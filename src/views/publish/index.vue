@@ -480,6 +480,7 @@ export default {
           if (this.form.mode === 'specify') {
             this.$message.warning(this.$t('您的招标模式为“指定设计师”，您必须邀请至少一名设计师参与项目'))
           }
+          return
         }
 
         if (!valid) {

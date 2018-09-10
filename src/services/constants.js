@@ -6,3 +6,9 @@ export const Project = {
   STATUS_WORKING: 1100, // 作标中
   STATUS_COMPLETED: 1200 // 已完成
 }
+
+export const ProjectInvitation = {
+  STATUS_NOT_VIEWED: 0, // 未查看
+  STATUS_ACCEPTED: 1, // 已接受
+  STATUS_DECLINED: 2 // 已拒绝
+}

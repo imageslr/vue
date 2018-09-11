@@ -547,7 +547,7 @@ export default {
         cancelButtonText: this.$t('g.cancelBtn'),
         type: 'warning'
       }).then(() => {
-        acceptInvitationByProjectId(this.project.id).then((data) => {
+        acceptInvitationByProjectId(this.project.id).then(({ data }) => {
           this.project.invitation = data
           this.$message({
             type: 'success',

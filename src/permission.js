@@ -12,17 +12,25 @@ function hasPermission (userType, permissionRoles) {
   return permissionRoles.indexOf(userType) >= 0
 }
 
+function inRouteList (list, to) {
+  return (
+    list.indexOf(to.path) !== -1 || // 全路径匹配
+    list.some(v => v === to.matched[to.matched.length - 1].path) // 模式匹配
+  )
+}
+
 const whiteList = [
   '/',
   '/signup',
   '/signup/email',
   '/signin',
-  // '/profile',
+  '/profile',
   '/search',
   '/square',
-  '/reset'
+  '/reset',
+  '/project/:id'
 ] // 免登录白名单
-const grayList = [] // 免登陆灰名单：白名单的子集，如果query里没有uid参数，则必须登录
+const grayList = ['/profile'] // 免登陆灰名单：白名单的子集，如果query里没有uid参数，则必须登录
 
 // 路由前权限判断
 router.beforeEach((to, from, next) => {
@@ -60,14 +68,14 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     // 没有登录
-    if (grayList.indexOf(to.path) !== -1 && !to.query.uid) {
+    if (inRouteList(grayList, to) && !to.query.uid) {
       // 在免登录灰名单，query中没有uid时要求登录
       next({
         path: '/signin',
         query: { returnUrl: to.fullPath } // 设置returnUrl参数，登录成功后跳转
       })
       NProgress.done() // hack
-    } else if (whiteList.indexOf(to.path) !== -1) {
+    } else if (inRouteList(whiteList, to)) {
       // 在免登录白名单，直接进入
       next()
     } else {

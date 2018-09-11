@@ -52,8 +52,13 @@ service.interceptors.response.use(
       // console.error('网络响应错误', error.response)
       if (response.status === 401) {
         store.dispatch('SIGN_OUT').then(() => {
-          router.push({ path: '/signin' })
+          router.push({
+            path: '/signin',
+            query: { returnUrl: router.history.current.fullPath } // 设置returnUrl参数，登录成功后跳转
+          })
         })
+      } else if (response.status === 403) {
+        router.replace('/403')
       } else if (response.status === 429) {
         Message({
           message: getErrMsg(429),

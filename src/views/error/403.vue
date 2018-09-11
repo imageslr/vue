@@ -1,7 +1,7 @@
 <i18n>
 {
   "zh": {
-    "title": "您无权操作"
+    "title": "您无权进行该操作"
   },
   "en": {
     "title": "You have no right to access"

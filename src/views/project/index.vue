@@ -204,25 +204,27 @@
               :key="keyword"
               type="info"
               class="mr1">{{ keyword }}</el-tag>
-            <h3 v-t="'项目描述'" />
-            <p
-              class="pre-wrap"
-              v-text="project.description" />
-            <my-alert
-              v-if="project.project_file_url"
-              class="mt-12">
-              <a
-                :href="project.project_file_url"
-                target="_blank">{{ $t('下载附件') }}</a>
-            </my-alert>
-            <h3 v-t="'项目设计深度要求'" />
-            <p v-text="project.depth" />
-            <h3 v-t="'项目的交付时间'" />
-            <p v-text="project.delivery_time" />
-            <h3 v-t="'希望用多长时间找设计师？'" />
-            <p v-text="project.find_time" />
-            <h3 v-t="'希望付给设计师的费用是多少？'" />
-            <p v-text="project.payment" />
+            <template v-if="isSignIn">
+              <h3 v-t="'项目描述'" />
+              <p
+                class="pre-wrap"
+                v-text="project.description" />
+              <my-alert
+                v-if="project.project_file_url"
+                class="mt-12">
+                <a
+                  :href="project.project_file_url"
+                  target="_blank">{{ $t('下载附件') }}</a>
+              </my-alert>
+              <h3 v-t="'项目设计深度要求'" />
+              <p v-text="project.depth" />
+              <h3 v-t="'项目的交付时间'" />
+              <p v-text="project.delivery_time" />
+              <h3 v-t="'希望用多长时间找设计师？'" />
+              <p v-text="project.find_time" />
+              <h3 v-t="'希望付给设计师的费用是多少？'" />
+              <p v-text="project.payment" />
+            </template>
           </div>
         </template>
         <el-button
@@ -230,6 +232,13 @@
           type="text"
           @click="showInfo = true">{{ $t('点击查看项目信息') }}</el-button>
       </div>
+      <router-link
+        v-if="!isSignIn"
+        to="/signin">
+        <el-button
+          class="block w-100 shadow"
+          type="primary">{{ $t('登录后查看项目完整信息') }}</el-button>
+      </router-link>
       <template v-if="isPublisher">
         <application-list
           v-if="project.mode === 'free'"
@@ -292,6 +301,7 @@ export default {
         title: '加载中',
         types: [],
         features: [],
+        keywords: [],
         favorite_count: 0,
         user: {},
         application: {},
@@ -315,10 +325,14 @@ export default {
         application_file_id: null
       },
 
-      showInfo: this.$isDesigner() // 是否显示项目信息
+      showInfo: !this.$isParty() // 是否显示项目信息：默认甲方不显示
     }
   },
   computed: {
+    // 是否登录
+    isSignIn () {
+      return !!this.$store.getters.uid
+    },
     // 项目id
     id () {
       return this.$route.params.id
@@ -356,7 +370,7 @@ export default {
     },
     // 甲方：是否是项目的发布者
     isPublisher () {
-      return this.project.user.id == this.$uid()
+      return this.$uid() && this.project.user.id == this.$uid()
     },
     // 甲方：能否编辑项目
     editable () {

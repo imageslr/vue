@@ -384,7 +384,7 @@ export default {
         application_file_id: null
       },
 
-      showInfo: !this.$isParty() // 是否显示项目信息：默认甲方不显示
+      showInfo: !this.$isParty() // 是否显示项目信息：是作者就不显示
     }
   },
   computed: {
@@ -499,12 +499,14 @@ export default {
     }
   },
   created () {
-    this.getProject()
+    this.getProject().then(() => {
+      this.showInfo = !this.isPublisher
+    })
   },
   methods: {
     getProject () {
       this.loading = true
-      getProjectById(this.id).then(({ data }) => {
+      return getProjectById(this.id).then(({ data }) => {
         this.loading = false
         this.project = data
       }).catch(() => {

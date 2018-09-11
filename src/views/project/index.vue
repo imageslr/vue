@@ -87,12 +87,12 @@
           type="warning"
           class="mb2"/>
         <my-alert
-          v-if="invitable && isAccepted && isWorking && !isDeliverd"
+          v-if="canDeliver && isWorking && !isDeliverd"
           :title="$t('请您在规定交付时间内上传设计文件')"
           type="warning"
           class="mb2"/>
         <my-alert
-          v-if="invitable && isAccepted && isCompleted && !isDeliverd"
+          v-if="canDeliver && isCompleted && !isDeliverd"
           :title="$t('项目已结束，您未在规定交付时间内上传设计文件')"
           type="warning"
           class="mb2"/>
@@ -160,19 +160,17 @@
                 @click="onDeclineInvitation"
               >{{ $t('拒绝邀请') }}</el-button>
             </template>
-            <template v-if="isWorking && isAccepted">
-              <el-button
-                v-if="isDeliverd"
-                size="mini"
-                type="success"
-                disabled>{{ $t('已上传交付文件') }}</el-button>
-              <el-button
-                v-else
-                size="mini"
-                type="primary"
-                @click="onDeliver">{{ $t('上传交付文件') }}</el-button>
-            </template>
           </template>
+          <el-button
+            v-if="isDeliverd"
+            size="mini"
+            type="success"
+            disabled>{{ $t('已上传交付文件') }}</el-button>
+          <el-button
+            v-else-if="canDeliver && isWorking"
+            size="mini"
+            type="primary"
+            @click="onDeliver">{{ $t('上传交付文件') }}</el-button>
         </template>
         <template v-if="$isParty()">
           <el-button
@@ -292,11 +290,14 @@
           type="primary">{{ $t('登录后查看项目完整信息') }}</el-button>
       </router-link>
       <template v-if="isPublisher">
+        <delivery-list
+          v-if="isWorking || isCompleted"
+          :project="project" />
         <application-list
-          v-if="project.mode === 'free'"
+          v-if="appliable"
           :project="project" />
         <invitation-list
-          v-else
+          v-if="invitable"
           :project="project" />
       </template>
       <el-dialog
@@ -349,8 +350,9 @@ import {
 import DeliverDialog from './components/DeliverDialog'
 import ApplicationList from './components/ApplicationList'
 import InvitationList from './components/InvitationList'
+import DeliveryList from './components/DeliveryList'
 export default {
-  components: { DeliverDialog, ApplicationList, InvitationList },
+  components: { DeliverDialog, ApplicationList, InvitationList, DeliveryList },
   data () {
     return {
       project: {
@@ -446,8 +448,7 @@ export default {
       const { project } = this
       const { user } = this.project
       return user.id == this.$uid() && // 是项目的发布者
-        (project.status == Project.STATUS_TENDERING || // 招标状态
-         project.status == Project.STATUS_REVIEW_FAILED || // 审核未通过
+        (project.status == Project.STATUS_REVIEW_FAILED || // 审核未通过
          project.status == Project.STATUS_REVIEWING) // 审核中
     },
     // 甲方：能否取消发布项目
@@ -490,6 +491,11 @@ export default {
     isDeliverd () {
       const { project } = this
       return !!project.delivery
+    },
+    // 设计师：是否有资格上传交付文件
+    canDeliver () {
+      const { isAccepted, project: { applying } } = this
+      return isAccepted || applying
     }
   },
   created () {

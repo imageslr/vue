@@ -1,3 +1,15 @@
+<i18n>
+{
+  "en": {
+    "上传交付文件": "Upload delivery file",
+    "备注信息（5000字以内）": "Remark (up to 5000 characters)",
+    "正在上传附件，请稍后": "File uploading, please wait",
+    "请上传交付的设计文件": "Please upload the design file to deliver",
+    "提交成功": "Successfully uploaded"
+  }
+}
+</i18n>
+
 <template>
   <el-dialog
     :visible.sync="visible"

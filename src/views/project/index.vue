@@ -25,6 +25,8 @@
     "报名成功": "Successfully apply",
     "取消报名": "Cancel apply",
     "此操作将取消报名该项目，是否确认？": "This operation will cancel the application for the project. Is it confirmed?",
+    "已上传交付文件": "Has uploaded delivery file",
+    "上传交付文件": "Uploaded delivery file",
     "编辑项目": "Edit the project",
     "取消发布": "Cancel publish",
     "此操作将取消发布该项目并不可恢复，是否确认？": "This operation will unpublish the project and is not recoverable. Is it confirmed?",
@@ -49,7 +51,10 @@
     "简单说点什么，让业主更快了解你（200字以内）": "Say something so that the party can know you quickly (200 characters at most)",
     "我的报名信息": "My application",
     "点击查看项目信息": "View project info",
-    "收起": "Collapse"
+    "收起": "Collapse",
+    "登录后查看项目完整信息": "Sign in to view complete project info",
+    "我的交付文件": "My delivery file",
+    "提交于": "Delivered at"
   }
 }
 </i18n>
@@ -122,7 +127,7 @@
               size="mini"
               disabled
             >{{ $t(isAccepted ? '已接受邀请' : '已拒绝邀请') }}</el-button>
-            <template v-else>
+            <template v-else-if="isTendering">
               <el-button
                 type="success"
                 size="mini"
@@ -133,6 +138,19 @@
                 size="mini"
                 @click="onDeclineInvitation"
               >{{ $t('拒绝邀请') }}</el-button>
+            </template>
+            <template v-if="isWorking && isAccepted">
+              <el-button
+                v-if="project.delivery"
+                size="mini"
+                type="success"
+                disabled
+              >{{ $t('已上传交付文件') }}</el-button>
+              <el-button
+                v-else
+                size="mini"
+                type="primary"
+              >{{ $t('上传交付文件') }}</el-button>
             </template>
           </template>
         </template>
@@ -172,8 +190,22 @@
     </div>
     <div class="main-container">
       <div
-        v-if="project.applying"
-        class="card my-applicaion">
+        v-if="$isDesigner() && project.delivery"
+        class="card">
+        <h3 v-t="'我的交付文件'" />
+        <p
+          v-if="project.delivery.remark"
+          v-text="project.delivery.remark" />
+        <my-alert class="mt-12">
+          <a
+            :href="project.delivery.file_url"
+            target="_blank">{{ $t('下载附件') }}</a>
+        </my-alert>
+        <p class="m0 mt1 f-12 black-65">{{ $t('提交于') }}：{{ project.delivery.created_at }}</p>
+      </div>
+      <div
+        v-if="$isDesigner() && project.applying"
+        class="card">
         <h3 v-t="'我的报名信息'" />
         <p v-text="project.application.remark" />
         <my-alert
@@ -280,7 +312,7 @@
 
 <script>
 /* eslint eqeqeq: "off" */
-import { Project } from '@/services/constants'
+import { Project, ProjectInvitation } from '@/services/constants'
 import {
   getProjectById,
   cancelProjectById,
@@ -360,6 +392,14 @@ export default {
     isReviewFailed () {
       return this.project.status == Project.STATUS_REVIEW_FAILED
     },
+    // 项目是否正在报名中
+    isTendering () {
+      return this.project.status == Project.STATUS_TENDERING
+    },
+    // 项目是否正在工作中
+    isWorking () {
+      return this.project.status == Project.STATUS_WORKING
+    },
     // 项目是否允许报名
     appliable () {
       return this.project.mode === 'free'
@@ -405,12 +445,12 @@ export default {
     // 设计师：是否已经接受邀请
     isAccepted () {
       const { project, invitable } = this
-      return invitable && project.invitation.status === 1
+      return invitable && project.invitation.status === ProjectInvitation.STATUS_ACCEPTED
     },
     // 设计师：是否已经拒绝邀请
     isDeclined () {
       const { project, invitable } = this
-      return invitable && project.invitation.status === 2
+      return invitable && project.invitation.status === ProjectInvitation.STATUS_DECLINED
     }
   },
   created () {

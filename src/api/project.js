@@ -104,3 +104,8 @@ export function getApplicationsByProjectId (id, page = 1) {
 export function getInvitationsByProjectId (id, page = 1) {
   return request.get(`/projects/${id}/invitations?page=${page}`)
 }
+
+// 提交交付文件
+export function deliverProjectById (id, body) {
+  return request.post(`/projects/${id}/deliveries`, body)
+}

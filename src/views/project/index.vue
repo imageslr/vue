@@ -22,6 +22,9 @@
     "您确定接受甲方邀请，参与该项目吗？": "Are you sure to accept the invitation from the party and to participate in the project?",
     "您确定拒绝甲方邀请吗？这个操作将无法撤销": "Are you sure you reject the invitation from the party? This operation cannot undo",
     "请填写拒绝原因，最多300字": "Please enter the refusal reason, up to 300 characters",
+    "您未在规定时间内接受邀请，已无法参与该项目": "You have not accepted the invitation within the specified time and are unable to participate in the project.",
+    "请您在规定交付时间内上传设计文件": "Please upload the design file within the specified delivery time.",
+    "项目已结束，您未在规定交付时间内上传设计文件": "This project has been complete. You have not uploaded the design file within the specified delivery time.",
     "报名成功": "Successfully apply",
     "取消报名": "Cancel apply",
     "此操作将取消报名该项目，是否确认？": "This operation will cancel the application for the project. Is it confirmed?",
@@ -77,6 +80,28 @@
         :title="$t('该项目未通过审核') + (project.review_message ? '：' + project.review_message : '')"
         type="warning"
         class="mb2"/>
+      <template v-if="$isDesigner()">
+        <my-alert
+          v-if="invitable && isNotViewed && !isTendering"
+          :title="$t('您未在规定时间内接受邀请，已无法参与该项目')"
+          type="warning"
+          class="mb2"/>
+        <my-alert
+          v-if="invitable && isAccepted && isWorking && !isDeliverd"
+          :title="$t('请您在规定交付时间内上传设计文件')"
+          type="warning"
+          class="mb2"/>
+        <my-alert
+          v-if="invitable && isAccepted && isCompleted && !isDeliverd"
+          :title="$t('项目已结束，您未在规定交付时间内上传设计文件')"
+          type="warning"
+          class="mb2"/>
+        <my-alert
+          v-if="isDeclined"
+          :title="$t('declined', { refusalCause: project.invitation.refusal_cause })"
+          type="warning"
+          class="mb2"/>
+      </template>
       <my-alert
         v-if="project.mode === 'free'"
         :title="$t('该项目模式为自由式，所有设计师都可以报名参与')"
@@ -88,10 +113,6 @@
       <my-alert
         v-if="project.mode === 'specify'"
         :title="$t('该项目模式为指定设计师，只对指定的设计师可见')"
-        class="mb2"/>
-      <my-alert
-        v-if="$isDesigner() && isDeclined"
-        :title="$t('declined', { refusalCause: project.invitation.refusal_cause })"
         class="mb2"/>
       <div class="project-header__title-area">
         <h1 class="project-header__title">{{ project.title }}</h1>
@@ -141,16 +162,15 @@
             </template>
             <template v-if="isWorking && isAccepted">
               <el-button
-                v-if="project.delivery"
+                v-if="isDeliverd"
                 size="mini"
                 type="success"
-                disabled
-              >{{ $t('已上传交付文件') }}</el-button>
+                disabled>{{ $t('已上传交付文件') }}</el-button>
               <el-button
                 v-else
                 size="mini"
                 type="primary"
-              >{{ $t('上传交付文件') }}</el-button>
+                @click="onDeliver">{{ $t('上传交付文件') }}</el-button>
             </template>
           </template>
         </template>
@@ -190,7 +210,7 @@
     </div>
     <div class="main-container">
       <div
-        v-if="$isDesigner() && project.delivery"
+        v-if="$isDesigner() && isDeliverd"
         class="card">
         <h3 v-t="'我的交付文件'" />
         <p
@@ -306,6 +326,10 @@
             @click="onDialogConfirm">{{ $t('g.confirmBtn') }}</el-button>
         </span>
       </el-dialog>
+      <deliver-dialog
+        ref="deliverDialog"
+        :project-id="id"
+        @delivered="onDeliverd" />
     </div>
   </div>
 </template>
@@ -322,10 +346,11 @@ import {
   cancelApplyProjectById,
   acceptInvitationByProjectId,
   declineInvitationByProjectId } from '@/api/project'
+import DeliverDialog from './components/DeliverDialog'
 import ApplicationList from './components/ApplicationList'
 import InvitationList from './components/InvitationList'
 export default {
-  components: { ApplicationList, InvitationList },
+  components: { DeliverDialog, ApplicationList, InvitationList },
   data () {
     return {
       project: {
@@ -400,6 +425,10 @@ export default {
     isWorking () {
       return this.project.status == Project.STATUS_WORKING
     },
+    // 项目是否已结束
+    isCompleted () {
+      return this.project.status == Project.STATUS_COMPLETED
+    },
     // 项目是否允许报名
     appliable () {
       return this.project.mode === 'free'
@@ -451,6 +480,16 @@ export default {
     isDeclined () {
       const { project, invitable } = this
       return invitable && project.invitation.status === ProjectInvitation.STATUS_DECLINED
+    },
+    // 设计师：是否未查看邀请
+    isNotViewed () {
+      const { project, invitable } = this
+      return invitable && project.invitation.status === ProjectInvitation.STATUS_NOT_VIEWED
+    },
+    // 设计师：是否上传了交付文件
+    isDeliverd () {
+      const { project } = this
+      return !!project.delivery
     }
   },
   created () {
@@ -467,7 +506,7 @@ export default {
       })
     },
     /**
-     * 设计师相关操作：报名、取消报名；收藏、取消收藏；接受、拒绝邀请
+     * 设计师相关操作：报名、取消报名；收藏、取消收藏；接受、拒绝邀请；上传交付文件
      */
     onCancelApply () {
       this.$confirm(this.$t('此操作将取消报名该项目，是否确认？'), this.$t('g.notice'), {
@@ -527,6 +566,12 @@ export default {
           })
         })
       }).catch(() => {})
+    },
+    onDeliver () {
+      this.$refs.deliverDialog.show()
+    },
+    onDeliverd (data) {
+      this.project.delivery = data
     },
     /**
      * 甲方相关操作：取消发布、编辑项目、申请重新审核

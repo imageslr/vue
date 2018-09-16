@@ -23,6 +23,7 @@
     "发布于": "Published at",
     "查看详情": "View detail",
     "重新加载": "Reload",
+    "汇款信息": "Remittance info",
     "status": {
       "500": "Canceled",
       "600": "Review Failed",
@@ -84,21 +85,30 @@
                 v-text="project.title" />
               <p class="m0 f-14 black-45">{{ $t('发布于') }}：{{ project.created_at }}</p>
             </div>
-            <router-link :to="'/project/'+project.id">
+            <div>
+              <router-link :to="'/project/'+project.id">
+                <el-button
+                  type="primary"
+                  size="small">
+                  {{ $t('查看详情') }}
+                </el-button>
+              </router-link>
               <el-button
-                type="primary"
-                size="small">
-                {{ $t('查看详情') }}
+                v-if="$isParty()"
+                size="small"
+                style="margin-left: 8px"
+                @click="onShowRemittanceDialog(index)">
+                {{ $t('汇款信息') }}
               </el-button>
-            </router-link>
-            <el-button
-              v-if="isFavorite"
-              :loading="favoriteLoadings[index]"
-              size="small"
-              style="margin-left: 8px"
-              @click="onToggleFavorite(index)">
-              {{ project.favoriting ? $t('取消收藏') : $t('收藏') }}
-            </el-button>
+              <el-button
+                v-if="isFavorite"
+                :loading="favoriteLoadings[index]"
+                size="small"
+                style="margin-left: 8px"
+                @click="onToggleFavorite(index)">
+                {{ project.favoriting ? $t('取消收藏') : $t('收藏') }}
+              </el-button>
+            </div>
           </div>
         </div>
         <el-pagination
@@ -110,6 +120,7 @@
           @current-change="onChangePage"/>
       </template>
     </div>
+    <remittance-dialog ref="remittanceDialog" />
   </div>
 </template>
 
@@ -119,7 +130,10 @@ import {
   getFavoriteProjectsOfCurrentUser,
   favoriteProjectById,
   unfavoriteProjectById } from '@/api/project'
+import { Project } from '@/services/constants'
+import RemittanceDialog from './components/RemittanceDialog'
 export default {
+  components: { RemittanceDialog },
   filters: {
     statusToType (status) {
       const t = {
@@ -216,6 +230,13 @@ export default {
           p: 1
         }
       })
+    },
+    onShowRemittanceDialog (index) {
+      const project = this.projects[index]
+      this.$refs.remittanceDialog.show(project)
+    },
+    isTendering (project) {
+      return project.status == Project.STATUS_TENDERING // eslint-disable-line eqeqeq
     }
   }
 }

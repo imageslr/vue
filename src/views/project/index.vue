@@ -284,7 +284,7 @@
       </div>
       <router-link
         v-if="!isSignIn"
-        to="/signin">
+        :to="`/signin?returnUrl=${$route.fullPath}`">
         <el-button
           class="block w-100 shadow"
           type="primary">{{ $t('登录后查看项目完整信息') }}</el-button>

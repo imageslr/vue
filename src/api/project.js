@@ -14,6 +14,11 @@ export function updateProjectById (id, data) {
   return request.patch(`/projects/${id}`, data)
 }
 
+// 填写项目的汇款信息
+export function updateProjectRemittanceById (id, remittance) {
+  return request.patch(`/projects/${id}/remittance`, { remittance })
+}
+
 // 申请重新审核
 export function reReviewProjectById (id) {
   return request.put(`/user/reviewing/projects/${id}`)

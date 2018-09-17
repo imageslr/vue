@@ -12,6 +12,7 @@
     "我的项目": "My projects",
     "添加作品": "Add work",
     "我的作品集": "My works",
+    "我的账户": "My account",
     "nomore": "All activities have been read, go to {0} and discover more exciting things"
   }
 }
@@ -72,6 +73,9 @@
           <router-link
             class="action-area-item"
             to="/square">{{ $t('设计师广场') }}</router-link>
+          <router-link
+            class="action-area-item"
+            to="/payment">{{ $t('我的账户') }}</router-link>
         </template>
         <app-footer/>
       </aside>

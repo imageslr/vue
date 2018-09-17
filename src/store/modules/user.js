@@ -9,21 +9,24 @@ const UserModel = {
   avatar_url: '',
   title: '',
   introduction: '',
-  professional_fields: [],
   phone: '',
   email: '',
   email_activated: false,
+  follower_count: 0,
+  following_count: 0,
+  notification_count: 0,
+  unread_message_count: 0,
+  views: 0,
+
+  // 设计师信息
+  professional_fields: [],
   bank_name: '',
   bank_card_number: '',
   account_name: '',
   qualification_urls: [],
   id_number: '',
   id_card_url: '',
-  follower_count: 0,
-  following_count: 0,
-  notification_count: 0,
-  unread_message_count: 0,
-  views: 0
+  total_payment: 0
 }
 
 const user = {

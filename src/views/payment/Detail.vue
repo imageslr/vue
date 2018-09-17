@@ -5,8 +5,8 @@
     "查看项目详情": "View project detail",
     "汇款信息": "Remittance information",
     "汇款单号": "Remittance slip number",
-    "汇款行": "Remittance bank name",
-    "汇款人姓名": "Remitter name",
+    "收款行": "Receive bank name",
+    "收款人姓名": "Receiver name",
     "汇款金额": "Remittance amount",
     "汇款日期": "Remittance date",
     "信息录入于": "Information recorded in"

@@ -6,7 +6,8 @@
     "project_applied": "{name} 报名了你的项目 {projectTitle} {createdAt}",
     "project_remitted": "您参与的项目 {projectTitle} 已托管赏金，您可以开始工作了！ {createdAt}",
     "invite_to_review": "{name} 邀请您评价Ta，您的评价将展示在Ta的个人主页 {createdAt}",
-    "project_invited": "{name} 邀请您参与Ta的项目 {projectTitle}，请选择是否接受邀请 {createdAt}"
+    "project_invited": "{name} 邀请您参与Ta的项目 {projectTitle}，请选择是否接受邀请 {createdAt}",
+    "project_payed": "您已收到项目 {projectTitle} 的设计费 {amount} 元 {createdAt}"
   },
   "en": {
     "activity_replied": "{name} replied your activity {activityContent}",
@@ -15,6 +16,7 @@
     "project_remitted": "The project {projectTitle} you participating has remitted design fees. You can start working now! {createdAt}",
     "invite_to_review": "{name} invited you to review him, your review will display on his profile page {createdAt}",
     "project_invited": "{name} invitied you to participate his/her project {projectTitle}. Please accept or decline the invitation. {createdAt}",
+    "project_payed": "You have received design fee of {projectTitle}: {amount} . {createdAt}",
     "点击查看": "Click to view",
     "标为已读": "Mark as read",
     "查看Ta的个人主页": "View his profile",
@@ -138,6 +140,28 @@
         <router-link
           :to="`/project/${data.project_id}`"
           place="projectTitle">{{ data.project_title }}</router-link>
+        <span
+          class="ml-4 black-45"
+          place="createdAt"
+          v-text="notification.created_at" />
+      </i18n>
+      <router-link :to="`/project/${data.project_id}`">
+        <el-button
+          style="padding-bottom: 0"
+          type="text">{{ $t('点击查看') }}</el-button>
+      </router-link>
+    </template>
+    <template v-else-if="data.type === 'project_payed'">
+      <i18n
+        :path="data.type"
+        tag="div">
+        <router-link
+          :to="`/project/${data.project_id}`"
+          place="projectTitle">{{ data.project_title }}</router-link>
+        <span
+          class="ml-4 black-85 bold"
+          place="amount"
+          v-text="data.amount" />
         <span
           class="ml-4 black-45"
           place="createdAt"

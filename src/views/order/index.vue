@@ -8,6 +8,11 @@
       "1000": "报名中",
       "1100": "工作中",
       "1200": "已完成"
+    },
+    "modes": {
+      "free": "自由式",
+      "invite": "邀请式",
+      "specify": "指定式"
     }
   },
   "en": {
@@ -31,6 +36,11 @@
       "1000": "Applying",
       "1100": "Working",
       "1200": "Completed"
+    },
+    "modes": {
+      "free": "Free mode",
+      "invite": "Invite mode",
+      "specify": "Specify mode"
     }
   }
 }
@@ -78,6 +88,7 @@
             class="project-list-item">
             <div class="flex-auto">
               <el-tag :type="project.status | statusToType">{{ $t(`status.${project.status}`) }}</el-tag>
+              <el-tag type="info">{{ $t(`modes.${project.mode}`) }}</el-tag>
               <router-link
                 :to="`/project/${project.id}`"
                 tag="p"

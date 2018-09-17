@@ -2,7 +2,7 @@
 {
   "zh": {
     "declined": "您已拒绝邀请。拒绝原因: {refusalCause}",
-    "paymentHelp": "请准确描述您的设计费发放方案，说明给谁多少设计费。只能给成功上传设计文件的设计师发放设计费。 \n举例: \n一等奖: 张三, 10000元; 李四, 10000元. \n二等奖: 王五, 5000元."
+    "paymentHelp": "请准确描述您的设计费发放方案，说明给谁多少发设计费。只能给成功上传设计文件的设计师发放设计费。 \n举例: \n一等奖: 张三, 10000元; 李四, 10000元. \n二等奖: 王五, 5000元."
   },
   "en": {
     "declined": "You have declined the project. Refusal cause: {refusalCause}",
@@ -66,10 +66,12 @@
 
     "操作成功": "Successful operation",
 
+    "更新于": "Updated at",
+    "编辑": "Edit",
     "设计费发放说明": "Design fee destribution scheme",
-    "填写设计费发放说明": "Describe how to distribute design fee",
-    "请填写设计费发放说明": "Please describe how to distribute design fee",
-    "paymentHelp": "You must describe how to distribute design fee. Please clearly describe who you want to pay and how much you want to pay him. Can only pay to those who successfully submit design files. \nFor example: \nThe First Prize: Wang, 10000 RMB; Zhang, 10000 RMB. \nThe Second Prize: Cook, 5000 RMB; Jobs, 5000 RMB."
+    "填写设计费发放说明": "Describe how to pay design fee",
+    "请填写设计费发放说明": "Please describe how to pay design fee",
+    "paymentHelp": "Please describe your design fee payment plan accurately. Please explain to whom and how much the design fee is paid. Design fees can only be paid to designers who successfully upload design files. \nFor example: \nThe First Prize: Wang, 10000 RMB; Zhang, 10000 RMB. \nThe Second Prize: Cook, 5000 RMB; Jobs, 5000 RMB."
   }
 }
 </i18n>
@@ -205,7 +207,6 @@
           <el-button
             v-if="isWorking"
             plain
-            type="success"
             size="mini"
             @click="onShowPaymentDialog"
           >{{ $t('完成项目') }}</el-button>
@@ -239,7 +240,12 @@
         <h3
           v-t="'设计费发放说明'"
           class="mt0" />
+        <el-button
+          type="text"
+          style="position:absolute;right:24px;top:16px;"
+          @click="onShowPaymentDialog">{{ $t('编辑') }}</el-button>
         <p v-text="project.payment_remark" />
+        <p class="m0 mt1 f-12 black-65">{{ $t('更新于') }}：{{ project.payment_remark_updated_at }}</p>
       </div>
       <div
         v-if="$isDesigner() && isDeliverd"
@@ -373,7 +379,8 @@
       :title="$t('填写设计费发放说明')">
       <p
         v-t="'paymentHelp'"
-        class="mt0 black-45 f-14" />
+        class="mt0 black-45 f-14"
+        style="white-space:pre-wrap" />
       <el-input
         v-model="paymentDialog.content"
         :rows="5"

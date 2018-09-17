@@ -1,7 +1,8 @@
 <i18n>
 {
   "zh": {
-    "declined": "您已拒绝邀请。拒绝原因: {refusalCause}"
+    "declined": "您已拒绝邀请。拒绝原因: {refusalCause}",
+    "paymentHelp": "请准确描述您的设计费发放方案，说明给谁多少设计费。只能给成功上传设计文件的设计师发放设计费。 \n举例: \n一等奖: 张三, 10000元; 李四, 10000元. \n二等奖: 王五, 5000元."
   },
   "en": {
     "declined": "You have declined the project. Refusal cause: {refusalCause}",
@@ -31,8 +32,11 @@
     "此操作将取消报名该项目，是否确认？": "This operation will cancel the application for the project. Is it confirmed?",
     "已上传交付文件": "Has uploaded delivery file",
     "上传交付文件": "Uploaded delivery file",
+
     "编辑项目": "Edit the project",
     "取消发布": "Cancel publish",
+    "完成项目": "Complete the project",
+
     "此操作将取消发布该项目并不可恢复，是否确认？": "This operation will unpublish the project and is not recoverable. Is it confirmed?",
     "取消成功": "Successfully canceled",
     "甲方": "Party",
@@ -58,7 +62,14 @@
     "收起": "Collapse",
     "登录后查看项目完整信息": "Sign in to view complete project info",
     "我的交付文件": "My delivery file",
-    "提交于": "Delivered at"
+    "提交于": "Delivered at",
+
+    "操作成功": "Successful operation",
+
+    "设计费发放说明": "Design fee destribution scheme",
+    "填写设计费发放说明": "Describe how to distribute design fee",
+    "请填写设计费发放说明": "Please describe how to distribute design fee",
+    "paymentHelp": "You must describe how to distribute design fee. Please clearly describe who you want to pay and how much you want to pay him. Can only pay to those who successfully submit design files. \nFor example: \nThe First Prize: Wang, 10000 RMB; Zhang, 10000 RMB. \nThe Second Prize: Cook, 5000 RMB; Jobs, 5000 RMB."
   }
 }
 </i18n>
@@ -158,11 +169,13 @@
               <el-button
                 type="success"
                 size="mini"
+                plain
                 @click="onAcceptInvitation"
               >{{ $t('接受邀请') }}</el-button>
               <el-button
                 type="danger"
                 size="mini"
+                plain
                 @click="onDeclineInvitation"
               >{{ $t('拒绝邀请') }}</el-button>
             </template>
@@ -178,7 +191,7 @@
             type="primary"
             @click="onDeliver">{{ $t('上传交付文件') }}</el-button>
         </template>
-        <template v-if="$isParty()">
+        <template v-if="$isParty() && isPublisher">
           <el-button
             v-if="editable"
             size="mini"
@@ -189,6 +202,13 @@
             size="mini"
             @click="onCancelPublish"
           >{{ $t('取消发布') }}</el-button>
+          <el-button
+            v-if="isWorking"
+            plain
+            type="success"
+            size="mini"
+            @click="onShowPaymentDialog"
+          >{{ $t('完成项目') }}</el-button>
         </template>
       </div>
       <div class="project-header__info">
@@ -214,9 +234,19 @@
     </div>
     <div class="main-container">
       <div
+        v-if="isPublisher && isCompleted"
+        class="card">
+        <h3
+          v-t="'设计费发放说明'"
+          class="mt0" />
+        <p v-text="project.payment_remark" />
+      </div>
+      <div
         v-if="$isDesigner() && isDeliverd"
         class="card">
-        <h3 v-t="'我的交付文件'" />
+        <h3
+          v-t="'我的交付文件'"
+          class="mt0" />
         <p
           v-if="project.delivery.remark"
           v-text="project.delivery.remark" />
@@ -306,38 +336,59 @@
           v-if="invitable"
           :project="project" />
       </template>
-      <el-dialog
-        :visible.sync="dialogVisible"
-        :title="$t('报名项目')">
-        <el-input
-          v-model="applicationForm.remark"
-          :rows="5"
-          :placeholder="$t('简单说点什么，让业主更快了解你（200字以内）')"
-          type="textarea"/>
-        <my-upload
-          ref="upload"
-          :max-size="50"
-          type="application_file"
-          class="mt-12"
-          @start="onUploadStart"
-          @success="onUploadSuccess"
-          @error="onUploadError"
-          @remove="onUploadRemove"/>
-        <span
-          slot="footer"
-          class="dialog-footer">
-          <el-button @click="onDialogCancel">{{ $t('g.cancelBtn') }}</el-button>
-          <el-button
-            :loading="dialogButtonLoading"
-            type="primary"
-            @click="onDialogConfirm">{{ $t('g.confirmBtn') }}</el-button>
-        </span>
-      </el-dialog>
-      <deliver-dialog
-        ref="deliverDialog"
-        :project-id="id"
-        @delivered="onDeliverd" />
     </div>
+    <el-dialog
+      :visible.sync="dialogVisible"
+      :title="$t('报名项目')">
+      <el-input
+        v-model="applicationForm.remark"
+        :rows="5"
+        :placeholder="$t('简单说点什么，让业主更快了解你（200字以内）')"
+        type="textarea"/>
+      <my-upload
+        ref="upload"
+        :max-size="50"
+        type="application_file"
+        class="mt-12"
+        @start="onUploadStart"
+        @success="onUploadSuccess"
+        @error="onUploadError"
+        @remove="onUploadRemove"/>
+      <span
+        slot="footer"
+        class="dialog-footer">
+        <el-button @click="onDialogCancel">{{ $t('g.cancelBtn') }}</el-button>
+        <el-button
+          :loading="dialogButtonLoading"
+          type="primary"
+          @click="onDialogConfirm">{{ $t('g.confirmBtn') }}</el-button>
+      </span>
+    </el-dialog>
+    <deliver-dialog
+      ref="deliverDialog"
+      :project-id="id"
+      @delivered="onDeliverd" />
+    <el-dialog
+      :visible.sync="paymentDialog.visible"
+      :title="$t('填写设计费发放说明')">
+      <p
+        v-t="'paymentHelp'"
+        class="mt0 black-45 f-14" />
+      <el-input
+        v-model="paymentDialog.content"
+        :rows="5"
+        :placeholder="$t('请填写设计费发放说明')"
+        :maxlength="1000"
+        type="textarea"/>
+      <span slot="footer">
+        <el-button @click="paymentDialog.visible = false">{{ $t('g.cancelBtn') }}</el-button>
+        <el-button
+          :loading="paymentDialog.submitting"
+          :disabled="!paymentDialog.content"
+          type="primary"
+          @click="onSubmitPaymentRemark">{{ $t('g.confirmBtn') }}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -347,6 +398,7 @@ import { Project, ProjectInvitation } from '@/services/constants'
 import {
   getProjectById,
   cancelProjectById,
+  updateProjectPaymentById,
   favoriteProjectById,
   unfavoriteProjectById,
   applyProjectById,
@@ -388,6 +440,15 @@ export default {
       applicationForm: { // 报名表单
         remark: '',
         application_file_id: null
+      },
+
+      /**
+       * 设置奖金发放信息，标记项目为已完成 Dialog
+       */
+      paymentDialog: {
+        visible: false,
+        content: '',
+        submitting: false
       },
 
       showInfo: !this.$isParty() // 是否显示项目信息：是作者就不显示
@@ -507,6 +568,7 @@ export default {
   created () {
     this.getProject().then(() => {
       this.showInfo = !this.isPublisher
+      this.paymentDialog.content = this.project.payment_remark
     })
   },
   methods: {
@@ -588,7 +650,7 @@ export default {
       this.project.delivery = data
     },
     /**
-     * 甲方相关操作：取消发布、编辑项目、申请重新审核
+     * 甲方相关操作：取消发布、编辑项目、申请重新审核、填写奖金发放信息
      */
     onCancelPublish () {
       this.$confirm(this.$t('此操作将取消发布该项目并不可恢复，是否确认？'), this.$t('g.notice'), {
@@ -608,6 +670,23 @@ export default {
     },
     onEdit () {
       this.$router.push(`/project/${this.id}/edit`)
+    },
+    onShowPaymentDialog () {
+      this.paymentDialog.visible = true
+    },
+    onSubmitPaymentRemark () {
+      this.paymentDialog.submitting = true
+      const markAsComplete = this.isWorking
+      updateProjectPaymentById(this.id, this.paymentDialog.content, markAsComplete)
+        .then(({ data }) => {
+          this.project = data
+          this.paymentDialog.submitting = false
+          this.paymentDialog.visible = false
+          this.$message.success(this.$t('操作成功'))
+        })
+        .catch(() => {
+          this.paymentDialog.submitting = true
+        })
     },
     /**
      * Dialog操作：设计师报名项目

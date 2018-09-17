@@ -19,6 +19,18 @@ export function updateProjectRemittanceById (id, remittance) {
   return request.patch(`/projects/${id}/remittance`, { remittance })
 }
 
+// 填写项目的奖金发放信息
+export function updateProjectPaymentById (
+  id,
+  payment_remark,
+  mark_as_completed = false
+) {
+  return request.patch(`/projects/${id}/payment`, {
+    payment_remark,
+    mark_as_completed
+  })
+}
+
 // 申请重新审核
 export function reReviewProjectById (id) {
   return request.put(`/user/reviewing/projects/${id}`)

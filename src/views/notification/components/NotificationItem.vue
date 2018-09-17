@@ -167,7 +167,7 @@
           place="createdAt"
           v-text="notification.created_at" />
       </i18n>
-      <router-link :to="`/project/${data.project_id}`">
+      <router-link :to="`/payment/${data.payment_id}`">
         <el-button
           style="padding-bottom: 0"
           type="text">{{ $t('点击查看') }}</el-button>

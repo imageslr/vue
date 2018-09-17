@@ -11,6 +11,7 @@
     "该项目模式为自由式，所有设计师都可以报名参与": "The project mode is Free. Every designers can apply and participate.",
     "该项目模式为邀请设计师，只对邀请的设计师可见": "The project mode is Invite, and is visible only to invited designers.",
     "该项目模式为指定设计师，只对指定的设计师可见": "The project mode is Specify, and is visible only to specified designers.",
+    "该项目已托管赏金": "The project has remitted the design fee",
     "收藏": "Favorite",
     "取消收藏": "Unfavorite",
     "我要报名": "Apply",
@@ -113,6 +114,11 @@
       <my-alert
         v-if="project.mode === 'specify'"
         :title="$t('该项目模式为指定设计师，只对指定的设计师可见')"
+        class="mb2"/>
+      <my-alert
+        v-if="project.has_remitted"
+        :title="$t('该项目已托管赏金')"
+        type="success"
         class="mb2"/>
       <div class="project-header__title-area">
         <h1 class="project-header__title">{{ project.title }}</h1>

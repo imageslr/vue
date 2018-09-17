@@ -35,6 +35,8 @@ import ThreadList from '../views/message'
 import Chat from '../views/message/Chat'
 import PostReview from '../views/review/Post'
 import PostReviewResult from '../views/review/Result'
+import PaymentDetail from '../views/payment/Detail'
+import PaymentList from '../views/payment/index'
 import Error404 from '../views/error/404'
 import Error403 from '../views/error/403'
 
@@ -161,6 +163,28 @@ export default new Router({
           path: ':id/edit',
           name: 'editProject',
           component: EditProject
+        }
+      ]
+    },
+    {
+      path: '/payment',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'paymentList',
+          meta: {
+            roles: ['designer']
+          },
+          component: PaymentList
+        },
+        {
+          path: ':id',
+          name: 'payment',
+          meta: {
+            roles: ['designer']
+          },
+          component: PaymentDetail
         }
       ]
     },

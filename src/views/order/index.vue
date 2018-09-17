@@ -28,7 +28,11 @@
     "发布于": "Published at",
     "查看详情": "View detail",
     "重新加载": "Reload",
+
     "汇款信息": "Remittance info",
+    "设计费汇款详情": "Design fee remittance detail",
+    "暂未发放设计费": "Not pay design fee yet",
+
     "status": {
       "500": "Canceled",
       "600": "Review Failed",
@@ -110,6 +114,20 @@
                 style="margin-left: 8px"
                 @click="onShowRemittanceDialog(index)">
                 {{ $t('汇款信息') }}
+              </el-button>
+              <el-button
+                v-if="$isDesigner() && project.designer_payment"
+                size="small"
+                style="margin-left: 8px"
+                @click="$router.push(`/payment/${project.designer_payment.id}`)">
+                {{ $t('设计费汇款详情') }}
+              </el-button>
+              <el-button
+                v-if="$isDesigner() && isCompleted(project)"
+                size="small"
+                style="margin-left: 8px"
+                disabled>
+                {{ $t('暂未发放设计费') }}
               </el-button>
               <el-button
                 v-if="isFavorite"
@@ -248,6 +266,9 @@ export default {
     },
     isTendering (project) {
       return project.status == Project.STATUS_TENDERING // eslint-disable-line eqeqeq
+    },
+    isCompleted (project) {
+      return project.status == Project.STATUS_COMPLETED // eslint-disable-line eqeqeq
     }
   }
 }

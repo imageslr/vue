@@ -31,7 +31,7 @@
     "景观设计": "Landscape Design",
     "城市设计": "Urban Design",
     "城市规划": "Urban Planning",
-    "概念规划": "Concept Planning"
+    "概念规划": "Conceptual Planning"
   }
 }
 </i18n>

@@ -2,22 +2,22 @@
 {
   "zh": {
     "types":  {
-      "conceptPlanning": "概念规划",
-      "cityDesign": "城市设计",
+      "conceptualPlanning": "概念规划",
+      "urbanDesign": "城市设计",
       "architecturalDesign": "建筑设计",
-      "landscapeDesign": "景观设计",
+      "landscapeArchitecture": "景观设计",
       "interiorDesign": "室内设计"
     },
     "features": {
       "residence": "住宅",
-      "business": "商业",
+      "commercial": "商业",
       "office": "办公",
       "publicSpace": "公共空间",
-      "school": "学校",
+      "institution": "学校",
       "retail": "零售",
       "restaurant": "餐厅",
       "hotel": "酒店",
-      "club": "会所",
+      "entertainment": "会所",
       "gardenSquare": "花园广场"
     },
     "deliveryTimes": {
@@ -85,22 +85,22 @@
     "错误": "Error",
     "请您按照规定格式填写所有必填表单项": "Please fill in all required form items in the prescribed format",
     "types":  {
-      "conceptPlanning": "Concept Planning",
-      "cityDesign": "City Design",
+      "conceptualPlanning": "Conceptual Planning",
+      "urbanDesign": "Urban Design",
       "architecturalDesign": "Architectural Design",
-      "landscapeDesign": "Landscape Design",
+      "landscapeArchitecture": "Landscape Architecture",
       "interiorDesign": "Interior Design"
     },
     "features": {
       "residence": "Residence",
-      "business": "Business",
+      "commercial": "Commercial",
       "office": "Office",
       "publicSpace": "Public Space",
-      "school": "School",
+      "institution": "Institution",
       "retail": "Retail",
       "restaurant": "Restaurant",
       "hotel": "Hotel",
-      "club": "Club",
+      "entertainment": "Entertainment",
       "gardenSquare": "Garden Square"
     },
     "deliveryTimes": {
@@ -114,7 +114,7 @@
       "oneMonth": "In one month"
     },
     "designDepthes": [
-      "Conceptual scheme", "Scheme design", "Scheme design + Preliminary design"
+      "Conceptual plan", "Plan & design", "Scheme + Preliminary design"
     ],
     "designModes": [{
       "value": "free",
@@ -359,22 +359,22 @@ export default {
     }
     return {
       types: [
-        'conceptPlanning',
-        'cityDesign',
+        'conceptualPlanning',
+        'urbanDesign',
         'architecturalDesign',
-        'landscapeDesign',
+        'landscapeArchitecture',
         'interiorDesign'
       ],
       features: [
         'residence',
-        'business',
+        'commercial',
         'office',
         'publicSpace',
-        'school',
+        'institution',
         'retail',
         'restaurant',
         'hotel',
-        'club',
+        'entertainment',
         'gardenSquare'
       ],
       deliveryTimes: [

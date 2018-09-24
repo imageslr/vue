@@ -115,28 +115,30 @@
                 @click="onShowRemittanceDialog(index)">
                 {{ $t('汇款信息') }}
               </el-button>
-              <el-button
-                v-if="$isDesigner() && project.designer_payment"
-                size="small"
-                style="margin-left: 8px"
-                @click="$router.push(`/payment/${project.designer_payment.id}`)">
-                {{ $t('设计费汇款详情') }}
-              </el-button>
-              <el-button
-                v-if="$isDesigner() && isCompleted(project)"
-                size="small"
-                style="margin-left: 8px"
-                disabled>
-                {{ $t('暂未发放设计费') }}
-              </el-button>
-              <el-button
-                v-if="isFavorite"
-                :loading="favoriteLoadings[index]"
-                size="small"
-                style="margin-left: 8px"
-                @click="onToggleFavorite(index)">
-                {{ project.favoriting ? $t('取消收藏') : $t('收藏') }}
-              </el-button>
+              <template v-if="$isDesigner()">
+                <el-button
+                  v-if="project.designer_payment"
+                  size="small"
+                  style="margin-left: 8px"
+                  @click="$router.push(`/payment/${project.designer_payment.id}`)">
+                  {{ $t('设计费汇款详情') }}
+                </el-button>
+                <el-button
+                  v-else-if="isCompleted(project)"
+                  size="small"
+                  style="margin-left: 8px"
+                  disabled>
+                  {{ $t('暂未发放设计费') }}
+                </el-button>
+                <el-button
+                  v-if="isFavorite"
+                  :loading="favoriteLoadings[index]"
+                  size="small"
+                  style="margin-left: 8px"
+                  @click="onToggleFavorite(index)">
+                  {{ project.favoriting ? $t('取消收藏') : $t('收藏') }}
+                </el-button>
+              </template>
             </div>
           </div>
         </div>

@@ -58,8 +58,11 @@
     "您的招标模式为“邀请设计师”，您必须邀请至少一名设计师参与项目": "Your bidding mode is \"Invite Designers\". You have to invite at least one designer to participate the project.",
     "您的招标模式为“指定设计师”，您必须邀请至少一名设计师参与项目": "Your bidding mode is \"Specify Designers\". You have to invite at least one designer to participate the project.",
     "错误": "Error",
+
     "请您按照规定格式填写所有必填表单项": "Please fill in all required form items in the prescribed format",
     "修改项目信息成功": "Successfully update the project information",
+    "该项目无法修改": "The project cannot be edited",
+
     "types":  ["Concept Planning", "City Design", "Architectural Design", "Landscape Design", "Interior Design"],
     "features":["Residence", "Business", "Office", "Public Space", "School", "Retail", "Restaurant", "Hotel", "Club", "Garden Square"],
     "deliveryTimes": ["After one month", "After three month", "After six month"],
@@ -101,6 +104,7 @@
         ref="form"
         :model="form"
         :rules="rules"
+        :disabled="!editable"
         label-position="top"
         class="form"
         size="small">
@@ -281,7 +285,7 @@
         class="m0 pb-24 center f-14 black-45" />
     </div>
     <el-button
-      :disabled="loading"
+      :disabled="loading || !editable"
       :loading="submitting"
       class="block w-100 shadow mt-24"
       type="primary"
@@ -293,6 +297,7 @@
 </template>
 
 <script>
+/* eslint eqeqeq: "off" */
 import PreviewDialog from '../publish/components/PreviewDialog'
 import { getProjectById, updateProjectById } from '@/api/project'
 import { Project } from '@/services/constants'
@@ -395,6 +400,13 @@ export default {
     id () {
       return this.$route.params.id
     },
+    // 是否可以编辑
+    editable () {
+      const { project } = this
+      return project.user_id == this.$uid() && // 是项目的发布者
+        (project.status == Project.STATUS_REVIEW_FAILED || // 审核未通过
+         project.status == Project.STATUS_REVIEWING) // 审核中
+    },
     // 是否可以申请重新审核
     rereviewable () {
       return this.project.status === Project.STATUS_REVIEW_FAILED
@@ -415,13 +427,17 @@ export default {
   },
   created () {
     getProjectById(this.id).then(({ data }) => {
-      if (data.user.id != this.$uid()) { // eslint-disable-line eqeqeq
-        this.$router.replace('/403')
-      }
-
       this.loading = false
       this.project = data
       this.setFormData() // 初始化Form的各个值
+
+      if (data.user.id != this.$uid()) { // eslint-disable-line eqeqeq
+        this.$router.replace('/403')
+      }
+      if (!this.editable) {
+        this.$message.error(this.$t('该项目无法修改'))
+        
+      }
     }).catch(({ statusCode }) => {
       this.loading = false
     })

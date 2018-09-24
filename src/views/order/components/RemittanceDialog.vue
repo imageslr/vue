@@ -10,7 +10,8 @@
     "汇款人姓名": "Remitter name",
     "汇款金额": "Remittance amount",
     "汇款日期": "Remittance date",
-    "信息录入于": "Information recorded in"
+    "信息录入于": "Information recorded in",
+    "修 改": "Edit"
   }
 }
 </i18n>
@@ -44,6 +45,7 @@
     <template v-else>
       <el-input
         v-model="content"
+        :disabled="inputDisabled"
         :rows="5"
         :placeholder="$t('请准确填写以下汇款信息，以便工作人员录入：汇款单号、汇款行、汇款人姓名、汇款金额、汇款日期')"
         :maxlength="1000"
@@ -55,6 +57,10 @@
       <span slot="footer">
         <el-button @click="visible = false">{{ $t('g.cancelBtn') }}</el-button>
         <el-button
+          v-if="inputDisabled"
+          @click="inputDisabled = false">{{ $t('修 改') }}</el-button>
+        <el-button
+          v-else
           :loading="submitting"
           :disabled="!content"
           type="primary"
@@ -76,6 +82,7 @@ export default {
       },
       visible: false,
       content: '',
+      inputDisabled: false, // 输入框是否不可用
       submitting: false
     }
   },
@@ -112,6 +119,7 @@ export default {
     show (project) {
       this.project = project
       this.content = project.remittance
+      this.inputDisabled = !!project.remittance
       this.visible = true
     },
     onConfirm () {
@@ -122,7 +130,7 @@ export default {
         this.$message.success(this.$t('提交成功'))
 
         // 直接修改对象的属性
-        this.project.remittance = data.content
+        this.project.remittance = data.remittance
         this.project.remittance_submitted_at = data.remittance_submitted_at
       }).catch(() => {
         this.submitting = false

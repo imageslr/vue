@@ -21,7 +21,7 @@
 <template>
   <div
     class="main-container card"
-    style="margin: 24px; padding: 24px;">
+    style="margin: 24px auto; padding: 24px;">
     <my-alert
       :title="$t('alert', {total: totalPayment})"
       class="mb2"/>

@@ -20,9 +20,12 @@
     "拼命加载中": "Loading user info",
     "发送站内信": "Send direct message",
     "发 送": "Send",
-    "消息不能为空": "Message cannot be empty",
+
     "发送成功后，您可在消息列表中查看对话": "You can view the conversation in the message list once sent",
-    "发送成功": "Successfully sent message"
+
+    "发送成功": "Successfully sent message",
+    "消息不能为空": "Message cannot be empty",
+    "您无权查看该甲方的信息": "You are not authorized to view the information of the Party."
   }
 }
 </i18n>
@@ -41,6 +44,7 @@
           @click="$router.push({path: '/me'})">{{ $t('编辑个人资料') }}</el-button>
         <template v-else>
           <el-button
+            v-if="userInfo.type === 'designer'"
             :loading="followBtnLoading"
             type="primary"
             @click="onToggleFollow">{{ userInfo.following ? $t('已关注') : $t('关注') }}</el-button>
@@ -52,52 +56,18 @@
         </el-button>
         <p class="f-12 m0 black-45">{{ $t('浏览量') }}：{{ userInfo.views }}</p>
       </profile-card>
-      <h2
-        v-t="'收到的评价'"
-        class="title" />
-      <div class="card review-card">
-        <div
-          v-for="(review, index) in reviews"
-          v-if="index < 5"
-          :key="review.id"
-          class="review-item">
-          <div class="review-item__user">
-            <router-link :to="'/profile?uid=' + review.reviewer.id">
-              <my-avatar
-                :avatar-url="review.reviewer.avatar_url"
-                class="review-item__user-avatar" />
-            </router-link>
-            <div class="review-item__user-info">
-              <router-link
-                :to="'/profile?uid=' + review.reviewer.id"
-                class="f-14 bold">{{ review.reviewer.name }}</router-link>
-              <!-- <el-rate
-                v-model="review.rate"
-                :colors="['#00A0DC', '#00A0DC', '#00A0DC']"
-                class="review-item__user-rate"
-                disabled /> -->
-              <p
-                class="m0 f-12 black-45"
-                v-text="review.created_at" />
-            </div>
-          </div>
-          <p
-            class="m0 mt-4 f-12 black-45"
-            v-text="review.content" />
-        </div>
-        <el-button
-          v-if="reviews.length"
-          type="text"
-          class="center w-100"
-          @click="reviewDialog.visible=true">{{ $t('查看所有评价') }} </el-button>
-        <p
-          v-t="$t('暂未收到评价')"
-          v-if="!reviews.length"
-          class="m0 p-12 f-12 black-45 center"/>
-      </div>
+      <template v-if="isDesigner">
+        <h2
+          v-t="'收到的评价'"
+          class="title" />
+        <review-list
+          v-loading="reviewLoading"
+          :reviews="reviews"
+          @clickBtn="reviewDialog.visible=true" />
+      </template>
     </div>
     <div class="main-container__right">
-      <template v-if="userInfo.type === 'designer'">
+      <template v-if="isDesigner">
         <div class="flex-title">
           <h2
             v-t="'作品集'"
@@ -120,11 +90,12 @@
       </template>
       <template v-else>
         <h2
-          v-t="'个人动态'"
+          v-t="'收到的评价'"
           class="title" />
-        <activity-list
-          :get-activities="getActivities"
-          :show-action-button="isCurrentUser"/>
+        <review-list
+          v-loading="reviewLoading"
+          :reviews="reviews"
+          @clickBtn="reviewDialog.visible=true" />
       </template>
     </div>
     <el-dialog
@@ -166,6 +137,9 @@
                 :colors="['#00A0DC', '#00A0DC', '#00A0DC']"
                 class="review-item__user-rate"
                 disabled /> -->
+              <span
+                v-t="`g.${review.reviewer.type}`"
+                class="f-14 black-45" />
               <p
                 class="m0 f-12 black-45"
                 v-text="review.created_at" />
@@ -191,6 +165,7 @@
 import ProfileCard from '@/views/components/ProfileCard'
 import ActivityList from '@/views/components/ActivityList'
 import WorkList from './components/WorkList'
+import ReviewList from './components/ReviewList'
 import { getUserInfoByUID } from '@/api/user'
 import { getActivitiesByUID } from '@/api/activity'
 import { getReceivedReviewsByUID } from '@/api/review'
@@ -199,7 +174,8 @@ export default {
   components: {
     ProfileCard,
     ActivityList,
-    WorkList
+    WorkList,
+    ReviewList
   },
   data () {
     return {
@@ -210,6 +186,7 @@ export default {
       },
       activities: [], // 个人动态
       reviews: [], // 收到的评论
+      reviewLoading: true,
       followBtnLoading: false,
       activitiesLoading: true,
       activitiesNomore: false,
@@ -233,6 +210,10 @@ export default {
     pageUID () {
       return this.$route.query.uid || this.$uid()
     },
+    // 是否是设计师
+    isDesigner () {
+      return this.userInfo.type === 'designer'
+    },
     // 是否是当前用户的主页
     isCurrentUser () {
       return this.$uid() == this.pageUID // eslint-disable-line eqeqeq
@@ -242,6 +223,17 @@ export default {
     // 获取用户信息
     if (this.isCurrentUser) {
       this.userInfo = this.$store.getters.userInfo
+
+      // 获取收到的评价
+      getReceivedReviewsByUID(this.pageUID).then(({
+        data: { data, meta: { pagination } }
+      }) => {
+        this.reviews = this.reviewDialog.reviews = data
+        this.reviewDialog.pageCount = pagination.total_pages
+        this.reviewLoading = false
+      }).catch(() => {
+        this.reviewLoading = false
+      })
     } else {
       const loading = this.$loading({
         lock: true,
@@ -252,18 +244,24 @@ export default {
       getUserInfoByUID(this.pageUID).then(({ data }) => {
         this.userInfo = data
         loading.close()
-      }).catch(() => {
+
+        // 获取收到的评价
+        getReceivedReviewsByUID(this.pageUID).then(({
+          data: { data, meta: { pagination } }
+        }) => {
+          this.reviews = this.reviewDialog.reviews = data
+          this.reviewDialog.pageCount = pagination.total_pages
+          this.reviewLoading = false
+        }).catch(() => {
+          this.reviewLoading = false
+        })
+      }).catch(({ response }) => {
         loading.close()
+        if (response && response.status === 403 && response.data) {
+          this.$message.warning(response.data.message)
+        }
       })
     }
-
-    // 获取收到的评价
-    getReceivedReviewsByUID(this.pageUID).then(({
-      data: { data, meta: { pagination } }
-    }) => {
-      this.reviews = this.reviewDialog.reviews = data
-      this.reviewDialog.pageCount = pagination.total_pages
-    })
   },
   methods: {
     getActivities (page) {

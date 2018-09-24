@@ -36,13 +36,15 @@
           class="f-20">{{ userInfo.following_count }}</router-link>
         <span class="block f-12 black-65">{{ $t('following') }}</span>
       </div>
-      <my-divider margin="12"/>
-      <div class="p-12">
-        <router-link
-          :to="'/follow?type=follower&uid=' + userInfo.id"
-          class="f-20">{{ userInfo.follower_count }}</router-link>
-        <span class="block f-12 black-65">{{ $t('follower') }}</span>
-      </div>
+      <template v-if="userInfo.type === 'designer'">
+        <my-divider margin="12"/>
+        <div class="p-12">
+          <router-link
+            :to="'/follow?type=follower&uid=' + userInfo.id"
+            class="f-20">{{ userInfo.follower_count }}</router-link>
+          <span class="block f-12 black-65">{{ $t('follower') }}</span>
+        </div>
+      </template>
     </div>
     <div class="profile-card__action">
       <slot>

@@ -2,7 +2,8 @@
 {
   "en": {
     "查看更多": "Load more",
-    "发送": "Send"
+    "发送": "Send",
+    "按下Enter键发送，最多300字": "Type Enter to send, 300 characters at most"
   }
 }
 </i18n>
@@ -56,7 +57,8 @@
       <el-input
         ref="input"
         v-model="textarea"
-        :placeholder="$t('按下Enter键发送')"
+        :placeholder="$t('按下Enter键发送，最多300字')"
+        maxlength="300"
         size="small"
         @keyup.native.enter="onSend">
         <el-button

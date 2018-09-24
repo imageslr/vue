@@ -266,7 +266,9 @@
       <div
         v-if="$isDesigner() && project.applying"
         class="card">
-        <h3 v-t="'我的报名信息'" />
+        <h3
+          v-t="'我的报名信息'"
+          class="mt0" />
         <p v-text="project.application.remark" />
         <my-alert
           v-if="project.application.application_file_url"

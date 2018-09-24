@@ -5,7 +5,8 @@
     "备注信息（5000字以内）": "Remark (up to 5000 characters)",
     "正在上传附件，请稍后": "File uploading, please wait",
     "请上传交付的设计文件": "Please upload the design file to deliver",
-    "提交成功": "Successfully uploaded"
+    "提交成功": "Successfully uploaded",
+    "查看已上传的设计文件": "View the delivered design file"
   }
 }
 </i18n>
@@ -29,6 +30,13 @@
       @success="onUploadSuccess"
       @error="onUploadError"
       @remove="onUploadRemove"/>
+    <my-alert
+      v-if="hasSubmitted"
+      class="mt-12">
+      <a
+        :href="project.delivery.file_url"
+        target="_blank">{{ $t('查看已上传的设计文件') }}</a>
+    </my-alert>
     <span
       slot="footer"
       class="dialog-footer">
@@ -42,11 +50,11 @@
 </template>
 
 <script>
-import { deliverProjectById } from '@/api/project'
+import { deliverProjectById, updateDeliveryById } from '@/api/project'
 export default {
   props: {
-    projectId: {
-      type: Number | String,
+    project: {
+      type: Object,
       required: true
     }
   },
@@ -61,26 +69,54 @@ export default {
       submitting: false
     }
   },
+  computed: {
+    // 是否已经提交了交付文件
+    hasSubmitted () {
+      return !!this.project.delivery
+    }
+  },
+  watch: {
+    visible () {
+      const { delivery } = this.project
+      if (delivery) {
+        this.form = {
+          remark: delivery.remark,
+          file_url: delivery.file_url
+        }
+      }
+    }
+  },
   methods: {
     show () {
       this.visible = true
-    },
-    onCancel () {
-      this.$refs.upload.cancel()
-      this.visible = false
     },
     onConfirm () {
       if (this.uploading) {
         this.$message.warning(this.$t('正在上传附件，请稍后'))
         return false
       }
-
       if (!this.form.file_url) {
         return this.$message.warning(this.$t('请上传交付的设计文件'))
       }
 
+      // 如果没有数据改变，就直接关闭dialog
+      if (this.hasSubmitted) {
+        const { form, project: { delivery } } = this
+        if (form.remark === delivery.remark &&
+        form.file_url === delivery.file_url) {
+          this.visible = false
+          return
+        }
+      }
+
       this.submitting = true
-      deliverProjectById(this.projectId, this.form).then(({ data }) => {
+
+      // 判断是否已经提交过交付文件，如果提交过则修改
+      const fn = this.hasSubmitted
+        ? updateDeliveryById(this.project.delivery.id, this.form)
+        : deliverProjectById(this.project.id, this.form)
+
+      fn.then(({ data }) => {
         this.submitting = false
         this.visible = false
         this.$message.success(this.$t('提交成功'))
@@ -88,6 +124,10 @@ export default {
       }).catch(() => {
         this.submitting = false
       })
+    },
+    onCancel () {
+      this.$refs.upload.cancel()
+      this.visible = false
     },
     onUploadStart () {
       this.uploading = true

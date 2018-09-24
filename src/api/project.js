@@ -127,6 +127,11 @@ export function deliverProjectById (id, body) {
   return request.post(`/projects/${id}/deliveries`, body)
 }
 
+// 修改交付文件
+export function updateDeliveryById (id, body) {
+  return request.patch(`/deliveries/${id}`, body)
+}
+
 // 获取一个项目的交付列表
 export function getDeliveriesByProjectId (id, page = 1) {
   return request.get(`/projects/${id}/deliveries?page=${page}`)

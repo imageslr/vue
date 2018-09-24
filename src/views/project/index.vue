@@ -191,7 +191,7 @@
             v-else-if="canDeliver && isWorking"
             size="mini"
             type="primary"
-            @click="onDeliver">{{ $t('上传交付文件') }}</el-button>
+            @click="onShowDeliverDialog">{{ $t('上传交付文件') }}</el-button>
         </template>
         <template v-if="$isParty() && isPublisher">
           <el-button
@@ -253,6 +253,11 @@
         <h3
           v-t="'我的交付文件'"
           class="mt0" />
+        <el-button
+          v-if="canUpdateDelivery"
+          type="text"
+          style="position:absolute;right:24px;top:16px;"
+          @click="onShowDeliverDialog">{{ $t('编辑') }}</el-button>
         <p
           v-if="project.delivery.remark"
           v-text="project.delivery.remark" />
@@ -374,7 +379,7 @@
     </el-dialog>
     <deliver-dialog
       ref="deliverDialog"
-      :project-id="id"
+      :project="project"
       @delivered="onDeliverd" />
     <el-dialog
       :visible.sync="paymentDialog.visible"
@@ -572,6 +577,11 @@ export default {
     canDeliver () {
       const { isAccepted, project: { applying } } = this
       return isAccepted || applying
+    },
+    // 设计师：是否可以修改交付文件
+    canUpdateDelivery () {
+      const { project } = this
+      return project.status == Project.STATUS_WORKING // 作标中
     }
   },
   created () {
@@ -652,7 +662,7 @@ export default {
         })
       }).catch(() => {})
     },
-    onDeliver () {
+    onShowDeliverDialog () {
       this.$refs.deliverDialog.show()
     },
     onDeliverd (data) {

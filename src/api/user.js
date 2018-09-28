@@ -70,6 +70,11 @@ export function updateCurrentUserInfo (body) {
   return request.patch('/user', body)
 }
 
+// 申请重新审核
+export function applyReview () {
+  return request.patch('/user/review')
+}
+
 // 获取推荐设计师
 export function getRecommendedDesigners () {
   return request.get(`/user/recommend`)

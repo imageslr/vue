@@ -29,7 +29,7 @@ const UserModel = {
   total_payment: 0,
 
   // 审核状态
-  review_status: null,
+  review_status: null
 }
 
 const user = {

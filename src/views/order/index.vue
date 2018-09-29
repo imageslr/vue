@@ -116,22 +116,24 @@
                 {{ $t('汇款信息') }}
               </el-button>
               <template v-if="$isDesigner()">
+                <template v-if="!isFavorite">
+                  <el-button
+                    v-if="project.designer_payment"
+                    size="small"
+                    style="margin-left: 8px"
+                    @click="$router.push(`/payment/${project.designer_payment.id}`)">
+                    {{ $t('设计费汇款详情') }}
+                  </el-button>
+                  <el-button
+                    v-else-if="isCompleted(project)"
+                    size="small"
+                    style="margin-left: 8px"
+                    disabled>
+                    {{ $t('暂未发放设计费') }}
+                  </el-button>
+                </template>
                 <el-button
-                  v-if="project.designer_payment"
-                  size="small"
-                  style="margin-left: 8px"
-                  @click="$router.push(`/payment/${project.designer_payment.id}`)">
-                  {{ $t('设计费汇款详情') }}
-                </el-button>
-                <el-button
-                  v-else-if="isCompleted(project)"
-                  size="small"
-                  style="margin-left: 8px"
-                  disabled>
-                  {{ $t('暂未发放设计费') }}
-                </el-button>
-                <el-button
-                  v-if="isFavorite"
+                  v-else
                   :loading="favoriteLoadings[index]"
                   size="small"
                   style="margin-left: 8px"

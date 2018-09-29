@@ -436,7 +436,6 @@ export default {
       }
       if (!this.editable) {
         this.$message.error(this.$t('该项目无法修改'))
-        
       }
     }).catch(({ statusCode }) => {
       this.loading = false

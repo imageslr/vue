@@ -1,42 +1,24 @@
-<i18n>
-{
-  "zh": {
-
-  },
-  "en": {
-
-  }
-}
-</i18n>
-
 <template>
-  <router-link
-    :to="`/message/${thread.id}`"
-    tag="div"
-    class="flex">
+  <div class="flex p-12">
     <my-avatar
       :avatar-url="participant.avatar_url"
       class="flex-none"/>
     <div class="flex-auto ml1">
-      <div class="flex mb1">
-        <p
-          class="flex-1 m0 f-15 bold black ellipsis-1"
-          v-text="participant.name" />
-        <p
-          class="m0 f-13 black-65"
-          v-text="thread.updated_at" />
-      </div>
-      <div class="flex">
-        <p
-          class="flex-1 m0 f-13 black-65 ellipsis-1"
-          v-text="latestMessage.body" />
-        <el-badge
-          :value="unreadCount"
-          :hidden="!unreadCount"
-          :max="99" />
-      </div>
+      <p
+        class="flex-1 m0 f-15 bold black"
+        v-text="participant.name" />
+      <p
+        class="mt-4 m0 f-13 black-65 ellipsis-1"
+        v-text="latestMessage.body" />
+      <p
+        class="mt-4 m0 f-12 black-65"
+        v-text="thread.updated_at" />
     </div>
-  </router-link>
+    <el-badge
+      :value="unreadCount"
+      :hidden="!unreadCount"
+      :max="99" />
+  </div>
 </template>
 
 <script>
@@ -85,8 +67,8 @@ export default {
 
 <style lang="scss" scoped>
 .avatar {
-  width: 48px;
-  height: 48px;
+  width: 24px;
+  height: 24px;
 }
 .el-badge {
   /deep/ .el-badge__content {

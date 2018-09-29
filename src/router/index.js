@@ -1,44 +1,45 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Layout from '../views/layout/Layout'
-import SidebarLayout from '../views/layout/SidebarLayout'
-import Guide from '../views/login/Guide'
-import SignUp from '../views/login/SignUp'
-import EmailRegister from '../views/login/EmailRegister'
-import SignIn from '../views/login/SignIn'
-import ResetPassword from '../views/login/ResetPassword'
-import Feed from '../views/feed'
-import Activity from '../views/activity'
-import Publish from '../views/publish'
-import EditProject from '../views/project/Edit'
-import PublishResult from '../views/publish/Result'
-import Follow from '../views/follow'
-import Profile from '../views/profile'
-import Project from '../views/project'
-import OrderSidebar from '../views/order/Sidebar'
-import OrderContent from '../views/order/index'
-import NotificationSidebar from '../views/notification/Sidebar'
-import NotificationContent from '../views/notification/index'
-import MeSidebar from '../views/me/Sidebar'
-import MeIndex from '../views/me/index'
-import MeAuth from '../views/me/Auth'
-import MeChangePhone from '../views/me/ChangePhone'
-import MeChangePassword from '../views/me/ChangePassword'
-import MeChangeEmail from '../views/me/ChangeEmail'
-import MeReviewList from '../views/me/ReviewList'
-import MeInviteUser from '../views/me/InviteUser'
-import Search from '../views/search'
-import AddWork from '../views/work/Add'
-import AddWorkResult from '../views/work/Result'
-import Square from '../views/square'
-import ThreadList from '../views/message'
-import Chat from '../views/message/Chat'
-import PostReview from '../views/review/Post'
-import PostReviewResult from '../views/review/Result'
-import PaymentDetail from '../views/payment/Detail'
-import PaymentList from '../views/payment/index'
-import Error404 from '../views/error/404'
-import Error403 from '../views/error/403'
+
+const Layout = () => import('../views/layout/Layout')
+const SidebarLayout = () => import('../views/layout/SidebarLayout')
+const Guide = () => import('../views/login/Guide')
+const SignUp = () => import('../views/login/SignUp')
+const EmailRegister = () => import('../views/login/EmailRegister')
+const SignIn = () => import('../views/login/SignIn')
+const ResetPassword = () => import('../views/login/ResetPassword')
+const Feed = () => import('../views/feed')
+const Activity = () => import('../views/activity')
+const Publish = () => import('../views/publish')
+const EditProject = () => import('../views/project/Edit')
+const PublishResult = () => import('../views/publish/Result')
+const Follow = () => import('../views/follow')
+const Profile = () => import('../views/profile')
+const Project = () => import('../views/project')
+const OrderSidebar = () => import('../views/order/Sidebar')
+const OrderContent = () => import('../views/order/index')
+const NotificationSidebar = () => import('../views/notification/Sidebar')
+const NotificationContent = () => import('../views/notification/index')
+const MeSidebar = () => import('../views/me/Sidebar')
+const MeIndex = () => import('../views/me/index')
+const MeAuth = () => import('../views/me/Auth')
+const MeChangePhone = () => import('../views/me/ChangePhone')
+const MeChangePassword = () => import('../views/me/ChangePassword')
+const MeChangeEmail = () => import('../views/me/ChangeEmail')
+const MeReviewList = () => import('../views/me/ReviewList')
+const MeInviteUser = () => import('../views/me/InviteUser')
+const Search = () => import('../views/search')
+const AddWork = () => import('../views/work/Add')
+const AddWorkResult = () => import('../views/work/Result')
+const Square = () => import('../views/square')
+const ThreadList = () => import('../views/message')
+const Chat = () => import('../views/message/Chat')
+const PostReview = () => import('../views/review/Post')
+const PostReviewResult = () => import('../views/review/Result')
+const PaymentDetail = () => import('../views/payment/Detail')
+const PaymentList = () => import('../views/payment/index')
+const Error404 = () => import('../views/error/404')
+const Error403 = () => import('../views/error/403')
 
 Vue.use(Router)
 

@@ -4,6 +4,8 @@ import {
   postMessageByThreadId
 } from '@/api/message'
 
+var REQ_ID = 0
+
 const notification = {
   state: {
     threads: [], // 全部对话列表
@@ -63,6 +65,7 @@ const notification = {
         commit('SET_MESSAGES', [])
         commit('SET_PARTICIPANT', {})
       }
+      var reqId = ++REQ_ID // 同步
       return getMessagesByThreadId(id, page).then(
         ({
           data: {
@@ -74,10 +77,23 @@ const notification = {
             }
           }
         }) => {
+          if (reqId !== REQ_ID) {
+            return Promise.reject(new Error('out of date'))
+          }
+
           // 服务器返回的是按照发送时间降序排列，需要转成正序
           commit('SET_MESSAGES', messages.reverse().concat(state.messages))
           commit('SET_PARTICIPANT', participant)
           commit('SET_UNREAD_MESSAGE_COUNT', unread_count)
+          commit(
+            'SET_THREADS',
+            state.threads.map(t => {
+              if (t.id === id) {
+                t.unread_count = 0 // 未读消息数设置为0
+              }
+              return t
+            })
+          )
           return pagination
         }
       )

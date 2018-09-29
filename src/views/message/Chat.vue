@@ -8,66 +8,52 @@
 }
 </i18n>
 <template>
-  <div class="main-container">
+  <div
+    v-loading="initing"
+    class="card">
     <div
-      v-loading="initing"
-      class="card">
-      <h1
-        v-if="!initing"
-        class="m0 p2 f-16 bold border-bottom center">
-        <router-link
-          tag="i"
-          to="/message"
-          class="el-icon-back" />
-        <router-link
-          :to="`/profile?uid=${participant.id}`"
-          tag="span"
-          style="cursor: pointer"
-          v-text="participant.name"/>
-      </h1>
+      ref="messageBox"
+      class="message-box">
       <div
-        ref="messageBox"
-        class="message-box">
-        <div
-          v-if="!initing && !nomore"
-          class="center pt1">
-          <i
-            v-if="loading"
-            class="el-icon-loading" />
-          <el-button
-            v-else
-            type="text"
-            size="mini"
-            @click="onLoadMore">{{ $t('查看更多') }}</el-button>
-        </div>
-        <ul class="list-reset">
-          <li
-            v-for="item in messages"
-            :key="item.id"
-            class="message-item">
-            <fieldset class="message-item__time">
-              <legend>{{ item.created_at | time }}</legend>
-            </fieldset>
-            <message-item
-              :message="item"
-              :participant="participant" />
-          </li>
-        </ul>
-      </div>
-      <el-input
-        ref="input"
-        v-model="textarea"
-        :placeholder="$t('按下Enter键发送，最多300字')"
-        maxlength="300"
-        size="small"
-        @keyup.native.enter="onSend">
+        v-if="!initing && !nomore"
+        class="center pt1">
+        <i
+          v-if="loading"
+          class="el-icon-loading" />
         <el-button
-          slot="append"
-          :loading="sending"
-          type="primary"
-          @click="onSend">{{ $t('发送') }}</el-button>
-      </el-input>
+          v-else
+          type="text"
+          size="mini"
+          @click="onLoadMore">{{ $t('查看更多') }}</el-button>
+      </div>
+      <ul class="list-reset">
+        <li
+          v-for="item in messages"
+          :key="item.id"
+          class="message-item">
+          <fieldset class="message-item__time">
+            <legend>{{ item.created_at | time }}</legend>
+          </fieldset>
+          <message-item
+            :message="item"
+            :participant="participant" />
+        </li>
+      </ul>
     </div>
+    <el-input
+      ref="input"
+      v-model="textarea"
+      :placeholder="$t('按下Enter键发送，最多300字')"
+      maxlength="300"
+      size="small"
+      class="chat-input"
+      @keyup.native.enter="onSend">
+      <el-button
+        slot="append"
+        :loading="sending"
+        type="primary"
+        @click="onSend">{{ $t('发送') }}</el-button>
+    </el-input>
   </div>
 </template>
 
@@ -89,6 +75,12 @@ export default {
       }
     }
   },
+  props: {
+    threadId: {
+      type: Number,
+      required: true
+    }
+  },
   data () {
     return {
       textarea: '',
@@ -100,9 +92,6 @@ export default {
     }
   },
   computed: {
-    threadId () {
-      return this.$route.params.id
-    },
     messages () {
       return this.$store.getters.messages
     },
@@ -110,15 +99,24 @@ export default {
       return this.$store.getters.participant
     }
   },
+  watch: {
+    threadId () {
+      this.init()
+    }
+  },
   created () {
-    this.getMessages().then(() => {
-      this.initing = false
-      this.scrollToBottom()
-    }).catch(() => {
-      this.initing = false
-    })
+    this.init()
   },
   methods: {
+    init () {
+      Object.assign(this.$data, this.$options.data())
+      this.getMessages().then(() => {
+        this.initing = false
+        this.scrollToBottom()
+      }).catch(() => {
+        this.initing = false
+      })
+    },
     onSend () {
       const { textarea: body, threadId: id } = this
       if (this.sending || !body.trim()) return
@@ -159,18 +157,26 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-  width: 700px;
-  margin: 0 auto;
-}
-.el-icon-back {
-  float: left;
   position: relative;
-  top: 3px;
-  cursor: pointer;
+  margin: 0 auto;
+  height: 100%;
+  width: 100%;
+  .chat-input {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border-radius: 0px;
+    /deep/ .el-input__inner {
+      border-radius: 0px;
+    }
+    /deep/ .el-input-group__append {
+      border-radius: 0px;
+    }
+  }
 }
 .message-box {
-  height: 500px;
-  padding: 0 15px 10px;
+  height: 100%;
+  padding: 0 15px 42px;
   margin: 0;
   overflow-y: scroll;
   .message-item {
@@ -194,15 +200,6 @@ export default {
         background-color: #fff;
       }
     }
-  }
-}
-.el-input {
-  border-radius: 0px;
-  /deep/ .el-input__inner {
-    border-radius: 0px;
-  }
-  /deep/ .el-input-group__append {
-    border-radius: 0px;
   }
 }
 </style>

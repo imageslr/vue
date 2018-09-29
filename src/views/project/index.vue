@@ -135,7 +135,7 @@
         class="mb2"/>
       <div class="project-header__title-area">
         <h1 class="project-header__title">{{ project.title }}</h1>
-        <template v-if="$isDesigner()">
+        <template v-if="$isDesigner() && !loading">
           <el-button
             v-if="project.favoriting"
             icon="el-icon-star-off"

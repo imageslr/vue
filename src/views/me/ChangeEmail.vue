@@ -139,7 +139,7 @@ export default {
   position: absolute;
   top: 0px;
   left: 660px;
-  width: 250px;
+  width: 260px;
   font-size: 14px;
   line-height: 1.8em;
   color: rgba($color: #000000, $alpha: 0.65);

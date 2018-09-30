@@ -6,7 +6,8 @@
     "设计师作品": "Designer works",
     "业主发布的项目": "Party projects",
     "设计费": "Design fees",
-    "进行中": "Processing",
+    "新发布": "New released",
+    "进行中": "In progress",
     "已完成": "Completed"
   }
 }
@@ -67,7 +68,10 @@
             v-for="project in projects"
             :key="project.id"
             class="project-list-item">
-            <el-tag v-if="isProcessing(project)">{{ $t('进行中') }}</el-tag>
+            <el-tag
+              v-if="isNewReleased(project)"
+              type="success">{{ $t('新发布') }}</el-tag>
+            <el-tag v-else-if="isInProgress(project)">{{ $t('进行中') }}</el-tag>
             <el-tag
               v-else
               type="info">{{ $t('已完成') }}</el-tag>
@@ -96,9 +100,13 @@ export default {
     this.$store.dispatch('getIndexDesigners')
   },
   methods: {
-    isProcessing (project) {
+    isNewReleased (project) {
       // eslint-disable-next-line
-      return project.status == Project.STATUS_TENDERING || project.status == Project.STATUS_WORKING
+      return project.status == Project.STATUS_TENDERING
+    },
+    isInProgress (project) {
+      // eslint-disable-next-line
+      return project.status == Project.STATUS_WORKING
     }
   }
 }

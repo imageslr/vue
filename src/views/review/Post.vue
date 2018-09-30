@@ -10,7 +10,8 @@
     "提交": "Submit",
     "请填写评价": "Please enter your review",
     "您已经评价过该用户": "You have already review this user",
-    "您未收到该用户的邀请，无法发表评价": "You have not received an invitation from this user to post a review"
+    "您未收到该用户的邀请，无法发表评价": "You have not received an invitation from this user to post a review",
+    "无权评价该用户": "Cannot review the user"
   }
 }
 </i18n>
@@ -53,7 +54,7 @@
 </template>
 
 <script>
-import { reviewUserByUID, getReviewStatusByUID } from '@/api/review'
+import { reviewUserByUID, canReviewUser } from '@/api/review'
 export default {
   data () {
     return {
@@ -72,14 +73,12 @@ export default {
     if (!this.pageUID) {
       this.$router.replace('/404')
     }
-    getReviewStatusByUID(this.pageUID).then(({ data }) => {
+    canReviewUser(this.pageUID).then(({ data }) => {
       this.loading = false
-      if (data.review_status === 'inviting') {
+      if (data.can) {
         this.disabled = false
-      } else if (data.review_status === 'reviewed') {
-        return this.$alert(this.$t('您已经评价过该用户'))
       } else {
-        return this.$alert(this.$t('您未收到该用户的邀请，无法发表评价'))
+        return this.$alert(this.$t('无权评价该用户'))
       }
     }).catch(() => {
       this.loading = false

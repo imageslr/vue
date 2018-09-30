@@ -35,3 +35,8 @@ export function deleteReviewById (id) {
 export function getReviewStatusByUID (uid) {
   return request.get(`/user/reviews/status?uid=${uid}`)
 }
+
+// 获取评价状态：是否可以评价某位用户
+export function canReviewUser (uid) {
+  return request.get(`/user/can_review?uid=${uid}`)
+}

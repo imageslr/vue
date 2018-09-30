@@ -21,6 +21,9 @@
     "发送站内信": "Send direct message",
     "发 送": "Send",
 
+    "您可以评价该用户": "You can review the user",
+    "发表评价": "Post review",
+
     "发送成功后，您可在消息列表中查看对话": "You can view the conversation in the message list once sent",
 
     "发送成功": "Successfully sent message",
@@ -34,69 +37,76 @@
   <div
     v-if="userInfo.id"
     class="main-container">
-    <div class="main-container__left">
-      <h2
-        v-t="'个人资料'"
-        class="title" />
-      <profile-card :user-info="userInfo">
-        <el-button
-          v-if="isCurrentUser"
-          @click="$router.push({path: '/me'})">{{ $t('编辑个人资料') }}</el-button>
-        <template v-else>
+    <my-alert
+      v-if="userInfo.can_review"
+      :title="$t('您可以评价该用户')"
+      :action-text="$t('发表评价')"
+      @clickAction="$router.push(`/review/post?uid=${pageUID}`)" />
+    <div class="content">
+      <div class="content__left">
+        <h2
+          v-t="'个人资料'"
+          class="title" />
+        <profile-card :user-info="userInfo">
           <el-button
-            v-if="userInfo.type === 'designer'"
-            :loading="followBtnLoading"
-            type="primary"
-            @click="onToggleFollow">{{ userInfo.following ? $t('已关注') : $t('关注') }}</el-button>
-          <el-button @click="messageDialog.visible = true">{{ $t('联系') }}</el-button>
+            v-if="isCurrentUser"
+            @click="$router.push({path: '/me'})">{{ $t('编辑个人资料') }}</el-button>
+          <template v-else>
+            <el-button
+              v-if="userInfo.type === 'designer'"
+              :loading="followBtnLoading"
+              type="primary"
+              @click="onToggleFollow">{{ userInfo.following ? $t('已关注') : $t('关注') }}</el-button>
+            <el-button @click="messageDialog.visible = true">{{ $t('联系') }}</el-button>
+          </template>
+          <el-button @click="onShare">
+            {{ $t('分享') }}
+            <i class="el-icon-share" />
+          </el-button>
+          <p class="f-12 m0 black-45">{{ $t('浏览量') }}：{{ userInfo.views }}</p>
+        </profile-card>
+        <template v-if="isDesigner">
+          <h2
+            v-t="'收到的评价'"
+            class="title" />
+          <review-list
+            v-loading="reviewLoading"
+            :reviews="reviews"
+            @clickBtn="reviewDialog.visible=true" />
         </template>
-        <el-button @click="onShare">
-          {{ $t('分享') }}
-          <i class="el-icon-share" />
-        </el-button>
-        <p class="f-12 m0 black-45">{{ $t('浏览量') }}：{{ userInfo.views }}</p>
-      </profile-card>
-      <template v-if="isDesigner">
-        <h2
-          v-t="'收到的评价'"
-          class="title" />
-        <review-list
-          v-loading="reviewLoading"
-          :reviews="reviews"
-          @clickBtn="reviewDialog.visible=true" />
-      </template>
-    </div>
-    <div class="main-container__right">
-      <template v-if="isDesigner">
-        <div class="flex-title">
+      </div>
+      <div class="content__right">
+        <template v-if="isDesigner">
+          <div class="flex-title">
+            <h2
+              v-t="'作品集'"
+              :class="{'unactive': pageType != 'work' }"
+              class="title"
+              @click="pageType = 'work'" />
+            <h2
+              v-t="'个人动态'"
+              :class="{'unactive': pageType != 'activity' }"
+              class="title"
+              @click="pageType = 'activity'" />
+          </div>
+          <keep-alive>
+            <work-list v-if="pageType === 'work'" />
+            <activity-list
+              v-else
+              :get-activities="getActivities"
+              :show-action-button="isCurrentUser"/>
+          </keep-alive>
+        </template>
+        <template v-else>
           <h2
-            v-t="'作品集'"
-            :class="{'unactive': pageType != 'work' }"
-            class="title"
-            @click="pageType = 'work'" />
-          <h2
-            v-t="'个人动态'"
-            :class="{'unactive': pageType != 'activity' }"
-            class="title"
-            @click="pageType = 'activity'" />
-        </div>
-        <keep-alive>
-          <work-list v-if="pageType === 'work'" />
-          <activity-list
-            v-else
-            :get-activities="getActivities"
-            :show-action-button="isCurrentUser"/>
-        </keep-alive>
-      </template>
-      <template v-else>
-        <h2
-          v-t="'收到的评价'"
-          class="title" />
-        <review-list
-          v-loading="reviewLoading"
-          :reviews="reviews"
-          @clickBtn="reviewDialog.visible=true" />
-      </template>
+            v-t="'收到的评价'"
+            class="title" />
+          <review-list
+            v-loading="reviewLoading"
+            :reviews="reviews"
+            @clickBtn="reviewDialog.visible=true" />
+        </template>
+      </div>
     </div>
     <el-dialog
       :title="$t('发送站内信')"
@@ -317,7 +327,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main-container {
+.content {
   display: flex;
   align-items: flex-start;
   &__left {

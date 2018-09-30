@@ -3,6 +3,10 @@
   "en": {
     "输入设计师姓名进行搜索": "Enter keyword to search",
     "专业领域": "Professional fields",
+    "排序方式": "Order by",
+    "默认排序": "Default",
+    "完成项目数从多到少": "Completed project count desc",
+
     "搜索": "Search",
     "关注": "Follow",
     "取消关注": "Unfollow",
@@ -22,6 +26,7 @@
         <el-input
           v-model="keyword"
           :placeholder="$t('输入关键字进行搜索')"
+          clearable
           @keyup.native.enter="onSearch"/>
       </el-form-item>
       <el-form-item>
@@ -34,6 +39,19 @@
             :key="field"
             :label="field"
             :value="field"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-select
+          v-model="order"
+          :placeholder="$t('排序方式')"
+          clearable>
+          <el-option
+            label="默认排序"
+            value="default"/>
+          <el-option
+            label="完成项目数从多到少"
+            value="completed_project_count_desc"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -134,6 +152,7 @@ export default {
       users: [],
       keyword: '',
       selectedFields: [],
+      order: null, // default
       pageCount: 1,
       currentPage: 1,
       loading: false,
@@ -149,6 +168,7 @@ export default {
   created () {
     if (this.$route.query.p) this.currentPage = parseInt(this.$route.query.p)
     if (this.$route.query.keyword) this.keyword = this.$route.query.keyword
+    if (this.$route.query.order) this.order = this.$route.query.order
     if (this.$route.query.fields) {
       if (Array.isArray(this.$route.query.fields)) this.selectedFields = this.$route.query.fields
       else this.selectedFields = [this.$route.query.fields]
@@ -159,8 +179,11 @@ export default {
     getUsers () {
       this.loading = true
       this.error = false
-      const { currentPage, keyword, userType, selectedFields } = this
-      searchUsers(currentPage, keyword, userType, { professional_fields: selectedFields })
+      const { currentPage, keyword, userType, selectedFields, order } = this
+      searchUsers(currentPage, keyword, userType, {
+        professional_fields: selectedFields,
+        order
+      })
         .then(({ data: { data: users, meta: { pagination } } }) => {
           this.loading = false
           this.users = users
@@ -188,7 +211,8 @@ export default {
         query: {
           type: this.userType,
           keyword: this.keyword,
-          fields: this.selectedFields
+          fields: this.selectedFields,
+          order: this.order
         }
       })
     },
@@ -199,7 +223,8 @@ export default {
           type: this.userType,
           keyword: this.$route.query.keyword,
           fields: this.selectedFields,
-          p: page
+          p: page,
+          order: this.order
         }
       })
     }

@@ -70,11 +70,15 @@
             class="project-list-item">
             <el-tag
               v-if="isNewReleased(project)"
-              type="success">{{ $t('新发布') }}</el-tag>
-            <el-tag v-else-if="isInProgress(project)">{{ $t('进行中') }}</el-tag>
+              type="success"
+              class="mr1">{{ $t('新发布') }}</el-tag>
+            <el-tag
+              v-else-if="isInProgress(project)"
+              class="mr1">{{ $t('进行中') }}</el-tag>
             <el-tag
               v-else
-              type="info">{{ $t('已完成') }}</el-tag>
+              type="info"
+              class="mr1">{{ $t('已完成') }}</el-tag>
             <router-link
               :to="`/project/${project.id}`"
               class="project-list-item__title"

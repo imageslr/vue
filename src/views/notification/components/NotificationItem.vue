@@ -1,6 +1,7 @@
 <i18n>
 {
   "zh": {
+    "reviewed": "{name} 评价了您 {createdAt}",
     "activity_replied": "{name} 评论了你的动态 {activityContent} {createdAt}",
     "reply_replied": "{name} 回复了你在动态 {activityContent} 下的评论 {createdAt}",
     "project_applied": "{name} 报名了你的项目 {projectTitle} {createdAt}",
@@ -14,9 +15,10 @@
     "project_payed": "您已收到项目 {projectTitle} 的设计费 {amount} 元 {createdAt}"
   },
   "en": {
-    "activity_replied": "{name} replied your activity {activityContent}",
-    "reply_replied": "{name} replied your reply under activity {activityContent}",
-    "project_applied": "{name} applied your project {projectTitle}",
+    "reviewed": "{name} posted a review to you {createdAt}",
+    "activity_replied": "{name} replied your activity {activityContent} {createdAt}",
+    "reply_replied": "{name} replied your reply under activity {activityContent} {createdAt}",
+    "project_applied": "{name} applied your project {projectTitle} {createdAt}",
     "project_delivered": "{name} has delivered the design file of your project {projectTitle} {createdAt}",
     "project_invitation_accepted": "{name} accepted your invitation in the project {projectTitle} {createdAt}",
     "project_invitation_declined": "{name} declined your invitation in the project {projectTitle} {createdAt}",
@@ -72,6 +74,22 @@
       <p
         class="reply-content"
         v-text="data.reply_content" />
+    </template>
+    <template v-else-if="data.type === 'reviewed'">
+      <i18n
+        :path="data.type"
+        tag="div">
+        <router-link
+          :to="`/profile?uid=${data.user_id}`"
+          place="name">{{ data.user_name }}</router-link>
+        <span
+          class="ml-4 black-45"
+          place="createdAt"
+          v-text="notification.created_at" />
+      </i18n>
+      <p
+        class="content"
+        v-text="data.content" />
     </template>
     <template v-else-if="data.type === 'project_applied'">
       <i18n
@@ -303,6 +321,7 @@ export default {
       text-decoration: underline;
     }
   }
+  .content,
   .reply-content,
   .application-remark {
     margin: 8px 0 0;

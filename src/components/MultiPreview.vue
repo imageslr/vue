@@ -122,4 +122,21 @@ export default {
 <style>
 @import "photoswipe/dist/photoswipe.css";
 @import "photoswipe/dist/default-skin/default-skin.css";
+
+.pswp__button--arrow--left:before,
+.pswp__button--arrow--right:before {
+  background-size: 528px 176px;
+  height: 60px;
+  width: 64px;
+  top: 24px;
+  left: 4px;
+}
+
+.pswp__button--arrow--left::before {
+  background-position: -276px -88px;
+}
+
+.pswp__button--arrow--right::before {
+  background-position: -188px -88px;
+}
 </style>

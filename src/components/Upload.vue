@@ -25,7 +25,7 @@
     class="upload">
     <el-button
       :loading="uploading"
-      :disabled="!!fileData">{{ buttonText }}</el-button>
+      :disabled="!!fileData">{{ $t('上传附件') }}</el-button>
     <p
       slot="tip"
       class="inline ml-12 black-45 f-14"
@@ -55,12 +55,6 @@ export default {
     accept: {
       type: String,
       default: ''
-    },
-    buttonText: {
-      type: String,
-      default () {
-        return this.$t('上传附件')
-      }
     }
   },
   data () {

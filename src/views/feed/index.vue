@@ -7,11 +7,11 @@
     "我要发布项目": "Publish project",
     "我已发布项目": "Published projects",
     "收藏的设计师": "Following designers",
-    "设计师广场": "Designer square",
+    "设计师广场": "Designer plaza",
     "搜索项目": "Search projects",
     "我的项目": "My projects",
     "添加作品": "Add work",
-    "我的作品集": "My works",
+    "我的作品集": "My portfolios",
     "我的账户": "My account",
     "nomore": "All activities have been read, go to {0} and discover more exciting things"
   }

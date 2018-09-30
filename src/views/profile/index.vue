@@ -16,7 +16,7 @@
     "暂未收到评价": "No received reviews",
     "查看所有评价": "View all reviews",
     "所有评价": "All reviews",
-    "作品集": "Works",
+    "作品集": "Portfolios",
     "拼命加载中": "Loading user info",
     "发送站内信": "Send direct message",
     "发 送": "Send",

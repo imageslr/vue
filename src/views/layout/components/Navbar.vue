@@ -6,8 +6,8 @@
     "马上加入": "Sign up",
     "项目": "Project",
     "设计师": "Designer",
-    "业主入口": "Party entrance",
-    "设计师入口": "Designer entrance"
+    "业主入口": "Party",
+    "设计师入口": "Designer"
   }
 }
 </i18n>
@@ -17,9 +17,10 @@
     class="navbar"
     mode="horizontal"
     background-color="#283E4A">
-    <icon
-      name="app-logo"
-      @click.native="$router.push('/')"/>
+    <img
+      class="logo"
+      src="@/assets/logo_full.png"
+      @click="$router.push('/')" >
     <div
       v-if="isRoot"
       :class="{links: !isSignIn}">
@@ -65,14 +66,16 @@
           plain>{{ $t('马上加入') }}</el-button>
       </router-link>
     </div>
+    <lang-select class="lang-select-btn" />
   </el-menu>
 </template>
 
 <script>
 /* eslint-disable */
 import NavbarMenu from './NavbarMenu'
+import LangSelect from '@/components/LangSelect'
 export default {
-  components: { NavbarMenu },
+  components: { NavbarMenu, LangSelect },
   data () {
     return {
       keyword: ''
@@ -123,8 +126,8 @@ export default {
   height: 52px;
   padding: 0 calc((100% - 1000px) / 2);
   border-bottom: none;
-  .fa-icon {
-    width: 34px;
+  .logo {
+    width: auto;
     height: 34px;
     margin-right: 16px;
     color: #fff;
@@ -152,6 +155,17 @@ export default {
     &:focus,
     &:active {
       border-color: #aaa;
+    }
+  }
+  .lang-select-btn {
+    position: absolute;
+    right: 24px;
+    color: #bfcad1;
+    margin-left: 24px;
+    &:hover,
+    &:focus,
+    &:active {
+      color: #fff;
     }
   }
 }

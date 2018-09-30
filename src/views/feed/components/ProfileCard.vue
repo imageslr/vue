@@ -15,9 +15,9 @@
 
 <template>
   <aside class="card profile-card">
-    <img
+    <!-- <img
       src="@/assets/profile-bg.png"
-      class="profile-card__bg">
+      class="profile-card__bg"> -->
     <div class="profile-card__info">
       <my-avatar
         :avatar-url="userInfo.avatar_url"
@@ -84,7 +84,7 @@ export default {
   &__info {
     padding: 0 12px 12px;
     &-avatar {
-      margin: -40px auto 16px;
+      margin: 40px auto 16px;
       width: 80px;
       height: 80px;
     }

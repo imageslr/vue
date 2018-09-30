@@ -23,10 +23,12 @@
     "lodash": "^4.17.10",
     "nprogress": "^0.2.0",
     "photoswipe": "^4.1.2",
+    "svg-innerhtml": "^1.1.0",
     "vue": "^2.5.2",
     "vue-antd-ui": "^0.7.0",
     "vue-awesome": "^3.0.5",
     "vue-i18n": "8.0.0",
+    "vue-image-crop-upload": "^2.5.0",
     "vue-infinite-scroll": "^2.0.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"

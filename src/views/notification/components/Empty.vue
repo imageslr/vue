@@ -10,11 +10,11 @@
   <div className="empty-content">
     <div class="exception-content">
       <img
-        src="https://img.alicdn.com/tfs/TB1WNNxjBHH8KJjy0FbXXcqlpXa-780-780.png"
+        src="@/assets/logo_primary_20.png"
         class="imgException">
-      <h3
+        <!-- <h3
         class="title"
-        v-text="$t('没有新的通知')"/>
+        v-text="$t('没有新的通知')"/> -->
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@
   justify-content: center;
   .imgException {
     max-width: 260px;
-    margin-right: 50px;
+    // margin-right: 50px;
   }
   .title {
     font-size: 24px;

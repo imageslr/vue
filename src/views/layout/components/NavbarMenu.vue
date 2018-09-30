@@ -7,7 +7,6 @@
     "message": "消息",
     "notification": "通知",
     "me": "我",
-    "signOut": "退出登录",
     "square": "项目广场"
   },
   "en": {
@@ -17,8 +16,9 @@
     "message": "Message",
     "notification": "Notice",
     "me": "Me",
-    "signOut": "Sign out",
-    "square": "Square"
+    "square": "Square",
+    "个人中心": "Personal center",
+    "退出登录": "Sign out"
   }
 }
 </i18n>
@@ -85,10 +85,10 @@
         </div>
         <el-dropdown-menu
           slot="dropdown">
-          <el-dropdown-item command="me">个人中心</el-dropdown-item>
+          <el-dropdown-item command="me">{{ $t('个人中心') }}</el-dropdown-item>
           <el-dropdown-item
             command="signout"
-            divided>退出登录</el-dropdown-item>
+            divided>{{ $t('退出登录') }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </li>
@@ -141,7 +141,7 @@ export default {
 .navbar-menu-item {
   position: relative;
   display: inline-block;
-  padding: 3px 24px;
+  padding: 3px 20px;
   text-align: center;
   &:last-child {
     padding-right: 0;

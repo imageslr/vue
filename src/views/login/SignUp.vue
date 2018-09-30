@@ -47,7 +47,16 @@
 <template>
   <div class="container">
     <section>
-      <h1><icon name="app-logo"/><span>{{ $t('app.title') }}</span></h1>
+      <h1>
+        <!-- <icon name="app-logo"/> -->
+        <img
+          style="width:auto; height:30px;margin-right:8px;vertical-align:middle;cursor:pointer;"
+          src="@/assets/logo.png"
+          @click="$router.push('/')" >
+        <span
+          style="cursor:pointer;"
+          @click="$router.push('/')">{{ $t('app.title') }}</span>
+      </h1>
       <p>{{ $t('app.description') }}</p>
       <el-form
         ref="signUpForm"

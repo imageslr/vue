@@ -1,5 +1,6 @@
 <template>
-  <footer>copyright © {{ $t('app.cpr') }} <lang-select/></footer>
+  <!-- <footer>copyright © {{ $t('app.cpr') }} <lang-select/></footer> -->
+  <footer>copyright © {{ $t('app.cpr') }}</footer>
 </template>
 
 <script>

@@ -6,7 +6,8 @@
     "Ta关注的人": "Following",
     "关注Ta的人": "Followers",
     "关注": "Following",
-    "粉丝": "Follower"
+    "粉丝": "Follower",
+    "取消关注": "Unfollow"
   }
 }
 </i18n>

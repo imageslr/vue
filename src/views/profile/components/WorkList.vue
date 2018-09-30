@@ -4,7 +4,8 @@
     "加载更多": "Load more",
     "编辑": "Edit",
     "删除": "Delete",
-    "确认删除该作品？": "Is it confirmed to delete the work?"
+    "确认删除该作品？": "Is it confirmed to delete the work?",
+    "上传作品集": "Upload new work"
   }
 }
 </i18n>
@@ -14,6 +15,13 @@
     v-infinite-scroll="onReachBottom"
     infinite-scroll-disabled="busy"
     infinite-scroll-distance="200">
+    <el-button
+      v-if="isCurrentUser"
+      type="primary"
+      plain
+      class="block w-100"
+      style="margin-bottom: 8px;"
+      @click="$router.push('/work/add')">{{ $t('上传作品集') }}</el-button>
     <transition-group
       tag="div"
       name="fade-transform-y">

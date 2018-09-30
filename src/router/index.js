@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+// 防止登录后还需要加载，产生卡顿
+import Feed from '../views/feed'
+
 const Layout = () => import('../views/layout/Layout')
 const SidebarLayout = () => import('../views/layout/SidebarLayout')
 const Guide = () => import('../views/login/Guide')
@@ -8,7 +11,6 @@ const SignUp = () => import('../views/login/SignUp')
 const EmailRegister = () => import('../views/login/EmailRegister')
 const SignIn = () => import('../views/login/SignIn')
 const ResetPassword = () => import('../views/login/ResetPassword')
-const Feed = () => import('../views/feed')
 const Activity = () => import('../views/activity')
 const Publish = () => import('../views/publish')
 const EditProject = () => import('../views/project/Edit')

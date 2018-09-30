@@ -4,8 +4,12 @@
 @import "./util.scss";
 @import "basscss/css/basscss.css";
 
+@import url("https://fonts.googleapis.com/css?family=Didact+Gothic");
+
 * {
   box-sizing: border-box;
+  font-family: "Didact Gothic", "Helvetica Neue", Helvetica, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
 
 html,

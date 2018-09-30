@@ -18,7 +18,13 @@
 
 <template>
   <section class="container both-center">
-    <h1><icon name="app-logo"/><span>{{ $t('app.title') }}</span></h1>
+    <h1>
+      <!-- <icon name="app-logo"/> -->
+      <img
+        style="width:auto; height:30px;margin-right:8px;vertical-align:middle;"
+        src="@/assets/logo_primary.png" >
+      <span>{{ $t('app.title') }}</span>
+    </h1>
     <el-form
       ref="signInForm"
       :rules="rules"

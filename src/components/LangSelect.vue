@@ -1,6 +1,9 @@
 <template>
-  <el-button
+  <!-- <el-button
     class="lang-select-button"
+    type="text"
+    @click="switchLanguage">{{ text }}</el-button> -->
+  <el-button
     type="text"
     @click="switchLanguage">{{ text }}</el-button>
 </template>
@@ -9,7 +12,7 @@
 export default {
   computed: {
     text () {
-      return this.$store.getters.language === 'en' ? '切换语言' : 'Language'
+      return this.$store.getters.language === 'en' ? '中文' : 'English'
     }
   },
   methods: {

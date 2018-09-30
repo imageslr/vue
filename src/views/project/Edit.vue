@@ -1,6 +1,7 @@
 <i18n>
 {
   "zh": {
+    "paymentPlaceholder": "请按照如下格式填写设计费：单位 金额。如：“RMB 1,000,000.00” 或 “USD 144,306.40”",
     "types":  ["概念规划", "城市设计", "建筑设计", "景观设计", "室内设计"],
     "features": ["住宅", "商业", "办公", "公共空间", "学校", "零售", "餐厅", "酒店", "会所", "花园广场"],
     "deliveryTimes": ["一个月后", "三个月后", "六个月后"],
@@ -21,6 +22,7 @@
     }]
   },
   "en": {
+    "paymentPlaceholder": "Please fill in the design fee as follows: Unit Amount. For example: “RMB 1,000,000.00” or “USD 144,306.40”",
     "编辑项目": "Edit project",
     "完善详实的项目信息，是精准匹配设计师、得到理想成果的必要条件。": "Perfecting detailed project information is a necessary condition for accurately matching designers and achieving ideal results.",
     "给项目起一个标题吧": "Project title",
@@ -29,6 +31,7 @@
     "项目的类型是？": "Project types",
     "项目的功能是？": "Project features",
     "项目关键字": "Project keywords",
+    "添加关键字": "Add keywords",
     "项目设计深度要求": "Design depth",
     "项目描述": "Project description",
     "比如项目的面积、施工预算、动工时间、您倾向的风格和色彩等等": "Such as the project area, construction budget, start time, your preferred style and color, etc.",
@@ -242,6 +245,7 @@
           prop="payment">
           <el-input
             v-model="form.payment"
+            :placeholder="$t('paymentPlaceholder')"
             maxlength="200" />
         </el-form-item>
         <el-form-item

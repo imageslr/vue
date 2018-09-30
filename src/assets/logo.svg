@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="450px" height="399px" viewBox="0 0 450 399" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(-21.000000, -28.000000)" fill="#FFFFFF">
+            <ellipse id="Oval" cx="247" cy="315.5" rx="50" ry="111.5"></ellipse>
+            <ellipse id="Oval" transform="translate(370.561833, 99.051270) rotate(-120.000000) translate(-370.561833, -99.051270) " cx="370.561833" cy="99.0512702" rx="50" ry="111.5"></ellipse>
+            <ellipse id="Oval" transform="translate(121.561833, 99.051270) rotate(120.000000) translate(-121.561833, -99.051270) " cx="121.561833" cy="99.0512702" rx="50" ry="111.5"></ellipse>
+        </g>
+    </g>
+</svg>

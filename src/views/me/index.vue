@@ -17,6 +17,7 @@
 
     "编辑个人资料": "Edit Personal Information",
     "头像": "Avatar",
+    "设置头像": "Set avatar",
     "姓名": "Name",
     "职位/公司": "Title/Company",
     "简介": "Introduction",
@@ -71,22 +72,25 @@
       :rules="rules"
       label-position="top">
       <el-form-item :label="$t('头像')">
-        <el-upload
-          v-loading="avatarUploading"
-          :show-file-list="false"
-          :http-request="onUpload"
-          :before-upload="beforeFileUpload"
-          class="avatar-uploader"
-          accept="image/jpeg, image/jpg, image/png, image/bmp"
-          action="">
-          <img
-            v-if="avatarUrl"
-            :src="avatarUrl"
-            class="avatar">
-          <i
-            v-else
-            class="el-icon-plus avatar-uploader-icon"/>
-        </el-upload>
+        <img
+          v-if="form.avatar_url"
+          :src="form.avatar_url"
+          class="avatar"
+          @click="showCropper">
+        <el-button
+          v-else
+          @click="showCropper">{{ $t('设置头像') }}</el-button>
+        <my-upload
+          v-model="isCropperShowing"
+          :width="300"
+          :height="300"
+          :headers="header"
+          :params="{type: 'avatar'}"
+          :url="uploadUrl"
+          :lang-type="language"
+          field="file"
+          img-format="png"
+          @crop-upload-success="onCropUploadSuccess"/>
       </el-form-item>
       <el-form-item
         :label="$t('姓名')"
@@ -171,16 +175,22 @@
 <script>
 import { namePattern } from '@/utils/validate'
 import { updateCurrentUserInfo, applyReview } from '@/api/user'
-import { upload } from '@/api/upload'
+import { BASE_API } from '@/utils/request'
+import myUpload from 'vue-image-crop-upload'
 export default {
+  components: { myUpload },
   data () {
     return {
+      uploadUrl: BASE_API + '/uploads',
+      header: {
+        Authorization: `Bearer ${this.$store.getters.token}`
+      },
       fields: ['建筑设计', '室内设计', '景观设计', '城市设计', '城市规划', '概念规划'],
       form: {
         name: '',
         title: '',
         introduction: '',
-        // avatar_id: null, 这个属性一开始是没有的，只有上传了图片才有
+        avatar_url: '',
 
         // 这四个只有设计师有
         professional_fields: [],
@@ -194,8 +204,7 @@ export default {
           { pattern: namePattern, min: 1, max: 50, message: this.$t('中文名或英文名，2~50个字符') }
         ]
       },
-      avatarUploading: false,
-      avatarUrl: '',
+      isCropperShowing: false, // 是否显示图片裁切
       submitting: false, // 是否正在提交表单中
       loading: true, // 是否正在加载用户个人信息
       applying: false // 是否正在申请重新审核
@@ -231,12 +240,14 @@ export default {
       Object.keys(this.form).forEach(key => {
         this.form[key] = user[key]
       })
-      this.avatarUrl = user.avatar_url
     }).catch(() => {
       this.loading = false
     })
   },
   methods: {
+    showCropper () {
+      this.isCropperShowing = true
+    },
     onSubmit () {
       if (this.avatarUploading) {
         return this.$message.warning(this.$t('正在上传附件，请稍后'))
@@ -264,26 +275,8 @@ export default {
         this.applying = false
       })
     },
-    beforeFileUpload (file) {
-      const isLessThan = file.size / 1024 / 1024 < 2
-      if (!isLessThan) {
-        this.$message.error(this.$t('上传文件大小不能超过2MB！'))
-      }
-      return isLessThan
-    },
-    onUpload (file) {
-      this.avatarUploading = true
-      upload('avatar', file.file)
-        .then(({ data }) => {
-          this.avatarUploading = false
-          this.form.avatar_id = data.id
-          this.avatarUrl = URL.createObjectURL(file.file)
-          file.onSuccess()
-        }).catch(error => {
-          console.error(error)
-          this.avatarUploading = false
-          file.onError()
-        })
+    onCropUploadSuccess (data, field) {
+      this.form.avatar_url = data.path
     }
   }
 }
@@ -306,30 +299,15 @@ export default {
   line-height: 1.8em;
   color: rgba($color: #000000, $alpha: 0.65);
 }
-.avatar-uploader {
-  width: 102px;
-  /deep/ .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    &:hover {
-      border-color: #0077b5;
-    }
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
-    text-align: center;
-  }
-  .avatar {
-    width: 100px;
-    height: 100px;
-    display: block;
+.avatar {
+  display: block;
+  width: 100px;
+  height: 100px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  &:hover {
+    border-color: #0077b5;
   }
 }
 </style>

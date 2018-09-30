@@ -50,9 +50,9 @@
               :to="'/profile?uid=' + user.id"
               class="bold black-85">{{ user.name }}</router-link>
             <p>
-              <span class="color-primary">{{ $t('关注') }}</span>
+              <span class="color-primary">{{ $t('g.following') }}</span>
               <span v-text="user.following_count" />
-              <span class="color-primary">{{ $t('粉丝') }}</span>
+              <span class="color-primary">{{ $t('g.fans') }}</span>
               <span v-text="user.follower_count" />
             </p>
             <p v-text="user.title" />

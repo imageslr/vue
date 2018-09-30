@@ -1,6 +1,6 @@
 export default {
   app: {
-    title: '尤歌',
+    title: '尤格',
     description: '一个连接甲方与设计师的平台',
     cpr: 'YoGooooo',
     link: 'www.yogooooo.com'

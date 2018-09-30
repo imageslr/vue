@@ -1,7 +1,7 @@
 <i18n>
 {
   "en": {
-    "输入设计师姓名进行搜索": "Enter keyword to search",
+    "输入关键字进行搜索": "Enter keyword to search",
     "专业领域": "Professional fields",
     "排序方式": "Order by",
     "默认排序": "Default",
@@ -47,10 +47,10 @@
           :placeholder="$t('排序方式')"
           clearable>
           <el-option
-            label="默认排序"
+            :label="$t('默认排序')"
             value="default"/>
           <el-option
-            label="完成项目数从多到少"
+            :label="$t('完成项目数从多到少')"
             value="completed_project_count_desc"/>
         </el-select>
       </el-form-item>

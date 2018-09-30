@@ -9,7 +9,10 @@
     "您可以邀请用户发表评价，这些评价将展示在您的个人主页上": "You can invite users to post reviews that will appear on your profile.",
     "其他用户可以邀请您评价，您的评价将展示在他们的个人主页上": "Other users can invite you to review and your reviews will appear on their profile",
     "立即邀请": "Invite now",
-    "我的评价": "My review"
+    "我的评价": "My review",
+
+    "取消置顶": "Unstick",
+    "置顶": "Stick"
   }
 }
 </i18n>
@@ -57,14 +60,22 @@
         <p
           v-else
           slot="content">{{ $t('我的评价') }}：{{ review.content }}</p>
-        <el-button
-          slot="action"
-          :loading="deletings[review.id]"
-          type="text"
-          size="small"
-          @click="onDelete(review.id)">
-          {{ $t('g.delete') }}
-        </el-button>
+        <div slot="action">
+          <el-button
+            v-if="type === 'received'"
+            type="text"
+            size="small"
+            @click="onToggleStick(review)">
+            {{ review.order_id == 1 ? $t('取消置顶') : $t('置顶') }}
+          </el-button>
+          <el-button
+            :loading="deletings[review.id]"
+            type="text"
+            size="small"
+            @click="onDelete(review.id)">
+            {{ $t('g.delete') }}
+          </el-button>
+        </div>
       </user-list-item>
       <el-pagination
         :current-page.sync="currentPage"
@@ -79,7 +90,13 @@
 
 <script>
 import UserListItem from '@/views/components/UserListItem'
-import { getReceivedReviewsByUID, getPostedReviewsByUID, deleteReviewById } from '@/api/review'
+import {
+  getReceivedReviewsByUID,
+  getPostedReviewsByUID,
+  deleteReviewById,
+  stickReviewById,
+  unstickReviewById
+} from '@/api/review'
 export default {
   components: { UserListItem },
   data () {
@@ -132,6 +149,16 @@ export default {
         }).catch(() => {
           this.deletings[id] = false
         })
+      }).catch(() => {})
+    },
+    onToggleStick (review) {
+      const fn = review.order_id ? unstickReviewById : stickReviewById
+      fn(review.id).then(({ data }) => {
+        this.reviews = this.reviews.map(v => {
+          if (v.id === data.id) return data
+          else return v
+        })
+        this.$message.success(this.$t('g.successfulOperation'))
       }).catch(() => {})
     },
     onChangePage (page) {

@@ -29,7 +29,8 @@ export default {
     party: 'Party',
     designer: 'Designer',
     delete: 'Delete',
-    successfullyDeleted: 'Successfully deleted'
+    successfullyDeleted: 'Successfully deleted',
+    successfulOperation: 'Successful operation'
   },
   ordinalNum: ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'],
   errmsgs: {

@@ -31,6 +31,16 @@ export function deleteReviewById (id) {
   return request.delete(`/reviews/${id}`)
 }
 
+// 置顶一条评价
+export function stickReviewById (id) {
+  return request.put(`/reviews/${id}/stick`)
+}
+
+// 取消置顶一条评价
+export function unstickReviewById (id) {
+  return request.put(`/reviews/${id}/unstick`)
+}
+
 // 获取评价状态：是否评价了某位用户
 export function getReviewStatusByUID (uid) {
   return request.get(`/user/reviews/status?uid=${uid}`)

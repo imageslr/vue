@@ -29,7 +29,8 @@ export default {
     party: '甲方',
     designer: '设计师',
     delete: '删除',
-    successfullyDeleted: '删除成功'
+    successfullyDeleted: '删除成功',
+    successfulOperation: '操作成功'
   },
   ordinalNum: ['一', '二', '三', '四', '五', '六'],
   errmsgs: {

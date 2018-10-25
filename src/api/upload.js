@@ -6,6 +6,7 @@ export function upload (type, file, config) {
   body.append('file', file)
   return request.post('/uploads', body, {
     ...config,
+    timeout: 0, // 上传的时候不考虑超时
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }

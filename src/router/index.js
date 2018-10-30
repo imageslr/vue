@@ -5,6 +5,7 @@ import Router from 'vue-router'
 import Feed from '../views/feed'
 
 const Layout = () => import('../views/layout/Layout')
+const Layout2 = () => import('../views/layout/Layout2')
 const SidebarLayout = () => import('../views/layout/SidebarLayout')
 const Guide = () => import('../views/login/Guide')
 const SignUp = () => import('../views/login/SignUp')
@@ -63,15 +64,22 @@ export default new Router({
         }
       ]
     },
+
     {
       path: '/',
-      component: Layout,
+      component: Layout2,
       children: [
         {
           path: '',
           name: 'index',
           component: Guide
-        },
+        }
+      ]
+    },
+    {
+      path: '/',
+      component: Layout,
+      children: [
         {
           path: 'signin',
           name: 'signin',

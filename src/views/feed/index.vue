@@ -122,7 +122,6 @@ export default {
 }
 .profile-card {
   position: fixed;
-  top: 76px;
   margin-left: -244px;
 }
 .action-area-container {

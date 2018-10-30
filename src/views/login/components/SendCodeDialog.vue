@@ -176,7 +176,7 @@ export default {
   }
   .el-dialog__body {
     padding: 0;
-    background-image: linear-gradient(45deg, #0077b5, #008891);
+    background-image: linear-gradient(45deg, #29b2fe, #008891);
   }
 }
 </style>

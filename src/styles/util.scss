@@ -36,7 +36,7 @@
 
 /* color */
 .color-primary {
-  color: #0077b5;
+  color: #29b2fe;
 }
 .color-warning {
   color: #faad14;
@@ -85,9 +85,13 @@
   flex: 1;
 }
 
-/* other */
+/* background, shadow */
 .background-none {
   background: none;
+}
+
+.bg-fff {
+  background-color: #fff;
 }
 
 .shadow {

@@ -136,12 +136,12 @@ export default {
 
 <style lang="scss" scoped>
 .navbar-menu {
-  height: 52px;
+  height: 70px;
 }
 .navbar-menu-item {
   position: relative;
   display: inline-block;
-  padding: 3px 20px;
+  padding: 13px 20px;
   text-align: center;
   &:last-child {
     padding-right: 0;
@@ -151,14 +151,13 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
-    height: 51px;
-    border-right: 2px solid #5c6f7c;
+    height: 70px;
   }
   &__container {
-    color: #bfcad1;
+    color: rgba(0, 0, 0, 0.45);
     cursor: pointer;
     &:hover {
-      color: #fff;
+      color: #29b2fe;
     }
     .svg-icon,
     .avatar {
@@ -175,7 +174,7 @@ export default {
   }
   &.is-active {
     .navbar-menu-item__container {
-      color: #fff;
+      color: #29b2fe;
     }
   }
 }

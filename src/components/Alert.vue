@@ -75,7 +75,7 @@ export default {
     border: 1px solid #bae7ff;
     border-radius: 4px;
     .alert__icon {
-      color: #0077b5;
+      color: #29b2fe;
     }
   }
   &.error {

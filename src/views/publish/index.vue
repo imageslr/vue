@@ -557,7 +557,7 @@ export default {
   /deep/ .el-textarea__inner {
     border-color: rgb(220, 223, 230);
     &:focus {
-      border-color: #0077b5;
+      border-color: #29b2fe;
     }
   }
   .el-checkbox {

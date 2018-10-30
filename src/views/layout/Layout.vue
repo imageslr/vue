@@ -24,7 +24,7 @@ export default {
   position: relative;
   width: 100%;
   min-height: 100%;
-  padding-top: 52px;
+  padding-top: 70px;
   background-color: #f9f9f9;
 }
 .app-nav {
@@ -35,6 +35,6 @@ export default {
 }
 .app-main {
   position: relative;
-  min-height: calc(100vh - 52px - 60px); /* header: 52px footer: 60px */
+  min-height: calc(100vh - 70px); /* header: 70px */
 }
 </style>

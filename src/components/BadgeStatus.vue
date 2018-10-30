@@ -56,7 +56,7 @@ export default {
     background-color: #d9d9d9;
   }
   &.is-info {
-    background-color: #0077b5;
+    background-color: #29b2fe;
   }
   &.is-success {
     background-color: #52c41a;

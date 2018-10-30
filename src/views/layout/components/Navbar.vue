@@ -16,23 +16,23 @@
   <el-menu
     class="navbar"
     mode="horizontal"
-    background-color="#283E4A">
+    background-color="#ffffffcc">
     <img
       class="logo"
       src="@/assets/logo_full.png"
       @click="$router.push('/')" >
     <div
-      v-if="isRoot"
+      v-if="isRoot && !isSignIn"
       :class="{links: !isSignIn}">
       <router-link to="/signin?type=designer">
         <el-button
-          class="line-btn ml-12"
+          class="linear primary ml-12"
           plain>{{ $t('设计师入口') }}</el-button>
       </router-link>
       <router-link to="/signin?type=party">
         <el-button
-          class="line-btn ml-24"
-          plain>{{ $t('业主入口') }}</el-button>
+          type="primary"
+          class="ml-24">{{ $t('业主入口') }}</el-button>
       </router-link>
     </div>
     <el-autocomplete
@@ -56,14 +56,12 @@
       v-else-if="!isRoot"
       class="links">
       <router-link to="/signin">
-        <el-button
-          class="signin-btn"
-          type="text">{{ $t('登录') }}</el-button>
+        <el-button type="text">{{ $t('登录') }}</el-button>
       </router-link>
       <router-link to="/signup">
         <el-button
-          class="line-btn signup-btn"
-          plain>{{ $t('马上加入') }}</el-button>
+          type="primary"
+          style="margin-left: 24px">{{ $t('马上加入') }}</el-button>
       </router-link>
     </div>
     <lang-select class="lang-select-btn" />
@@ -123,9 +121,10 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 52px;
+  height: 70px;
   padding: 0 calc((100% - 1000px) / 2);
   border-bottom: none;
+  box-shadow: 0 0 1px 0px rgba(0, 0, 0, 0.3), 0 0 6px 2px rgba(0, 0, 0, 0.15);
   .logo {
     width: auto;
     height: 34px;
@@ -141,12 +140,6 @@ export default {
     flex: 1;
     text-align: right;
     outline: none;
-    .signin-btn {
-      color: #fff;
-    }
-    .signup-btn {
-      margin-left: 24px;
-    }
   }
   .line-btn {
     background: none;
@@ -160,13 +153,7 @@ export default {
   .lang-select-btn {
     position: absolute;
     right: 24px;
-    color: #bfcad1;
     margin-left: 24px;
-    &:hover,
-    &:focus,
-    &:active {
-      color: #fff;
-    }
   }
 }
 </style>

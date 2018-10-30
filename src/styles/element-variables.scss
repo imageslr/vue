@@ -1,6 +1,6 @@
 /* Colors
 -------------------------- */
-$--color-primary: #0077b5;
+$--color-primary: #29b2fe;
 $--color-success: #52c41a;
 $--color-warning: #faad14;
 $--color-danger: #f5222d;
@@ -12,8 +12,8 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
 // 自定义class
 .el-button.linear {
   &.primary {
-    color: #0077b5;
-    border-color: #0077b5;
+    color: #29b2fe;
+    border-color: #29b2fe;
     &:hover {
       border-color: rgba(0, 119, 181, 0.8);
     }
@@ -28,16 +28,16 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
 
 // 覆盖样式
 .el-step__head.is-process {
-  color: #0077b5;
-  border-color: #0077b5;
+  color: #29b2fe;
+  border-color: #29b2fe;
 }
 .el-step__head.is-success {
   // color: rgba($color: #000000, $alpha: 0.85);
   // border-color: rgba($color: #000000, $alpha: 0.85);
-  color: #0077b5;
-  border-color: #0077b5;
+  color: #29b2fe;
+  border-color: #29b2fe;
   .el-step__line {
-    background-color: #0077b5;
+    background-color: #29b2fe;
   }
 }
 .el-step__title.is-success,

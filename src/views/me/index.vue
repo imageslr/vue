@@ -307,7 +307,7 @@ export default {
   border-radius: 6px;
   cursor: pointer;
   &:hover {
-    border-color: #0077b5;
+    border-color: #29b2fe;
   }
 }
 </style>

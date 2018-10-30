@@ -189,8 +189,8 @@ export default {
   background-image: linear-gradient(
     -225deg,
     #008891 0%,
-    #0077b5 100%,
-    #0077b5 100%
+    #29b2fe 100%,
+    #29b2fe 100%
   );
 }
 h1 {

@@ -21,7 +21,7 @@ const i18n = new VueI18n({
 })
 
 export function getLocale () {
-  return Cookies.get('language') || 'zh'
+  return Cookies.get('language') || 'en'
 }
 
 export function setLocale (language) {

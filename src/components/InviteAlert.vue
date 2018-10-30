@@ -64,7 +64,7 @@ export default {
   padding: 8px 16px;
   &__icon {
     margin-right: 8px;
-    color: #0077b5;
+    color: #29b2fe;
   }
   &__title {
     flex: 1;

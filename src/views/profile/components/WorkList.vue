@@ -201,7 +201,7 @@ export default {
     &-like-btn {
       color: rgba(0, 0, 0, 0.65);
       &.is-liked {
-        color: #0077b5;
+        color: #29b2fe;
       }
       &:hover {
         color: #3392c4;

@@ -4,7 +4,7 @@
     "tip1": "设计师广场包含设计师们近一个月的热门动态（依据点赞数与评论数排列）与作品集。"
   },
   "en": {
-    "tip1": "Designer Square contains the trending activities of designers for nearly a month (according to the number of likes and comments) and their works.",
+    "tip1": "Designer Plaza contains the trending activities of designers for nearly a month (according to the number of likes and comments) and their works.",
     "设计师广场": "Designer Plaza",
     "亚里士多德": "Aristotle",
     "热门动态": "Trending activities",
@@ -112,7 +112,7 @@ export default {
   }
 }
 .wrap-container {
-  min-height: calc(100vh - 52px);
+  min-height: calc(100vh - 70px);
   background-color: #fff;
   border-top: 1px solid rgba($color: #000000, $alpha: 0.1);
   .main-container {

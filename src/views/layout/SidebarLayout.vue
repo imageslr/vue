@@ -27,13 +27,13 @@ export default {
 
 <style lang="scss" scoped>
 .app-container {
-  padding-top: 52px;
+  padding-top: 70px;
   padding-left: 200px;
   min-height: 100%;
   .app-navbar {
     z-index: 5;
     position: fixed;
-    height: 52px;
+    height: 70px;
     top: 0;
     left: 0;
     width: 100%;
@@ -41,12 +41,12 @@ export default {
   .app-sidebar {
     position: fixed;
     left: 0;
-    top: 52px;
+    top: 70px;
     bottom: 0;
     width: 200px;
   }
   .app-main {
-    min-height: calc(100vh - 52px);
+    min-height: calc(100vh - 70px);
     display: flex;
     flex-direction: column;
     .app-content {
